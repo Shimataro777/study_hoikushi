@@ -273,6 +273,8 @@ details.block[open] > summary .i{transform:rotate(180deg)}
 @keyframes up{from{transform:translateY(30px);opacity:0}}
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);font-size:var(--fs-body-sm);font-weight:500;padding:10px 18px;border-radius:999px;width:max-content;max-width:calc(100vw - 32px);text-align:center;pointer-events:none;animation:toast 2s forwards}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,-8px)}10%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
+.toast.act{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 18px;animation:toast 6s forwards;z-index:95}
+.toast.act button{border:0;border-radius:999px;background:#FFFFFF;color:var(--primary);font-weight:700;font-size:var(--fs-label);padding:8px 14px;min-height:36px}
 
 
 /* ===== 操作感（参考：My手帳 引継書の決まり） ===== */
@@ -559,6 +561,14 @@ body{overflow-wrap:anywhere}
 .pv summary{cursor:pointer;color:var(--ink2)}
 .pv ol{margin:8px 0 0;padding-left:20px;color:var(--ink2)}
 .pv li{margin:4px 0}
+.answer .atxt{flex:1;min-width:0;display:block;border:0;padding:0;border-radius:0;font-size:inherit;font-weight:600;color:var(--ink)}
+.row-d .answer{font-size:var(--fs-body)}
+.lifeln{display:flex;align-items:center;gap:6px;margin:6px 0 0;font-size:var(--fs-label);color:var(--muted);font-weight:500}
+.lifeln .i{width:15px;height:15px;color:var(--primary)}
+.lifeln.sm{margin:2px 0 2px;font-size:var(--fs-caption)}
+.drow .dh{flex-wrap:wrap;row-gap:0}
+.drow .dn{white-space:nowrap}
+.qtext + .lifeln{margin:-14px 0 18px}
 .okmsg{display:flex;align-items:center;gap:8px;color:var(--b-correct);font-weight:600}
 .mrow .mc{font-size:var(--fs-label);color:var(--muted);font-variant-numeric:tabular-nums}
 .tl .x + .btnrow{margin:-4px 0 10px}
@@ -647,6 +657,7 @@ const ICONS = {
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   note: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   grip: '<circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/>',
   sliders: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
   alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>',
@@ -683,6 +694,7 @@ const HELP = {
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
   resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
+  dir: ['出題の向き', '「説明 → 答え」は説明を読んで人物・用語を選ぶ問題、「答え → 説明」は人物・用語を見て正しい説明を選ぶ問題です。「まぜる」で両方から出します。\n\n振り分けは向きごとに別々に記録されます。'],
   units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
   import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
   sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
@@ -732,10 +744,18 @@ function seedDB(old){
   db.memos = { ...old.memos };
   return db;
 }
+/* 付属ファイルに後から足した欄（国・地域、生没年）を、すでにある置き場へ一度だけ補う */
+function backfillFromBundle(db){
+  if (db.filled >= 1) return false;
+  const b = new Map(bundleData().terms.map(t => [t.key, t]));
+  for (const t of db.terms) { const o = b.get(t.key); if (o) { if (!t.country && o.country) t.country = o.country; if (!t.life && o.life) t.life = o.life; } }
+  db.filled = 1;
+  return true;
+}
 let U = (() => {
-  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) return { ...blankDB(), ...o }; } catch (_) {}
+  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
   let old = null; try { old = JSON.parse(localStorage.getItem(UKEY) || 'null'); } catch (_) {}
-  const db = seedDB(old);
+  const db = seedDB(old); db.filled = 1;
   try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {}
   return db;
 })();
@@ -829,6 +849,11 @@ function buildData(){
     id: t.key.replace('::', ':') + ':' + n, unit: t.unit, cat: t.cat, type: 'term', question: text, answer: t.term, termKey: t.key,
     exclude: t.exclude || [], explanation: [t.summary, t.detail].filter(Boolean).join('\n'), point: t.point
   }));
+  /* 逆向き（答え→説明）：用語・人物を見て、正しい説明を選ぶ */
+  for (const t of TERMS) if (t.summary) QUESTIONS.push({
+    id: t.key.replace('::', ':') + ':r', unit: t.unit, cat: t.cat, type: 'rev', question: `「${t.term}」の説明として正しいものは？`, answer: t.summary, termKey: t.key,
+    exclude: t.exclude || [], explanation: [t.summary, t.detail].filter(Boolean).join('\n'), point: t.point
+  });
   for (const e of EVENTS) QUESTIONS.push({ id: `${e.unit}:y:${e.id}`, unit: e.unit, cat: '年号', type: 'year', eventId: e.id,
     question: `${e.title}は何年？`, answer: yearLabel(e), exclude: [], explanation: e.explanation || '', point: e.point });
   termByKey = new Map(TERMS.map(t => [t.key, t]));
@@ -856,7 +881,9 @@ function buildRuby(){
   RUBY_RE = keys.length ? new RegExp(keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g') : null;
 }
 const rb = s => { const e = esc(s); return SET.ruby && RUBY_RE ? e.replace(RUBY_RE, w => `<ruby>${w}<rt>${RUBY_MAP[w]}</rt></ruby>`) : e; };
-const memoKey = q => q.type === 'term' ? 'k:' + q.termKey : 'e:' + q.eventId;
+const lifeText = t => t ? [t.country, t.life].filter(Boolean).join('・') : '';
+const lifeLine = t => lifeText(t) ? `<p class="lifeln">${I('clock')}${esc(lifeText(t))}</p>` : '';
+const memoKey = q => q.termKey ? 'k:' + q.termKey : 'e:' + q.eventId;
 const memoOf = q => U.memos[memoKey(q)] || '';
 const memoOfEvent = e => U.memos['e:' + e.id] || '';
 
@@ -889,6 +916,13 @@ function distractorsFor(q){
     }
     return out;
   }
+  if (q.type === 'rev') {
+    const ngT = new Set([termByKey.get(q.termKey)?.term, ...(q.exclude || [])]);
+    const pick = list => uniq(list.filter(t => !ngT.has(t.term) && t.summary && t.summary !== q.answer).map(t => t.summary));
+    let c = pick(TERMS.filter(t => t.unit === q.unit && t.cat === q.cat));
+    if (c.length < 3) c = uniq([...c, ...pick(TERMS.filter(t => t.unit === q.unit))]);
+    return c;
+  }
   const ng = new Set([q.answer, ...(q.exclude || [])]);
   let c = uniq(TERMS.filter(t => t.unit === q.unit && t.cat === q.cat).map(t => t.term)).filter(a => !ng.has(a));
   if (c.length < 3) c = uniq([...c, ...TERMS.filter(t => t.unit === q.unit).map(t => t.term)]).filter(a => !ng.has(a));
@@ -904,8 +938,12 @@ function choiceInfo(q, c){
     const evs = EVENTS.filter(e => e.unit === q.unit && yearLabel(e) === c);
     return { text: evs.map(e => e.title).join('／'), key: null };
   }
+  if (q.type === 'rev') {
+    const t = TERMS.find(x => x.unit === q.unit && x.summary === c);
+    return { text: t ? `これは「${t.term}」の説明${lifeText(t) ? `（${lifeText(t)}）` : ''}` : '', key: t ? t.key : null, name: t ? t.term : '' };
+  }
   const t = termIn(q.unit, c);
-  return { text: t ? t.summary : '', key: t ? t.key : null };
+  return { text: t ? t.summary : '', key: t ? t.key : null, life: t ? lifeText(t) : '' };
 }
 function linkedTerms(unit, texts, skip){
   const s = new Set(skip), joined = texts.join('\n'), seen = new Set();
@@ -949,55 +987,81 @@ function playTransition(kind, snap){
 }
 /* =========================================================
  * 画面遷移と履歴
- *   決まり：アプリの画面の積み重ね（stack）と、ブラウザの履歴の深さを、いつも一致させる。
- *     履歴の深さ ＝ stack の段数 − 1 ＋（紙が開いていれば 1）
- *   ・進む（push）……履歴を1つ積む
- *   ・置きかえ（replace）……履歴は積まない
- *   ・下タブ（tab）……積んだ履歴をいったん底まで戻してから、積み直す（古い履歴を残さない）
- *   ・戻る……かならず history.back() を通し、popstate の中だけで画面を戻す
- *   ・紙（シート）は履歴を1つ持つ。「戻る」は紙だけを閉じる
- *   ・確かめる小窓が出ているときの「戻る」は、小窓を閉じるだけ
- *   ・ブラウザが自分で持っている「左端から払って戻る」（iPhoneのSafari・Android）と二重にならないよう、
- *     アプリ独自の払いは、ホーム画面に追加して開いたiPhone（払う戻るが無い）だけで使う
+ *   決まり（すべての遷移はこの決まりだけを通す）
+ *   1. 画面の積み重ね（stack）＋開いている重ね物（紙・確認の小窓）の数 ＝ ブラウザの履歴の深さ。
+ *   2. 履歴を新しく積む（pushState）のは、利用者が押したその場だけ。
+ *      ブラウザ（Chrome・Safari）は、操作なしに積まれた履歴を「戻る」で飛ばすため、
+ *      popstate やタイマーの中では積まない（置きかえ replaceState と、戻す go/back だけ使う）。
+ *   3. 下タブ：今の深さが0なら積む／1なら置きかえる／2以上なら深さ1まで戻してから置きかえる。
+ *   4. 戻る：かならず history.back()/go() を通し、画面を戻すのは popstate の中だけ。
+ *   5. 紙と確認の小窓は、それぞれ履歴を1つ持つ。「戻る」はいちばん上の重ね物だけを閉じる。
+ *      ボタンで閉じたときは、その履歴をまとめて戻す（すぐ次の遷移があれば、そちらで使い回す）。
+ *   6. ブラウザ自身の「左端から払って戻る」と二重にならないよう、
+ *      アプリ独自の払いは、ホーム画面に追加して開いたiPhoneでだけ使う。
  * ========================================================= */
-let modalEntry = false;      // 紙のぶんの履歴があるか
-let ignorePop = 0;           // こちらで起こした戻り（数えて読み飛ばす）
-let pendingTab = null;       // 下タブ：底まで戻ったあとに出す画面
-let pendingModalBack = null; // 紙を閉じたあとの「履歴を1つ戻す」（すぐ次の遷移があれば取り消して使い回す）
+const overlays = [];         // 開いている重ね物 { kind:'modal'|'dlg', entry:履歴を持つか, el }
+let pendingBacks = 0;        // 閉じたが、まだ戻していない重ね物の履歴の数
+let flushTimer = null;
+let ignorePop = 0;           // こちらで起こした戻り（読み飛ばす）
+const afterIgnored = [];     // 読み飛ばしたあとにすること（置きかえなど）
+let pendingTab = null;       // 下タブ：戻し終わったあとに出す画面
 let navLock = 0;             // 戻るの二度押し止め
-const histDepth = () => stack.length - 1 + (modalEntry ? 1 : 0);
-function takeModalEntry(){   // 紙の履歴を、次の遷移で使い回す
-  if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; return true; }
-  if (modalEntry) { modalEntry = false; return true; }
-  return false;
+const userActive = () => !navigator.userActivation || navigator.userActivation.isActive;
+const overlayEntries = () => overlays.filter(o => o.entry).length;
+const histDepth = () => stack.length - 1 + overlayEntries() + pendingBacks;
+function selfBack(n, then){ if (n <= 0) { then && then(); return; } ignorePop++; afterIgnored.push(then || null); history.go(-n); }
+function flushBacks(){ flushTimer = null; const n = pendingBacks; pendingBacks = 0; selfBack(n); }
+function takePending(){ clearTimeout(flushTimer); flushTimer = null; const n = pendingBacks; pendingBacks = 0; return n; }
+function overlayOpen(kind, el){
+  const o = { kind, el, entry: false };
+  if (pendingBacks > 0) { pendingBacks--; o.entry = true; if (!pendingBacks) { clearTimeout(flushTimer); flushTimer = null; } }   // 閉じてすぐ開き直した：履歴を使い回す
+  else if (userActive()) { o.entry = true; history.pushState({ d: histDepth() + 1 }, ''); }
+  overlays.push(o);
+  return o;
+}
+function overlayClose(o){
+  const i = overlays.indexOf(o);
+  if (i < 0) return;
+  overlays.splice(i, 1);
+  if (o.entry) { pendingBacks++; if (!flushTimer) flushTimer = setTimeout(flushBacks, 0); }
+}
+function closeAllOverlays(){
+  [...overlays].reverse().forEach(o => { if (o.kind === 'dlg') o.el._cancel && o.el._cancel(); else closeModal(true); });
 }
 function finishTab(route){
   const snap = snapshot();
   stack.length = 0; stack.push({ v: 'home' });
-  if (route.v !== 'home') { stack.push(route); history.pushState({ d: 1 }, ''); }
+  if (route.v !== 'home') stack.push(route);
   render(route);
   playTransition('none', snap);
 }
 function go(route, how = 'push'){
   hideTip();
+  closeAllOverlays();
+  const k = takePending();          // 閉じた重ね物の履歴（まだ戻していないもの）
+  const base = Math.max(0, stack.length - 1);    // 画面だけの深さ
   if (how === 'tab') {
-    const reuse = takeModalEntry();
-    if (modalOpen()) closeModal(true, true);
-    const d = stack.length - 1 + (reuse ? 1 : 0);
-    if (d > 0) { pendingTab = route; history.go(-d); return; }   // 続きは popstate で
-    finishTab(route); return;
+    const D = base + k;
+    if (route.v === 'home') {
+      if (D === 0) { finishTab(route); return; }
+      pendingTab = route; history.go(-D); return;                       // 続きは popstate
+    }
+    if (D === 0) { history.pushState({ d: 1 }, ''); finishTab(route); return; }   // 押したその場なので積んでよい
+    if (D === 1) { history.replaceState({ d: 1 }, ''); finishTab(route); return; }
+    pendingTab = route; history.go(-(D - 1)); return;                   // 深さ1まで戻して置きかえる
   }
   const snap = snapshot();
-  const reuse = takeModalEntry();
-  if (modalOpen()) closeModal(true, true);
   let anim = 'none';
   if (how === 'replace' && stack.length) {
     stack[stack.length - 1] = route;
-    if (reuse) { ignorePop++; history.back(); }   // 紙の履歴だけ片づける
+    selfBack(k);
   } else {
     if (stack.length) stack[stack.length - 1].y = scrollY;
     stack.push(route);
-    if (reuse) history.replaceState({ d: stack.length - 1 }, ''); else history.pushState({ d: stack.length - 1 }, '');
+    const d = stack.length - 1;
+    if (k === 0) history.pushState({ d }, '');
+    else if (k === 1) history.replaceState({ d }, '');                  // 閉じた重ね物の履歴を使い回す
+    else selfBack(k - 1, () => history.replaceState({ d }, ''));
     anim = FROM_BOTTOM.includes(route.v) ? 'up' : 'push';
   }
   render(route);
@@ -1006,10 +1070,10 @@ function go(route, how = 'push'){
 function uiBack(){
   if (Date.now() - navLock < 350) return;   // 二度押しで2画面戻らないように
   navLock = Date.now();
-  if (stack.length <= 1) { go({ v: 'home' }, 'tab'); return; }
-  const extra = takeModalEntry() ? 1 : 0;
-  if (modalOpen()) closeModal(true, true);
-  history.go(-(1 + extra));
+  closeAllOverlays();
+  const k = takePending();
+  if (stack.length <= 1) { selfBack(k); go({ v: 'home' }, 'tab'); return; }
+  history.go(-(1 + k));
 }
 function quitRoundIfNeeded(){
   if (cur().v !== 'round' || !state.round || state.round.i >= state.round.items.length) return;
@@ -1020,30 +1084,29 @@ function quitRoundIfNeeded(){
   toast(done ? `ここまでの${done}${rd.items.every(x => x.type === 'sort') ? 'セット' : '問'}の結果を保存しました` : '中断しました');
 }
 window.addEventListener('popstate', e => {
-  if (ignorePop > 0) { ignorePop--; return; }
+  if (ignorePop > 0) { ignorePop--; const f = afterIgnored.shift(); f && f(); return; }
   hideTip();
   const d = e.state && typeof e.state.d === 'number' ? e.state.d : 0;
-  /* 下タブ：底まで戻ったところで、新しい画面を積む */
-  if (pendingTab) { const r = pendingTab; pendingTab = null; finishTab(r); return; }
-  /* 確かめる小窓が出ていたら、小窓を閉じるだけ（画面は戻さない） */
-  const dl = document.querySelector('.dlg:not(.closing)');
-  if (dl) { dl._cancel && dl._cancel(); history.pushState({ d: histDepth() }, ''); return; }
-  /* 紙が開いていたら、紙を閉じるだけ */
-  if (modalEntry && modalOpen() && modalGuard && modalGuard()) {
-    /* 書きかけの紙は、戻るでも黙って閉じない（✕と同じく確かめる） */
-    history.pushState({ d: histDepth() }, '');
-    requestCloseModal();
-    return;
+  if (pendingTab) {
+    const r = pendingTab; pendingTab = null;
+    if (r.v !== 'home') history.replaceState({ d: 1 }, '');
+    finishTab(r); return;
   }
-  if (modalEntry || pendingModalBack) {
-    if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; }
-    modalEntry = false;
-    if (modalOpen()) closeModal(false, true);
+  /* 重ね物が開いていたら、いちばん上だけを閉じる（その履歴はもう戻っている） */
+  const top = overlays[overlays.length - 1];
+  if (top && top.entry) {
+    top.entry = false;          // 履歴は消費済み
+    if (top.kind === 'dlg') { top.el._cancel && top.el._cancel(); }
+    else closeModalByBack();
     if (d >= stack.length - 1) return;
+  } else if (top) {
+    closeAllOverlays(); takePending();
   }
+  if (pendingBacks) { takePending(); }
   /* 進む（右端から払うなど）は受けない：元の深さへ戻す */
-  if (d > stack.length - 1) { ignorePop++; history.go((stack.length - 1) - d); return; }
-  if (d === stack.length - 1) return;
+  const want = stack.length - 1 + overlayEntries();
+  if (d > want) { selfBack(d - want); return; }
+  if (d >= stack.length - 1) return;
   /* 戻る：d の深さまで画面を下ろす（長押しで何段か戻ったときも、ここでまとめて） */
   quitRoundIfNeeded();
   const snap = snapshot(), popped = cur();
@@ -1073,7 +1136,7 @@ function tabTap(v){
   const atRoot = stack.length === (v === 'home' ? 1 : 2) && cur().v === v;
   if (!atRoot) { go({ v }, 'tab'); return; }
   if (scrollY > 8) { scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' }); return; }
-  if (v === 'list') { state.list.kind = 'quiz'; state.search.list = blankSearchState(); state.open = null; }
+  if (v === 'list') { state.list.kind = 'quiz'; state.search.list = blankSearchState(); state.opened.clear(); }
   if (v === 'dict') { state.dict.tab = 'terms'; state.search.dict = blankSearchState(); }
 
   render(cur(), true);
@@ -1122,8 +1185,9 @@ function renderTop(){
 }
 
 /* ---------- 下から出る紙（シート） ----------
-   開くと履歴を1つ持つ。✕・キャンセル・保存で閉じたときは、その履歴を1つ戻す */
-let modalGuard = null;
+   開くと履歴を1つ持つ。✕・キャンセル・保存で閉じたときは、その履歴を戻す。
+   「戻る」で閉じたとき、書きかけだったら、すぐ下の知らせから入力を戻せる */
+let modalGuard = null, modalOv = null;
 const modalOpen = () => !document.getElementById('modal').hidden;
 function openModal(html, opts = {}){
   hideTip();
@@ -1131,8 +1195,7 @@ function openModal(html, opts = {}){
   document.getElementById('mbody').innerHTML = html;
   m.hidden = false; m.classList.remove('closing'); document.body.style.overflow = 'hidden';
   if (!was) { m.classList.remove('opening'); void m.offsetWidth; m.classList.add('opening'); }
-  if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; modalEntry = true; }   // 閉じてすぐ開き直した
-  if (!modalEntry) { modalEntry = true; history.pushState({ d: histDepth() }, ''); }
+  if (!modalOv) modalOv = overlayOpen('modal', m);
   m.querySelector('.msheet').scrollTop = 0;
   m.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
   const form = m.querySelector('form[data-guard]');
@@ -1141,26 +1204,48 @@ function openModal(html, opts = {}){
   if (!opts.noFocus) m.querySelector('.mclose').focus({ preventScroll: true });
 }
 function autoGrow(el){ el.style.height = 'auto'; el.style.height = Math.max(el.scrollHeight + 2, 60) + 'px'; }
-/* instant：動かさずに閉じる／fromNav：遷移の側で履歴を扱うので、ここでは触らない */
-function closeModal(instant, fromNav){
+function hideModalNow(instant){
   const m = document.getElementById('modal');
-  if (!fromNav && modalEntry) {
-    modalEntry = false;
-    /* すぐあとに画面の遷移が続くなら、そちらで履歴を使い回す（back と push が入れ違いにならないように） */
-    pendingModalBack = setTimeout(() => { pendingModalBack = null; ignorePop++; history.back(); }, 0);
-  }
-  if (!modalOpen()) return;
   modalGuard = null;
+  if (!modalOpen()) return;
   const fin = () => { m.hidden = true; m.classList.remove('closing', 'opening'); document.body.style.overflow = ''; };
   if (instant === true || reduceMotion()) { fin(); return; }
   m.classList.add('closing');
   setTimeout(() => { if (m.classList.contains('closing')) fin(); }, 280);
+}
+function closeModal(instant){
+  if (modalOv) { const o = modalOv; modalOv = null; overlayClose(o); }
+  hideModalNow(instant);
+}
+function closeModalByBack(){
+  const m = document.getElementById('modal'), dirty = modalGuard && modalGuard();
+  let saved = null;
+  if (dirty) { const form = m.querySelector('form'); saved = { html: document.getElementById('mbody').innerHTML, vals: [...form.querySelectorAll('[data-f]')].map(el => el.type === 'radio' ? el.checked : el.value) }; }
+  const o = modalOv; modalOv = null; if (o) { const i = overlays.indexOf(o); if (i >= 0) overlays.splice(i, 1); }
+  hideModalNow();
+  if (saved) {
+    toastAction('入力した内容を閉じました', '元に戻す', () => {
+      openModal(saved.html, { noFocus: true });
+      const form = document.querySelector('#mbody form');
+      [...form.querySelectorAll('[data-f]')].forEach((el, i) => { if (el.type === 'radio') el.checked = saved.vals[i]; else el.value = saved.vals[i]; });
+      form.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
+      modalGuard = () => true;
+    });
+  }
 }
 async function requestCloseModal(){
   if (modalGuard && modalGuard()) {
     if (!await confirmDialog({ title: '保存せずに閉じますか？', body: '入力した内容は保存されません。', ok: '閉じる' })) return;
   }
   closeModal();
+}
+function toastAction(text, label, fn){
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast act'; t.setAttribute('role', 'status');
+  t.innerHTML = `<span>${esc(text)}</span><button type="button">${esc(label)}</button>`;
+  t.querySelector('button').addEventListener('click', ev => { ev.stopPropagation(); t.remove(); fn(); });
+  document.body.appendChild(t); setTimeout(() => t.remove(), 6000);
 }
 
 /* ---------- 確かめる小窓（削除など） ---------- */
@@ -1171,10 +1256,11 @@ function confirmDialog({ title, body = '', ok = '削除する', danger = true, c
     d.className = 'dlg'; d.setAttribute('role', 'alertdialog'); d.setAttribute('aria-modal', 'true');
     d.innerHTML = `<div class="dlg-bg"></div><div class="dlg-box"><h3>${esc(title)}</h3>${body ? `<p>${esc(body)}</p>` : ''}
       <div class="dlg-btns"><button type="button" class="btn" data-r="0">${esc(cancel)}</button><button type="button" class="btn ${danger ? 'danger' : 'primary'}" data-r="1">${esc(ok)}</button></div></div>`;
-    let closed = false;
+    let closed = false, ov = null;
     const done = r => {
       if (closed) return; closed = true;
       document.removeEventListener('keydown', key, true);
+      overlayClose(ov);
       d.classList.add('closing'); setTimeout(() => d.remove(), 180);
       resolve(r);
     };
@@ -1187,6 +1273,7 @@ function confirmDialog({ title, body = '', ok = '削除する', danger = true, c
     d._cancel = () => done(false);
     document.addEventListener('keydown', key, true);
     document.body.appendChild(d);
+    ov = overlayOpen('dlg', d);
     d.querySelector('[data-r="1"]').focus({ preventScroll: true });
   });
 }
@@ -1217,7 +1304,7 @@ addEventListener('resize', hideTip);
  * ========================================================= */
 const state = {
   unit: 'all',
-  setup: { buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
+  setup: { dir: 'fwd', buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
   list: { kind: 'quiz' },
   dict: { tab: 'terms' },
   search: { list: { draft: { q: '', units: [], cats: [], buckets: [] }, applied: null, open: false }, dict: { draft: { q: '', units: [], cats: [], buckets: [] }, applied: null, open: false } },
@@ -1226,7 +1313,7 @@ const state = {
   imp: null,
   bulk: { unit: null, newName: '', text: '', done: null },
   one: { kind: 'term', unit: null, newName: '', f: {} },
-  open: null, round: null, streak: 0
+  opened: new Set(), round: null, streak: 0
 };
 const catsFor = (kind, unit) => kind === 'quiz' ? uniq(inUnit(QUESTIONS, unit).map(q => q.cat)) : uniq(inUnit(EVENTS, unit).map(e => e.group || 'その他'));
 function selectedCats(kind, unit){
@@ -1255,7 +1342,7 @@ const unitIcon = id => id === 'all' ? 'layers' : (unitById.get(id)?.icon || 'boo
  * 学習（単元一覧）
  * ========================================================= */
 function renderHome(){
-  state.round = null; state.open = null;
+  state.round = null; state.opened.clear();
   const unitRow = id => {
     const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id);
     const c = sumC(countB('q', qs), countB('e', evs));
@@ -1281,7 +1368,7 @@ function renderHome(){
  * 単元ページ
  * ========================================================= */
 function renderUnit(id){
-  state.unit = id; state.round = null; state.open = null;
+  state.unit = id; state.round = null; state.opened.clear();
   const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id);
   const cq = countB('q', qs), ce = countB('e', evs);
   const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b], 0);
@@ -1294,7 +1381,7 @@ function renderUnit(id){
   <section class="sect">
     <h2 class="stitle">学習する</h2>
     <div class="menu">
-      ${qs.length ? row('setupQuiz', 'list', '4択問題', `${qs.length}問`) : ''}
+      ${qs.length ? row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`) : ''}
       ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
       ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length ? `<p class="empty">まだ問題がありません</p>` : ''}
@@ -1317,9 +1404,12 @@ function renderUnit(id){
 /* =========================================================
  * 出題の設定
  * ========================================================= */
+const DIRS = [['fwd', '説明 → 答え'], ['rev', '答え → 説明'], ['mix', 'まぜる']];
+const dirOk = (q, dir) => dir === 'mix' || (dir === 'rev' ? q.type === 'rev' : q.type !== 'rev');
 function setupPool(kind, unit){
   const k = kind === 'quiz' ? 'q' : 'e', B = state.setup.buckets[kind], cats = selectedCats(kind, unit);
-  const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
+  const hasRev = inUnit(QUESTIONS, unit).some(q => q.type === 'rev'), dir = hasRev ? state.setup.dir : 'fwd';
+  const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat) && dirOk(q, dir)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
   return { pool: inScope.filter(x => B.has(bucket(k, x.id))), c: countB(k, inScope) };
 }
 function renderSetup(r){
@@ -1340,6 +1430,8 @@ function renderSetup(r){
   app.innerHTML = `
   <p class="psub" style="margin:0 0 2px">${esc(unitName(unit))}</p>
   <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'}</h1>
+  ${kind === 'quiz' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev') ? `<section class="fgroup"><h2 class="stitle">出題の向き ${help('dir')}</h2>
+    <div class="seg">${DIRS.map(([v, l]) => `<button data-act="sdir" data-v="${v}" aria-pressed="${S.dir === v}">${l}</button>`).join('')}</div></section>` : ''}
   <section class="fgroup">
     <h2 class="stitle">出題する問題 ${help('buckets')}</h2>
     <div class="checklist" role="group">${ORDER.map(b => `
@@ -1401,7 +1493,7 @@ async function startRound(items, origin, how = 'push'){
 }
 function finishRound(){
   const r = state.round, total = r.results.length, ok = r.results.filter(x => x.ok).length;
-  clearSession(); state.open = null;
+  clearSession(); state.opened.clear();
   SFX.finish(total ? ok / total * 100 : 0);
   go({ v: 'result' }, 'replace');
 }
@@ -1464,6 +1556,7 @@ function renderQuizFeedback(first){
     const info = choiceInfo(q, ch), isAns = ch === q.answer, picked = k === c.picked && !isAns;
     return `<div class="citem ${isAns ? 'ok' : ''} ${picked ? 'picked' : ''}"><span class="ic">${I(isAns ? 'check' : 'x')}</span>
       <div class="ct"><div class="cn">${rb(ch)}${isAns ? '<small>正解</small>' : picked ? '<small>あなたの解答</small>' : ''}</div>
+      ${info.life ? `<p class="lifeln sm">${I('clock')}${esc(info.life)}</p>` : ''}
       ${info.text ? `<p class="cs">${rb(info.text)}</p>` : ''}
       ${info.key ? `<button class="textbtn" data-act="term" data-v="${esc(info.key)}">${I('book')}図鑑で見る</button>` : ''}</div></div>`;
   }).join('');
@@ -1475,7 +1568,8 @@ function renderQuizFeedback(first){
   const verdict = c.unknown ? 'わからない' : c.ok ? (state.streak >= 3 ? `正解　${state.streak}連続` : '正解') : '不正解';
   document.getElementById('fb').innerHTML = `
   <div class="verdict b-${vb}"><span class="vi">${I(c.unknown ? 'book' : c.ok ? 'check' : 'x')}</span><div><b>${verdict}</b><span class="vs">${sub}</span></div></div>
-  <div class="ansrow"><p class="answer"><span>答え</span>${rb(q.answer)}</p>${editBtn('editQ', q.id)}</div>
+  <div class="ansrow"><p class="answer"><span>答え</span><span class="atxt">${q.type === 'rev' ? `「${rb(termByKey.get(q.termKey)?.term || '')}」の説明は、上の緑の選択肢` : rb(q.answer)}</span></p>${editBtn('editQ', q.id)}</div>
+  ${q.termKey ? lifeLine(termByKey.get(q.termKey)) : ''}
   ${memoBlock(memoOf(q))}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('q', q.id)}</section>
   <section class="block"><h3>解説</h3><p class="prose">${rb(q.explanation)}</p></section>
@@ -1637,6 +1731,7 @@ function openTerm(key){
   openModal(`
     <h2>${rb(t.term)}</h2>
     <p class="kana">${t.kana ? esc(t.kana) + '　' : ''}${esc(unitName(t.unit))}／${esc(t.cat)}</p>
+    ${lifeLine(t)}
     <p class="lead">${rb(t.summary)}</p>
     <div class="btnrow">${editBtn('editT', t.key)}</div>
     ${memoBlock(U.memos['k:' + key])}
@@ -1672,6 +1767,8 @@ function openEditTerm(key){
       ${fld('問題文', 'q', qList(t.q).join('\n\n'), 'ta', false, null, '空行で区切ると複数の問題になります')}
       ${fld('答え（用語・人物）', 'term', t.term, 'inp', true)}
       ${fld('読み', 'kana', t.kana || '', 'inp', false, null, 'ひらがな（ふりがなになります）')}
+      ${fld('国・地域', 'country', t.country || '', 'inp', false, null, '人物のとき 例：フランス')}
+      ${fld('生没年・時期', 'life', t.life || '', 'inp', false, null, '人物のとき 例：1712–1778')}
       ${fld('要約', 'summary', t.summary || '', 'ta', true)}
       ${fld('解説', 'detail', t.detail || '', 'ta')}
       ${fld('覚え方', 'point', t.point || '', 'ta')}
@@ -1716,10 +1813,10 @@ function saveEdit(form){
   if (form.dataset.kind === 'term') {
     const key = form.dataset.key, t = termByKey.get(key);
     const qs = f.q.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
-    const vals = { q: qs.length > 1 ? qs : (qs[0] || ''), term: f.term.trim(), kana: f.kana.trim(), cat: f.cat.trim() || t.cat, summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), unit: f.unit || t.unit };
+    const vals = { q: qs.length > 1 ? qs : (qs[0] || ''), term: f.term.trim(), kana: f.kana.trim(), country: f.country.trim(), life: f.life.trim(), cat: f.cat.trim() || t.cat, summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), unit: f.unit || t.unit };
     if (!vals.term || !vals.summary) { toast('答えと要約は必須です'); return false; }
     if (vals.term !== t.term || vals.unit !== t.unit) { if (termByName.has(vals.unit + '::' + vals.term) && termByName.get(vals.unit + '::' + vals.term) !== t) { toast('同じ単元に同じ用語があります'); return false; } }
-    for (const k of ['q', 'term', 'kana', 'cat', 'summary', 'detail', 'point']) delete t[k];
+    for (const k of ['q', 'term', 'kana', 'country', 'life', 'cat', 'summary', 'detail', 'point']) delete t[k];
     Object.assign(t, clean({ ...vals }));
     if (kanaOk(t)) U.ruby[t.term] = t.kana.replace(/\s+/g, '');
     setMemo('k:' + key, f.memo);
@@ -1764,11 +1861,14 @@ const TEMPLATE = `あなたは保育士試験の学習教材を作るアシス�
 ・「要約」は1〜2文。ほかの問題で誤りの選択肢として表示されるので、それだけで意味が分かるように書く
 ・同じ「分野」の用語が4つ以上になるようにする（誤りの選択肢に使うため）
 ・「読み」には用語のよみがなをひらがなで書く（アプリでふりがなとして表示される）
+・人物のときは「国」に活動した国・地域、「生没年」に生まれた年と亡くなった年（例：1712–1778）を書く。はっきりしないときは「明治期」「1970年代に提唱」のように時期で書く
 ・事実に自信がない内容は書かない
 
 # 形式（用語・人物）
 用語:
 読み:
+国:
+生没年:
 分野:
 要約:
 解説:
@@ -1787,6 +1887,8 @@ const TEMPLATE = `あなたは保育士試験の学習教材を作るアシス�
 # 出力例
 用語: ルソー
 読み: るそー
+国: フランス
+生没年: 1712–1778
 分野: 西洋の人物
 要約: 18世紀フランスの思想家。『エミール』で消極教育を説き、「子どもの発見者」と呼ばれる。
 解説: 子どもを「小さな大人」ではなく独自の存在と捉えた。「自然に還れ」。
@@ -1799,7 +1901,7 @@ const TEMPLATE = `あなたは保育士試験の学習教材を作るアシス�
 出来事: 「学制」の制定
 解説: わが国初の近代的な学校制度。「国民皆学」を目指した。
 ---`;
-const KEYMAP = { '単元': 'unit', '用語': 'term', '人物': 'term', '見出し': 'term', '答え': 'term', '読み': 'kana', '分野': 'cat', '要約': 'summary', '解説': 'detail', '問題': 'q', '問題文': 'q', '覚え方': 'point', 'ポイント': 'point', '除外': 'exclude', 'メモ': 'memo', '年': 'year', '西暦': 'year', '和暦': 'era', '時代': 'group', '出来事': 'title' };
+const KEYMAP = { '国': 'country', '国・地域': 'country', '地域': 'country', '生没年': 'life', '時期': 'life', '活動時期': 'life', '単元': 'unit', '用語': 'term', '人物': 'term', '見出し': 'term', '答え': 'term', '読み': 'kana', '分野': 'cat', '要約': 'summary', '解説': 'detail', '問題': 'q', '問題文': 'q', '覚え方': 'point', 'ポイント': 'point', '除外': 'exclude', 'メモ': 'memo', '年': 'year', '西暦': 'year', '和暦': 'era', '時代': 'group', '出来事': 'title' };
 const toHalf = s => String(s || '').replace(/[０-９]/g, d => String('０１２３４５６７８９'.indexOf(d)));
 function parseText(text){
   const blocks = [[]];
@@ -1833,7 +1935,7 @@ function parseText(text){
       items.push(clean({ kind: 'event', year: y, era: o.era, group: o.group, title: o.title, explanation: o.detail || o.summary, unitName: o.unit, memo: o.memo }));
     } else {
       if (!o.term || !o.summary) { errors.push(`${no}件目${o.term ? `（${o.term}）` : ''}：「用語」と「要約」が必要です`); return; }
-      items.push(clean({ kind: 'term', term: o.term, kana: o.kana, cat: o.cat || 'その他', summary: o.summary, detail: o.detail,
+      items.push(clean({ kind: 'term', term: o.term, kana: o.kana, country: o.country, life: o.life, cat: o.cat || 'その他', summary: o.summary, detail: o.detail,
         q: o.q ? (o.q.length === 1 ? o.q[0] : o.q) : undefined, point: o.point,
         exclude: o.exclude ? o.exclude.split(/[、,，]/).map(s => s.trim()).filter(Boolean) : undefined, unitName: o.unit, memo: o.memo }));
     }
@@ -1942,6 +2044,8 @@ function renderOne(){
     ${O.kind === 'term' ? `
       ${fld('答え（用語・人物）', 'term', f.term || '', 'inp', true)}
       ${fld('読み', 'kana', f.kana || '', 'inp', false, null, 'ひらがな（ふりがなになります）')}
+      ${fld('国・地域', 'country', f.country || '', 'inp', false, null, '人物のとき 例：フランス')}
+      ${fld('生没年・時期', 'life', f.life || '', 'inp', false, null, '人物のとき 例：1712–1778')}
       ${fld('問題文', 'q', f.q || '', 'ta', false, null, '答えの名前を含めずに書く')}
       ${fld('要約', 'summary', f.summary || '', 'ta', true, null, '誤りの選択肢になったときにも表示されます')}
       ${fld('解説', 'detail', f.detail || '', 'ta')}
@@ -1961,7 +2065,7 @@ function submitOne(){
   if (O.kind === 'term') {
     if (!(f.term || '').trim() || !(f.summary || '').trim()) { toast('答えと要約は必須です'); return; }
     const qs = (f.q || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
-    item = clean({ kind: 'term', term: f.term.trim(), kana: (f.kana || '').trim(), cat: (f.cat || '').trim() || 'その他', summary: f.summary.trim(),
+    item = clean({ kind: 'term', term: f.term.trim(), kana: (f.kana || '').trim(), country: (f.country || '').trim(), life: (f.life || '').trim(), cat: (f.cat || '').trim() || 'その他', summary: f.summary.trim(),
       detail: (f.detail || '').trim(), point: (f.point || '').trim(), q: qs.length > 1 ? qs : qs[0] });
   } else {
     const y = parseInt(toHalf(f.year), 10);
@@ -2085,7 +2189,7 @@ function renderImport(){
   const needUnit = I0.items.some(x => !x.unitPreset && !x.unitName);
   const card = (it, i) => {
     const dup = impDup(it), ul = impUnitLabel(it);
-    const title = it.kind === 'term' ? rb(it.term) : `<span class="yr">${it.year}${it.era ? `（${esc(it.era)}）` : ''}</span> ${rb(it.title)}`;
+    const title = it.kind === 'term' ? rb(it.term) + (lifeText(it) ? `<span class="ick" style="margin-left:8px">${esc(lifeText(it))}</span>` : '') : `<span class="yr">${it.year}${it.era ? `（${esc(it.era)}）` : ''}</span> ${rb(it.title)}`;
     const sub = it.kind === 'term' ? (qList(it.q)[0] ? `<p class="ic-q">${rb(qList(it.q)[0])}</p>` : '') + `<p class="ic-s">${rb(it.summary || '')}</p>` : (it.explanation ? `<p class="ic-s">${rb(it.explanation)}</p>` : '');
     return `<li class="icard ${it.sel ? '' : 'off'}">
       <label class="ichk"><input type="checkbox" data-imp="${i}" ${it.sel ? 'checked' : ''} aria-label="取り込む"><span class="box">${I('check')}</span></label>
@@ -2114,6 +2218,8 @@ function openImpSheet(i){
         ${fld('問題文', 'q', qList(it.q).join('\n\n'), 'ta', false, null, '空行で区切ると複数の問題になります')}
         ${fld('答え（用語・人物）', 'term', it.term || '', 'inp', true)}
         ${fld('読み', 'kana', it.kana || '')}
+        ${fld('国・地域', 'country', it.country || '')}
+        ${fld('生没年・時期', 'life', it.life || '')}
         ${fld('要約', 'summary', it.summary || '', 'ta', true)}
         ${fld('解説', 'detail', it.detail || '', 'ta')}
         ${fld('覚え方', 'point', it.point || '', 'ta')}
@@ -2132,8 +2238,8 @@ function saveImpForm(form){
   if (it.kind === 'term') {
     if (!f.term.trim() || !f.summary.trim()) { toast('答えと要約は必須です'); return; }
     const qs = f.q.split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
-    for (const k of ['q', 'term', 'kana', 'summary', 'detail', 'point', 'cat']) delete it[k];
-    Object.assign(it, clean({ q: qs.length > 1 ? qs : qs[0], term: f.term.trim(), kana: f.kana.trim(), summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), cat: f.cat.trim() || 'その他' }));
+    for (const k of ['q', 'term', 'kana', 'country', 'life', 'summary', 'detail', 'point', 'cat']) delete it[k];
+    Object.assign(it, clean({ q: qs.length > 1 ? qs : qs[0], term: f.term.trim(), kana: f.kana.trim(), country: f.country.trim(), life: f.life.trim(), summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), cat: f.cat.trim() || 'その他' }));
   } else {
     const y = parseInt(toHalf(f.year), 10);
     if (!f.title.trim() || !y) { toast('出来事と年は必須です'); return; }
@@ -2226,9 +2332,9 @@ function hitsOf(fields, words){
   if (!words.every(w => fs.some(f => f.n.includes(w)))) return false;
   return fs.filter(f => words.some(w => f.n.includes(w)));
 }
-const fieldsOfTerm = t => [['用語', t.term], ['読み', t.kana], ['要約', t.summary], ['解説', t.detail], ['問題', qList(t.q).join('\n')], ['覚え方', t.point], ['メモ', U.memos['k:' + t.key]], ['分野', t.cat]];
+const fieldsOfTerm = t => [['用語', t.term], ['読み', t.kana], ['国・時代', lifeText(t)], ['要約', t.summary], ['解説', t.detail], ['問題', qList(t.q).join('\n')], ['覚え方', t.point], ['メモ', U.memos['k:' + t.key]], ['分野', t.cat]];
 function fieldsOfQ(q){
-  if (q.type === 'term') { const t = termByKey.get(q.termKey) || {}; return [['問題', q.question], ['答え', q.answer], ['読み', t.kana], ['解説', q.explanation], ['覚え方', q.point], ['メモ', memoOf(q)]]; }
+  if (q.termKey) { const t = termByKey.get(q.termKey) || {}; return [['問題', q.question], ['答え', q.answer], ['用語', t.term], ['読み', t.kana], ['解説', q.explanation], ['覚え方', q.point], ['メモ', memoOf(q)]]; }
   const e = eById.get(q.eventId); return [['問題', q.question], ['年', yearLabel(e)], ['解説', e.explanation], ['メモ', memoOfEvent(e)]];
 }
 const fieldsOfE = e => [['出来事', e.title], ['年', yearLabel(e)], ['時代', e.group], ['解説', e.explanation], ['メモ', memoOfEvent(e)]];
@@ -2258,10 +2364,11 @@ function searchGroups(ctx){
       if (gs.length > 1) out.push(['時代', pills('cats', gs)]);
     }
   } else {
-    const isQ = state.list.kind === 'quiz', k = isQ ? 'q' : 'e';
-    const units = uniq((isQ ? QUESTIONS : EVENTS).map(x => x.unit));
+    const isQ = state.list.kind !== 'sort', k = isQ ? 'q' : 'e';
+    const QS = QUESTIONS.filter(q => state.list.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev');
+    const units = uniq((isQ ? QS : EVENTS).map(x => x.unit));
     if (units.length > 1) out.push(['単元', pills('units', units, unitName)]);
-    const scope = (isQ ? QUESTIONS : EVENTS).filter(x => !d.units.length || d.units.includes(x.unit));
+    const scope = (isQ ? QS : EVENTS).filter(x => !d.units.length || d.units.includes(x.unit));
     const c = countB(k, scope);
     out.push(['振り分け', pills('buckets', ORDER, b => BL[b], b => c[b])]);
   }
@@ -2296,7 +2403,7 @@ function searchBar(ctx){
 function applySearch(ctx){
   const S = state.search[ctx];
   S.applied = draftHas(S.draft) ? JSON.parse(JSON.stringify(S.draft)) : null;
-  S.open = false; state.open = null;
+  S.open = false; state.opened.clear();
   document.activeElement?.blur?.();
   render(cur(), true);
   scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
@@ -2315,18 +2422,18 @@ function toggleSearch(ctx){
 
 /* ---------- 一覧の行 ---------- */
 function qRow(q, showUnit, hits, words){
-  const b = bucket('q', q.id), open = state.open === 'q:' + q.id, memo = memoOf(q);
+  const b = bucket('q', q.id), open = state.opened.has('q:' + q.id), memo = memoOf(q);
   return `<li class="row ${open ? 'open' : ''}">
     <button class="row-h" data-act="open" data-v="q:${esc(q.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${showUnit ? `<span class="row-u">${esc(unitName(q.unit))}</span>` : ''}${markHTML(q.question, words)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
     ${!open && hitBox(hits, words, ['問題']) ? `<div class="row-hits">${hitBox(hits, words, ['問題'])}</div>` : ''}
-    ${open ? `<div class="row-d"><p class="answer"><span>答え</span>${rb(q.answer)}</p><p class="prose">${rb(q.explanation)}</p>
+    ${open ? `<div class="row-d"><p class="answer"><span>答え</span><span class="atxt">${rb(q.answer)}</span></p><p class="prose">${rb(q.explanation)}</p>
       ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(memo)}</p></div>` : ''}
       ${classifySeg('q', q.id, true)}
-      <div class="btnrow">${q.type === 'term' ? `<button class="textbtn" data-act="term" data-v="${esc(q.termKey)}">${I('book')}図鑑で見る</button>` : ''}${editBtn('editQ', q.id)}</div></div>` : ''}
+      <div class="btnrow">${q.termKey ? `<button class="textbtn" data-act="term" data-v="${esc(q.termKey)}">${I('book')}図鑑で見る</button>` : ''}${editBtn('editQ', q.id)}</div></div>` : ''}
   </li>`;
 }
 function eRow(e, hits, words){
-  const b = bucket('e', e.id), open = state.open === 'e:' + e.id, memo = memoOfEvent(e);
+  const b = bucket('e', e.id), open = state.opened.has('e:' + e.id), memo = memoOfEvent(e);
   return `<li class="row ${open ? 'open' : ''}">
     <button class="row-h" data-act="open" data-v="e:${esc(e.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${markHTML(e.title, words)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
     ${!open && hitBox(hits, words, ['出来事']) ? `<div class="row-hits">${hitBox(hits, words, ['出来事'])}</div>` : ''}
@@ -2339,10 +2446,30 @@ function eRow(e, hits, words){
 /* =========================================================
  * 振り分け
  * ========================================================= */
+/* 一覧の行だけを描き直す（開く・閉じる・振り分けで、画面全体を描き直さない＝画面が動かない） */
+function redrawRow(el, key){
+  const li = el.closest('li.row'); if (!li) { render(cur(), true); return; }
+  const [kind, id] = [key.slice(0, 1), key.slice(2)];
+  let html = '';
+  if (cur().v === 'list') {
+    const { items, words, applied } = listItems(), multi = !applied || applied.units.length !== 1;
+    const it = items.find(({ x }) => x.id === id) || { x: kind === 'q' ? qById.get(id) : eById.get(id), hits: null };
+    if (!it.x) return;
+    html = kind === 'q' ? qRow(it.x, multi, it.hits, words) : eRow(it.x, it.hits, words);
+  } else {
+    const x = kind === 'q' ? qById.get(id) : eById.get(id); if (!x) return;
+    html = kind === 'q' ? qRow(x, state.round?.origin?.unit === 'all') : eRow(x);
+  }
+  const top = li.getBoundingClientRect().top;
+  li.outerHTML = html;
+  const nli = [...app.querySelectorAll('li.row')].find(r => r.querySelector(`[data-v="${CSS.escape(key)}"]`));
+  if (nli) { const dy = nli.getBoundingClientRect().top - top; if (Math.abs(dy) > 1) scrollBy(0, dy); }   // 押した行が動かないように
+  nli?.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
+}
 function listItems(){
-  const L = state.list, a = state.search.list.applied, isQ = L.kind === 'quiz', k = isQ ? 'q' : 'e';
+  const L = state.list, a = state.search.list.applied, isQ = L.kind !== 'sort', k = isQ ? 'q' : 'e';
   const words = a ? searchWords(a.q) : [];
-  const scoped = (isQ ? QUESTIONS : EVENTS).filter(x => !a || !a.units.length || a.units.includes(x.unit));
+  const scoped = (isQ ? QUESTIONS.filter(q => L.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !a || !a.units.length || a.units.includes(x.unit));
   const items = [];
   for (const x of scoped) {
     if (a && a.buckets.length && !a.buckets.includes(bucket(k, x.id))) continue;
@@ -2359,8 +2486,9 @@ function renderList(){
   app.innerHTML = `
   <h1 class="ptitle">振り分け ${help('list')}</h1>
   <div class="seg" style="margin-top:18px">
-    <button data-act="lkind" data-v="quiz" aria-pressed="${isQ}">4択問題</button>
-    <button data-act="lkind" data-v="sort" aria-pressed="${!isQ}">年号並べ替え</button>
+    <button data-act="lkind" data-v="quiz" aria-pressed="${L.kind === 'quiz'}">説明→答え</button>
+    <button data-act="lkind" data-v="rev" aria-pressed="${L.kind === 'rev'}">答え→説明</button>
+    <button data-act="lkind" data-v="sort" aria-pressed="${L.kind === 'sort'}">年号並べ替え</button>
   </div>
   <div style="margin-top:12px">${searchBar('list')}</div>
   <div class="reshead"><span class="cnt">${applied ? '検索結果 ' : ''}${items.length}件</span>
@@ -2372,7 +2500,7 @@ function renderList(){
 function listStart(){
   const L = state.list, { isQ, items } = listItems(), xs = items.map(i => i.x);
   const a = state.search.list.applied, unit = a && a.units.length === 1 ? a.units[0] : 'all';
-  const origin = { unit, kind: L.kind };
+  const origin = { unit, kind: L.kind === 'sort' ? 'sort' : 'quiz' };
   if (isQ) startRound(xs.map(q => ({ type: 'quiz', id: q.id })), origin);
   else startRound(makeSortSets(xs, Math.min(10, Math.max(1, Math.ceil(xs.length / state.setup.size))), unit), origin);
 }
@@ -2398,7 +2526,8 @@ function renderDict(){
   const showUnit = !applied || applied.units.length !== 1;
   const termRow = ({ x: t, hits }) => { const b = termBucket(t); return `<li class="row">
     <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${markHTML(t.term, words)}</span>${showUnit ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div>
-    <p class="ds">${markHTML(t.summary, words)}</p>${hitBox(hits, words, ['用語', '要約'])}</button></li>`; };
+    ${lifeText(t) ? `<p class="lifeln sm">${I('clock')}${esc(lifeText(t))}</p>` : ''}
+    <p class="ds">${markHTML(t.summary, words)}</p>${hitBox(hits, words, ['用語', '要約', '国・時代'])}</button></li>`; };
   const yearRow = ({ x: e, hits }) => { const memo = memoOfEvent(e); return `<li><div class="y">${e.year}<small>${esc(e.era || '')}</small></div><div><p class="t">${markHTML(e.title, words)}</p><p class="x">${markHTML(e.explanation || '', words)}</p>
     ${hitBox(hits, words, ['出来事', '解説', '年'])}
     ${memo ? `<div class="memo" style="margin:0 0 10px"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(memo)}</p></div>` : ''}
@@ -2609,7 +2738,7 @@ async function onAction(el, ev){
       state.list.kind = QUESTIONS.some(q => q.unit === state.unit) ? 'quiz' : 'sort';
       state.search.list = blankSearchState();
       if (state.unit !== 'all') { state.search.list.draft.units = [state.unit]; state.search.list.applied = JSON.parse(JSON.stringify(state.search.list.draft)); }
-      state.open = null; go({ v: 'list' }, 'tab'); break;
+      state.opened.clear(); go({ v: 'list' }, 'tab'); break;
     case 'unitDict': {
       const hasT = TERMS.some(t => state.unit === 'all' || t.unit === state.unit);
       state.dict.tab = hasT ? 'terms' : 'years';
@@ -2626,6 +2755,7 @@ async function onAction(el, ev){
     case 'sreview': S.buckets[cur().a] = new Set(WEAK); render(cur(), true); break;
     case 'scat': { const s = selectedCats(cur().a, cur().u); s.has(v) ? s.delete(v) : s.add(v); render(cur(), true); break; }
     case 'scount': S.count = v === 'all' ? 'all' : +v; render(cur(), true); break;
+    case 'sdir': S.dir = v; render(cur(), true); break;
     case 'ssets': S.sets = +v; render(cur(), true); break;
     case 'ssize': S.size = +v; render(cur(), true); break;
     case 'startSetup': startFromSetup(); break;
@@ -2637,10 +2767,11 @@ async function onAction(el, ev){
     case 'classify':
       setBucket(el.dataset.k, el.dataset.id, v);
       if (cur().v === 'round') el.closest('.seg3').outerHTML = classifySeg(el.dataset.k, el.dataset.id, el.dataset.new === '1');
+      else if (el.closest('li.row')) redrawRow(el, (el.dataset.k === 'q' ? 'q:' : 'e:') + el.dataset.id);
       else render(cur(), true);
       toast(`「${BL[v]}」に振り分けました`);
       break;
-    case 'open': state.open = state.open === v ? null : v; render(cur(), true); break;
+    case 'open': state.opened.has(v) ? state.opened.delete(v) : state.opened.add(v); redrawRow(el, v); break;
     case 'retryReview': retry('review'); break;
     case 'retryAll': retry('all'); break;
     case 'setupAgain': {
@@ -2656,8 +2787,8 @@ async function onAction(el, ev){
     /* 検索 */
     case 'sToggle': toggleSearch(v); break;
     case 'sGo': applySearch(v); break;
-    case 'sClear': state.search[v] = blankSearchState(); state.open = null; render(cur(), true); break;
-    case 'sReset': { const s = state.search[v]; s.draft = blankDraft(); s.applied = null; state.open = null; render(cur(), true); document.getElementById('sq-' + v)?.focus({ preventScroll: true }); break; }
+    case 'sClear': state.search[v] = blankSearchState(); state.opened.clear(); render(cur(), true); break;
+    case 'sReset': { const s = state.search[v]; s.draft = blankDraft(); s.applied = null; state.opened.clear(); render(cur(), true); document.getElementById('sq-' + v)?.focus({ preventScroll: true }); break; }
     case 'sPill': {
       const s = state.search[el.dataset.c].draft, key = el.dataset.k, arr = s[key];
       const i = arr.indexOf(v); if (i >= 0) arr.splice(i, 1); else arr.push(v);
@@ -2671,12 +2802,12 @@ async function onAction(el, ev){
     }
 
     /* 振り分け・図鑑 */
-    case 'lkind': state.list.kind = v; state.open = null; state.search.list.draft.buckets = []; if (state.search.list.applied) state.search.list.applied.buckets = []; render(cur(), true); break;
+    case 'lkind': state.list.kind = v; state.opened.clear(); state.search.list.draft.buckets = []; if (state.search.list.applied) state.search.list.applied.buckets = []; render(cur(), true); break;
     case 'listStart': listStart(); break;
     case 'resetList': {
       const { k, items } = listItems();
       if (await confirmDialog({ title: `${items.length}件を未回答に戻しますか？`, body: '表示中の問題の振り分けを「未回答」に戻します。問題や編集・メモは消えません。', ok: '未回答に戻す' })) {
-        items.forEach(({ x }) => delete P[k][x.id]); saveP(); state.open = null; render(cur(), true); toast('未回答に戻しました');
+        items.forEach(({ x }) => delete P[k][x.id]); saveP(); state.opened.clear(); render(cur(), true); toast('未回答に戻しました');
       }
       break;
     }
@@ -2685,7 +2816,7 @@ async function onAction(el, ev){
     case 'closeModal': requestCloseModal(); break;
 
     /* 編集・削除 */
-    case 'editQ': { const q = qById.get(v); if (!q) break; q.type === 'term' ? openEditTerm(q.termKey) : openEditEvent(q.eventId); break; }
+    case 'editQ': { const q = qById.get(v); if (!q) break; q.termKey ? openEditTerm(q.termKey) : openEditEvent(q.eventId); break; }
     case 'editT': openEditTerm(v); break;
     case 'editE': openEditEvent(v); break;
     case 'delTerm': {
