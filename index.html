@@ -537,6 +537,26 @@ mark.hit{background:#CDE7F6;color:inherit}
 .frow > span{flex:none;font-size:var(--fs-body);color:var(--ink2);font-weight:500}
 .frow .sel{flex:1;min-width:0;width:auto;border:0;background-color:transparent;text-align:right;text-align-last:right;padding:10px 26px 10px 8px;font-weight:600;color:var(--primary);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:16px}
 .frow.sub{padding:10px 12px 12px 16px;background:var(--tint)}
+/* 出題する問題：振り分けをチェックで組み合わせる。チェックの枠そのものを振り分けの色にする */
+.bpick{border-top:1px solid var(--line)}
+.bpick-h{display:flex;align-items:center;gap:12px;min-height:52px;padding:6px 10px 2px 16px}
+.bpick-h > span{flex:1;font-size:var(--fs-body);color:var(--ink2);font-weight:500}
+.bquick{display:flex;gap:4px}
+.bquick button{border:0;background:none;border-radius:8px;padding:5px 10px;font-size:var(--fs-label);font-weight:600;color:var(--muted)}
+.bquick button[aria-pressed="true"]{background:var(--tint2);color:var(--primary)}
+.bquick button:hover{color:var(--primary)}
+.blist{padding:0 0 6px}
+.bopt{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:6px 16px;border:0;background:none;text-align:left;font-size:var(--fs-body);color:var(--ink)}
+.bopt .bx{width:22px;height:22px;border-radius:7px;border:1.6px solid var(--c);display:grid;place-items:center;color:transparent;flex:none;transition:background .15s,color .15s}
+.bopt .bx .i{width:14px;height:14px;stroke-width:2.8}
+.bopt[aria-checked="true"] .bx{background:var(--c);color:#fff}
+.bopt.b-new{--c:#97A1AD}   /* 未回答の色は淡いので、チェックの白が見えるよう少し濃く */
+.bopt .bl{flex:1}
+.bopt .bn{color:var(--muted);font-variant-numeric:tabular-nums;font-size:var(--fs-body-sm)}
+.bopt[aria-checked="false"] .bl{color:var(--muted)}
+.bopt.zero .bn{opacity:.6}
+.bopt:active{background:var(--surface2)}
+.bpick + .frow{border-top:1px solid var(--line)}
 .iconbtn.round{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--primary)}
 .iconbtn.round .i{width:20px;height:20px}
 
@@ -656,7 +676,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.0.5';
+const APP_VERSION = '1.0.6';
 const APP_BUILD = '2026-10-19';
 
 /* =========================================================
@@ -724,7 +744,7 @@ function toast(text){
  * ========================================================= */
 const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
-  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかを選びます。「苦手」は不正解・わからない・自信なしをまとめたものです。「自分で組み合わせる」を選ぶと、振り分けを自由に組み合わせられます。'],
+  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかをチェックで選びます。いくつでも組み合わせられます。右上の「すべて」「苦手」を押すと、まとめて切り替わります。「苦手」は不正解・わからない・自信なしをまとめたものです。'],
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
   resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
@@ -1391,32 +1411,36 @@ function setupPool(kind, unit){
   const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat) && dirOk(q, dir)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
   return { pool: inScope.filter(x => B.has(bucket(k, x.id))), c: countB(k, inScope) };
 }
-/* 出題の設定：項目名とプルダウンを1行ずつ並べるだけの、すっきりした形 */
-const PRESETS = [['all', 'すべて', ORDER], ['weak', '苦手（不正解・わからない・自信なし）', WEAK], ['new', '未回答だけ', ['new']], ['unknown', 'わからないだけ', ['unknown']], ['wrong', '不正解だけ', ['wrong']], ['unsure', '自信なしだけ', ['unsure']], ['correct', '正解だけ', ['correct']]];
-function presetOf(B){ const p = PRESETS.find(([, , bs]) => bs.length === B.size && bs.every(b => B.has(b))); return p ? p[0] : 'custom'; }
+/* 出題の設定：項目名とプルダウンを1行ずつ並べる。出題する問題だけは、振り分けをチェックで組み合わせる */
+const sameSet = (B, bs) => bs.length === B.size && bs.every(b => B.has(b));
 function renderSetup(r){
   const kind = r.a, unit = r.u; state.unit = unit;
   const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
   const { pool, c } = setupPool(kind, unit);
   const hasRev = kind === 'quiz' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
-  const pre = S.custom?.[kind] ? 'custom' : presetOf(B);
-  const cnt = bs => bs.reduce((n, b) => n + c[b], 0);
   const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
   const catVal = sel.size === cats.length ? '' : [...sel][0];
   let n, can, label;
   if (kind === 'quiz') {
     n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
-    can = n > 0; label = can ? `${n}問をはじめる` : '該当する問題がありません';
+    can = n > 0; label = can ? `${n}問をはじめる` : B.size ? '該当する問題がありません' : '出題する問題を選んでください';
   } else {
     can = pool.length > 0 && uniq(inUnit(EVENTS, unit).map(e => e.year)).length >= 3;
-    label = can ? `${S.sets}セットをはじめる` : '該当する出来事がありません';
+    label = can ? `${S.sets}セットをはじめる` : B.size ? '該当する出来事がありません' : '出題する問題を選んでください';
   }
   app.innerHTML = `
   <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'} ${help('buckets')}</h1>
   <div class="flist" style="margin-top:20px">
     ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
-    <label class="frow"><span>出題する問題</span><select class="sel" id="sPreset">${PRESETS.map(([v, l, bs]) => opt(v, `${l}（${cnt(bs)}）`, pre)).join('')}${opt('custom', '自分で組み合わせる…', pre)}</select></label>
-    ${pre === 'custom' ? `<div class="frow sub"><div class="chips">${ORDER.map(b => `<button type="button" class="pill" data-act="sbucket" data-v="${b}" aria-pressed="${B.has(b)}"><span class="dot b-${b}"></span>${BL[b]}<span class="n">${c[b]}</span></button>`).join('')}</div></div>` : ''}
+    <div class="bpick" role="group" aria-labelledby="bpickL">
+      <div class="bpick-h"><span id="bpickL">出題する問題</span>
+        <div class="bquick">
+          <button type="button" data-act="sall" aria-pressed="${sameSet(B, ORDER)}">すべて</button>
+          <button type="button" data-act="sreview" aria-pressed="${sameSet(B, WEAK)}">苦手</button>
+        </div>
+      </div>
+      <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c[b]}</span></button>`).join('')}</div>
+    </div>
     ${cats.length > 1 ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
     ${kind === 'quiz'
       ? `<label class="frow"><span>問題数</span><select class="sel" id="sCount">${[10, 20, 30, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select></label>`
@@ -2955,10 +2979,9 @@ document.addEventListener('compositionend', ev => {   // 変換が確定して�
 });
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (cur().v === 'setup' && ['sDir', 'sPreset', 'sCat', 'sCount', 'sSets', 'sSize'].includes(t.id)) {
+  if (cur().v === 'setup' && ['sDir', 'sCat', 'sCount', 'sSets', 'sSize'].includes(t.id)) {
     const S = state.setup, kind = cur().a, unit = cur().u, v = t.value;
     if (t.id === 'sDir') S.dir = v;
-    if (t.id === 'sPreset') { S.custom[kind] = v === 'custom'; if (v !== 'custom') S.buckets[kind] = new Set(PRESETS.find(p => p[0] === v)[2]); }
     if (t.id === 'sCat') { const cs = catsFor(kind, unit); state.setup.cats[`${unit}|${kind}`] = new Set(v ? [v] : cs); }
     if (t.id === 'sCount') S.count = v === 'all' ? 'all' : +v;
     if (t.id === 'sSets') S.sets = +v;
