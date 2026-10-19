@@ -656,7 +656,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.0.4';
+const APP_VERSION = '1.0.5';
 const APP_BUILD = '2026-10-19';
 
 /* =========================================================
@@ -817,8 +817,29 @@ const SFX = (() => {
   const play = fn => { if (SET.sound) { try { fn(); } catch (_) {} } };
   return {
     unlock: () => { if (SET.sound) { try { ctx(); } catch (_) {} } },
-    correct: () => play(() => { tone(880, 0, 0.16); tone(1318.5, 0.09, 0.32); tone(2637, 0.09, 0.2, 'sine', 0.03); }),
-    streak: n => play(() => { [1046.5, 1318.5, 1568, 2093].forEach((f, i) => tone(f, i * 0.07, 0.22, 'sine', 0.12)); if (n >= 10) tone(2637, 0.3, 0.4, 'sine', 0.06); }),
+    /* 正解音：連続正解の数で5段階に豪華になる（5問目以降は5段階目のまま。間違えると1段階目に戻る） */
+    correct: (n = 1) => play(() => {
+      const lv = Math.min(5, Math.max(1, n));
+      if (lv === 1) {          // 1問目：ピンポン
+        tone(880, 0, 0.16); tone(1318.5, 0.09, 0.32); tone(2637, 0.09, 0.2, 'sine', 0.03);
+      } else if (lv === 2) {   // 2連続：3音で上がる
+        [880, 1108.7, 1318.5].forEach((f, i) => tone(f, i * 0.07, i === 2 ? 0.34 : 0.16, 'sine', 0.14));
+        tone(2637, 0.14, 0.22, 'sine', 0.03);
+      } else if (lv === 3) {   // 3連続：4音のアルペジオ＋きらめき
+        [1046.5, 1318.5, 1568, 2093].forEach((f, i) => tone(f, i * 0.065, i === 3 ? 0.4 : 0.18, 'sine', 0.12));
+        tone(3136, 0.22, 0.25, 'sine', 0.035); tone(4186, 0.28, 0.3, 'sine', 0.025);
+      } else if (lv === 4) {   // 4連続：アルペジオのあとに和音が響く
+        [1046.5, 1318.5, 1568, 2093].forEach((f, i) => tone(f, i * 0.06, 0.18, 'sine', 0.12));
+        [1318.5, 1568, 2093].forEach(f => tone(f, 0.26, 0.55, 'sine', 0.06));
+        tone(523.25, 0.26, 0.55, 'triangle', 0.07);
+        [3136, 4186, 3520].forEach((f, i) => tone(f, 0.3 + i * 0.07, 0.22, 'sine', 0.025));
+      } else {                 // 5連続以上：ファンファーレ
+        [784, 1046.5, 1318.5, 1568, 2093, 2637].forEach((f, i) => tone(f, i * 0.05, 0.16, 'sine', 0.11));
+        [1046.5, 1318.5, 1568, 2093].forEach(f => tone(f, 0.32, 0.75, 'sine', 0.055));
+        tone(261.63, 0.32, 0.75, 'triangle', 0.09); tone(523.25, 0.32, 0.75, 'triangle', 0.05);
+        [3136, 4186, 3520, 4699, 5274].forEach((f, i) => tone(f, 0.36 + i * 0.06, 0.2, 'sine', 0.022));
+      }
+    }),
     wrong: () => play(() => { tone(392, 0, 0.16, 'triangle', 0.13); tone(311, 0.13, 0.3, 'triangle', 0.11); }),
     unknown: () => play(() => { tone(659, 0, 0.14, 'sine', 0.09); tone(784, 0.1, 0.24, 'sine', 0.08); }),
     finish: rate => play(() => {
@@ -1497,8 +1518,7 @@ function choose(i){
   saveP(); persistNav();
   if (unknown) SFX.unknown();
   else if (!c.ok) SFX.wrong();
-  else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak);
-  else SFX.correct();
+  else SFX.correct(state.streak);
   document.querySelectorAll('#choices .choice').forEach((b, k) => {
     b.disabled = true;
     if (b.classList.contains('dontknow')) { if (!unknown) b.hidden = true; else b.classList.add('is-dim'); return; }
@@ -1588,7 +1608,7 @@ function submitSort(){
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
   saveP(); persistNav();
-  if (!c.ok) SFX.wrong(); else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak); else SFX.correct();
+  if (!c.ok) SFX.wrong(); else SFX.correct(state.streak);
   drawSortList();
   document.querySelector('.toggle').hidden = true;
   renderSortFeedback(true);
