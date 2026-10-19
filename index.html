@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>暗記ノート｜保育士試験</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="暗記ノート">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111112" media="(prefers-color-scheme: dark)">
+<style>
+:root{
+  --bg:#f6f6f3; --surface:#ffffff; --surface2:#efefeb; --ink:#1c1c1e; --ink2:#3d3d41; --muted:#77777d; --line:#e2e2dd;
+  --primary:#1c1c1e; --on-primary:#ffffff;
+  --b-new:#bdbdb6; --b-wrong:#c4553f; --b-unsure:#c0972f; --b-correct:#3e8767;
+  --font:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#111112; --surface:#1a1a1c; --surface2:#252528; --ink:#f1f1f2; --ink2:#d2d2d6; --muted:#9a9aa1; --line:#2e2e32;
+    --primary:#f1f1f2; --on-primary:#111112;
+    --b-new:#5c5c62; --b-wrong:#e07b64; --b-unsure:#d9b257; --b-correct:#63b38e;
+    color-scheme:dark;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;min-height:100vh}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[hidden]{display:none!important}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* 振り分けの色（ここだけ有彩色） */
+.b-new{--c:var(--b-new)} .b-wrong{--c:var(--b-wrong)} .b-unsure{--c:var(--b-unsure)} .b-correct{--c:var(--b-correct)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+
+/* ---------- 上部バー ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.top-in{max-width:600px;margin:0 auto;height:56px;padding:0 12px;display:flex;align-items:center;gap:10px}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:0;background:none;display:grid;place-items:center;color:var(--ink)}
+.iconbtn:hover{background:var(--surface2)}
+.top .ttl{font-weight:600}
+.rprog{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.rprog i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.rnum{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:48px;text-align:right}
+
+main{max-width:600px;margin:0 auto;padding:28px 18px calc(110px + env(safe-area-inset-bottom,0px))}
+.flow main,main.flow{padding-bottom:40px}
+
+/* ---------- 見出し・文字 ---------- */
+.ptitle{font-size:30px;line-height:1.25;font-weight:700;letter-spacing:-.01em;margin:0}
+.psub{color:var(--muted);font-size:14px;margin:4px 0 0}
+.lead{color:var(--ink2);font-size:15px;margin:16px 0 0}
+.sect{margin-top:32px}
+.shead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.stitle{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 10px;letter-spacing:.02em}
+.shead .stitle{margin:0}
+.hint{font-size:13px;color:var(--muted);margin:2px 0 10px}
+.muted{color:var(--muted)}
+.textbtn{border:0;background:none;padding:6px 0;font-size:14px;color:var(--ink2);display:inline-flex;align-items:center;gap:4px}
+.textbtn .i{width:16px;height:16px}
+.textbtn.danger{color:var(--b-wrong)}
+
+/* ---------- メニュー ---------- */
+.menu,.panel,.checklist,.rows{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.mrow{display:flex;align-items:center;gap:14px;width:100%;padding:16px;border:0;background:none;text-align:left}
+.mrow+.mrow{border-top:1px solid var(--line)}
+.mrow:hover{background:var(--surface2)}
+.mi{width:42px;height:42px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;flex:none}
+.mtx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.45}
+.mt{font-weight:600;font-size:16px}
+.ms{font-size:13px;color:var(--muted)}
+.mrow .mchev{color:var(--muted);width:18px;height:18px}
+.mrow.accent .mi{background:color-mix(in srgb,var(--b-wrong) 12%,var(--surface));color:var(--b-wrong)}
+
+/* ---------- 振り分け状況 ---------- */
+.panel{padding:18px}
+.ov+.ov{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.ovh{display:flex;justify-content:space-between;font-weight:600;font-size:15px;margin-bottom:10px}
+.ovh .muted{font-weight:400;font-size:13px}
+.sbar{display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;background:var(--surface2)}
+.sbar i{display:block;background:var(--c);min-width:3px}
+.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:12px}
+.lg{display:flex;flex-direction:column;gap:2px}
+.lg .ll{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.lg b{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ---------- ボタン ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;font-size:16px;transition:opacity .15s,transform .1s}
+.btn:active:not(:disabled){transform:scale(.985)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btns{display:grid;gap:10px}
+.actionbar{position:sticky;bottom:calc(14px + env(safe-area-inset-bottom,0px));margin-top:24px;z-index:5;padding-top:14px;background:linear-gradient(to bottom,transparent,var(--bg) 40%)}
+.actionbar.static{position:static;background:none;padding-top:0}
+.actionbar.tabbed{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+
+/* ---------- セグメント・チップ ---------- */
+.seg{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:none;border-radius:8px;padding:8px 6px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:14px}
+.chip .n{opacity:.55;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+
+/* ---------- 出題設定 ---------- */
+.fgroup{margin-top:22px}
+.check{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;border:0;background:none;text-align:left;font-size:16px}
+.check+.check{border-top:1px solid var(--line)}
+.check .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);display:grid;place-items:center;color:transparent;flex:none;transition:background .15s}
+.check .box .i{width:15px;height:15px;stroke-width:2.6}
+.check[aria-checked="true"] .box{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.check .cn{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.quick{display:flex;gap:16px;margin-top:8px}
+.summary-line{font-size:14px;color:var(--muted);text-align:center;margin:0 0 10px}
+
+/* ---------- 問題 ---------- */
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:0 0 10px}
+.prev{display:inline-flex;align-items:center;gap:6px}
+.qtext{font-size:20px;line-height:1.7;font-weight:600;margin:0 0 22px;letter-spacing:.01em}
+.choices{display:grid;gap:10px}
+.choice{display:flex;align-items:center;gap:14px;width:100%;min-height:56px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:left;font-size:16px;transition:border-color .15s,background .15s,opacity .15s}
+.choice:hover:not(:disabled){border-color:var(--ink2)}
+.choice:disabled{cursor:default}
+.choice .key{width:20px;font-size:13px;font-weight:600;color:var(--muted);flex:none}
+.choice .ctext{flex:1}
+.choice .cmark{width:20px;height:20px;flex:none}
+.choice.is-ok{border-color:var(--b-correct);background:color-mix(in srgb,var(--b-correct) 9%,var(--surface));color:var(--ink)}
+.choice.is-ok .cmark{color:var(--b-correct)}
+.choice.is-ng{border-color:var(--b-wrong);background:color-mix(in srgb,var(--b-wrong) 9%,var(--surface))}
+.choice.is-ng .cmark{color:var(--b-wrong)}
+.choice.is-dim{opacity:.4}
+.toggle{display:inline-flex;align-items:center;gap:12px;margin-top:18px;font-size:15px;color:var(--ink2);cursor:pointer;user-select:none;position:relative}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.toggle .sw{width:42px;height:26px;border-radius:13px;background:var(--line);position:relative;transition:background .2s;flex:none}
+.toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .2s}
+.toggle input:checked + .sw{background:var(--b-unsure)}
+.toggle input:checked + .sw::after{transform:translateX(16px)}
+.toggle input:focus-visible + .sw{outline:2px solid var(--ink);outline-offset:2px}
+
+.verdict{display:flex;align-items:center;gap:12px;margin-top:24px;padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--c) 10%,var(--surface));animation:in .25s ease-out}
+.verdict .vi{width:34px;height:34px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;flex:none}
+.verdict .vi .i{stroke-width:2.6;width:18px;height:18px}
+.verdict b{display:block;font-size:17px;line-height:1.3}
+.verdict span.vs{font-size:13px;color:var(--muted)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.answer{margin:18px 0 0;font-size:17px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+.answer span{font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px}
+.block{margin-top:22px}
+.block h3,.block > summary{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 8px;letter-spacing:.02em}
+.prose{white-space:pre-wrap;margin:0;line-height:1.85}
+.note{background:var(--surface2);border-radius:12px;padding:14px 16px}
+details.block > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+details.block > summary::-webkit-details-marker{display:none}
+details.block > summary .i{width:16px;height:16px;transition:transform .2s}
+details.block[open] > summary .i{transform:rotate(180deg)}
+.clist{border-top:1px solid var(--line)}
+.citem{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.citem .ic{width:18px;height:18px;flex:none;margin-top:3px;color:var(--muted)}
+.citem.ok .ic{color:var(--b-correct)} .citem.picked .ic{color:var(--b-wrong)}
+.citem .ic .i{width:18px;height:18px;stroke-width:2.4}
+.citem .ct{flex:1;min-width:0}
+.citem .cn{font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.citem .cn small{font-size:12px;font-weight:400;color:var(--muted)}
+.citem .cs{margin:2px 0 0;font-size:14px;line-height:1.7;color:var(--ink2)}
+.citem .textbtn{font-size:13px;padding:2px 0;color:var(--muted)}
+.tchips{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:14px}
+.tchip:hover{border-color:var(--ink2)}
+
+.seg3{display:flex;gap:6px;flex-wrap:wrap}
+.seg3 button{flex:1 1 0;min-width:0;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 6px;font-size:14px;font-weight:600;color:var(--ink2)}
+.seg3 button[aria-checked="true"]{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 9%,var(--surface))}
+.seg3.sm{gap:4px}
+.seg3.sm button{padding:7px 2px;font-size:12.5px;gap:4px}
+
+/* ---------- 並べ替え ---------- */
+.axis{font-size:12px;color:var(--muted);margin:6px 2px}
+.slist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sitem{display:flex;align-items:center;gap:12px;padding:10px 10px 10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;user-select:none;transition:border-color .15s,background .15s}
+.sitem.sel{border-color:var(--ink);background:var(--surface2)}
+.sitem .no{width:20px;font-size:13px;font-weight:600;color:var(--muted);flex:none;display:grid;place-items:center}
+.sitem .st{flex:1;min-width:0;line-height:1.5}
+.sitem .yr{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sitem .mv{display:flex;gap:4px}
+.sitem .mv button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.sitem .mv button:disabled{opacity:.3;cursor:default}
+.sitem.ok{border-color:var(--b-correct);cursor:default} .sitem.ok .no{color:var(--b-correct)}
+.sitem.ng{border-color:var(--b-wrong);cursor:default} .sitem.ng .no{color:var(--b-wrong)}
+.sitem .no .i{width:16px;height:16px;stroke-width:2.6}
+.tl{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.tl li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.tl .y{font-weight:600;font-variant-numeric:tabular-nums;line-height:1.4}
+.tl .y small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.tl .t{font-weight:600;margin:0 0 4px}
+.tl .x{margin:0 0 10px;font-size:14px;color:var(--ink2);line-height:1.8}
+
+/* ---------- 結果 ---------- */
+.score{font-size:15px;color:var(--muted);margin:10px 0 0}
+.score b{font-size:44px;font-weight:600;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-right:4px}
+.legend.three{grid-template-columns:repeat(3,1fr)}
+
+/* ---------- 一覧 ---------- */
+.rows{list-style:none;margin:0;padding:0}
+.row+.row{border-top:1px solid var(--line)}
+.row-h{display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px 16px;border:0;background:none;text-align:left}
+.row-h:hover{background:var(--surface2)}
+.row-h .dot{margin-top:9px}
+.row-t{flex:1;min-width:0;font-size:15px;line-height:1.6}
+.row.open .row-t{display:block}
+.row-b{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:3px}
+.row-h .i{width:16px;height:16px;color:var(--muted);margin-top:4px;transition:transform .2s}
+.row.open .row-h .i{transform:rotate(180deg)}
+.row-d{padding:0 16px 18px 36px}
+@media (max-width:420px){.row-d{padding-left:16px}}
+.row-d .answer{margin:0 0 8px}
+.row-d .prose{font-size:14px;color:var(--ink2);margin-bottom:14px}
+.row-d .textbtn{margin-top:8px}
+.empty{text-align:center;color:var(--muted);padding:40px 16px;font-size:14px}
+.warn{margin-top:28px;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.warn summary{cursor:pointer}
+.warn ul{margin:6px 0 0;padding-left:18px}
+.foot{margin-top:28px;text-align:center}
+
+/* ---------- 図鑑 ---------- */
+.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 14px;margin-top:14px}
+.search:focus-within{border-color:var(--ink2)}
+.search .i{color:var(--muted);width:18px;height:18px}
+.search input{flex:1;min-width:0;border:0;background:none;padding:12px 0;font-size:16px;outline:none}
+.drow{display:block;width:100%;text-align:left;border:0;background:none;padding:14px 16px}
+.drow:hover{background:var(--surface2)}
+.drow .dh{display:flex;align-items:center;gap:8px}
+.drow .dn{font-weight:600}
+.drow .dk{font-size:12px;color:var(--muted)}
+.drow .ds{margin:2px 0 0;font-size:13.5px;color:var(--muted);line-height:1.6}
+
+/* ---------- タブバー ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11px;font-weight:600;color:var(--muted)}
+.tab .i{width:22px;height:22px}
+.tab[aria-current="page"]{color:var(--ink)}
+
+/* ---------- モーダル・トースト ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.backdrop{position:absolute;inset:0;background:rgba(0,0,0,.35);animation:fade .2s}
+.msheet{position:relative;width:100%;max-width:600px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px calc(28px + env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
+@media (min-width:700px){.modal{align-items:center}.msheet{border-radius:20px}}
+.mclose{position:sticky;top:0;float:right;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface2);display:grid;place-items:center;z-index:1}
+.mclose .i{width:16px;height:16px}
+.msheet h2{font-size:24px;margin:4px 0 0;font-weight:700;line-height:1.3}
+.msheet .kana{color:var(--muted);font-size:13px;margin:2px 0 0}
+.msheet .lead{font-weight:500;color:var(--ink);background:var(--surface2);border-radius:12px;padding:14px 16px;margin:16px 0 0}
+.rel{border-top:1px solid var(--line)}
+.rel div{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.6}
+.rel .dot{margin-top:8px}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);font-size:14px;font-weight:500;padding:10px 18px;border-radius:999px;width:max-content;max-width:calc(100vw - 32px);text-align:center;pointer-events:none;animation:toast 2s forwards}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-8px)}10%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- 単元 ---------- */
+.mrow .mbar{margin-top:8px}
+.mrow .mbar .sbar{height:5px}
+.urow .mtx{gap:1px}
+.brandrow{display:flex;align-items:center;gap:14px}
+.applogo{width:44px;height:44px;border-radius:11px;flex:none}
+.uicon{width:48px;height:48px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;margin-bottom:14px}
+.uicon .i{width:24px;height:24px}
+.row-u{display:block;font-size:11.5px;color:var(--muted);margin-bottom:2px}
+.ulabel{font-size:12px;color:var(--muted)}
+.other{background:var(--surface2);border-radius:12px;padding:12px 14px;margin-top:8px;display:block;width:100%;text-align:left;border:0}
+.other b{display:block;font-size:13px;margin-bottom:2px}
+.other span{font-size:14px;color:var(--ink2);line-height:1.7}
+
+/* ---------- 追加分 ---------- */
+body{overflow-wrap:anywhere}
+.ptitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stitle{display:flex;align-items:center;gap:6px}
+.help{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:12px;font-weight:700;display:inline-grid;place-items:center;padding:0;flex:none;line-height:1}
+.ptitle .help{width:26px;height:26px;font-size:13px}
+.help:hover{color:var(--ink);border-color:var(--ink2)}
+.sheet-t{font-size:20px!important;margin:4px 0 12px!important}
+.tabbar-in{grid-template-columns:repeat(4,1fr)!important}
+.mini-i{width:14px!important;height:14px!important;color:var(--b-unsure);margin-top:5px}
+.ansrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}
+.ansrow .answer{margin:0}
+.btnrow{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+.memo{background:color-mix(in srgb,var(--b-unsure) 10%,var(--surface));border-radius:12px;padding:12px 14px}
+.memo h3{display:flex;align-items:center;gap:6px;color:var(--ink2)!important}
+.memo h3 .i{width:15px;height:15px}
+.fld{margin-top:16px}
+.fld > label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.fld > label.req::after{content:"必須";font-size:11px;font-weight:600;margin-left:8px;color:var(--b-wrong)}
+.inp,.ta,.sel{display:block;width:100%;font-size:16px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-family:inherit}
+.ta{min-height:60px;resize:vertical;line-height:1.7}
+.ta.big{min-height:240px;font-size:15px}
+.inp:focus,.ta:focus,.sel:focus{outline:none;border-color:var(--ink2)}
+.sheet-actions{display:grid;gap:10px;margin-top:22px}
+.filebtn{position:relative;overflow:hidden;cursor:pointer}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.pv{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;font-size:14px}
+.pv b{font-size:15px}
+.pv .err{color:var(--b-wrong);margin:6px 0 0;padding-left:18px}
+.pv details{margin-top:8px}
+.pv summary{cursor:pointer;color:var(--ink2)}
+.pv ol{margin:8px 0 0;padding-left:20px;color:var(--ink2)}
+.pv li{margin:4px 0}
+.okmsg{display:flex;align-items:center;gap:8px;color:var(--b-correct);font-weight:600}
+.mrow .mc{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tl .x + .btnrow{margin:-4px 0 10px}
+</style>
+</head>
+<body>
+<header class="top" id="top" hidden><div class="top-in" id="topIn"></div></header>
+<main id="app"></main>
+<nav class="tabbar" id="tabbar" aria-label="メニュー">
+  <div class="tabbar-in">
+    <button class="tab" data-act="tab" data-v="home"><span data-icon="pen"></span>学習</button>
+    <button class="tab" data-act="tab" data-v="list"><span data-icon="inbox"></span>振り分け</button>
+    <button class="tab" data-act="tab" data-v="dict"><span data-icon="book"></span>図鑑</button>
+    <button class="tab" data-act="tab" data-v="data"><span data-icon="data"></span>データ</button>
+  </div>
+</nav>
+<div class="modal" id="modal" hidden>
+  <div class="backdrop" data-act="closeModal"></div>
+  <div class="msheet" role="dialog" aria-modal="true">
+    <button class="mclose" data-act="closeModal" aria-label="閉じる"><span data-icon="x"></span></button>
+    <div id="mbody"></div>
+  </div>
+</div>
+
+<!-- 学習データ（単元ごとのファイル。単元を増やすときはここに1行追加） -->
+<script>window.UNITS = []; window.addUnit = function (u) { window.UNITS.push(u); };</script>
+<script src="kyoiku-genri.js"></script>
+<script src="hoiku-genri.js"></script>
+<script src="hoiku-shinri.js"></script>
+<script src="seido-nengo.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* =========================================================
+ * ユーティリティ・アイコン
+ * ========================================================= */
+const app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const uniq = arr => [...new Set(arr)];
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const qList = q => Array.isArray(q) ? q.filter(Boolean) : (q ? [q] : []);
+const KEYS = ['A', 'B', 'C', 'D'];
+const ICONS = {
+  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/>',
+  book: '<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+  data: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  list: '<path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+  hourglass: '<path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/>',
+  retry: '<path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/>',
+  layers: '<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>',
+  chevL: '<path d="m15 18-6-6 6-6"/>',
+  chevD: '<path d="m6 9 6 6 6-6"/>',
+  up: '<path d="m18 15-6-6-6 6"/>',
+  down: '<path d="m6 9 6 6 6-6"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  note: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  paste: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+  copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>',
+  cap: '<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/><path d="M22 10v6"/>',
+  blocks: '<rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><rect x="8" y="3" width="8" height="8" rx="1.5"/>',
+  sprout: '<path d="M7 20h10M12 20v-8"/><path d="M12 12c-3.5 0-6-2-6-6 3.5 0 6 2 6 6zM12 12c0-3.5 2.5-6 6-6 0 4-2.5 6-6 6z"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+};
+const I = (name, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ICONS.book}</svg>`;
+document.querySelectorAll('[data-icon]').forEach(el => { el.outerHTML = I(el.dataset.icon); });
+function toast(text){
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = text; t.setAttribute('role', 'status');
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2100);
+}
+
+/* =========================================================
+ * 説明（？ボタンで表示）
+ * ========================================================= */
+const HELP = {
+  home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
+  buckets: ['出題する問題', '出題したい振り分けを選びます。複数選ぶと組み合わせて出題します。'],
+  classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」になります。'],
+  sort: ['年号並べ替え', '上が古くなるように並べます。矢印で1つずつ動かすか、2つの出来事を続けてタップすると入れ替わります。'],
+  list: ['振り分け', '振り分けごとに問題を確認できます。項目をタップすると、解説とメモの確認、振り分けの変更、問題の編集ができます。'],
+  dict: ['図鑑', 'すべての用語・人物と年表を確認できます。用語をタップすると、くわしい説明や、他の単元での説明が表示されます。'],
+  data: ['データ', '編集・メモ・追加した問題・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。'],
+  bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
+  one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
+};
+const help = key => `<button class="help" data-act="help" data-v="${key}" aria-label="説明を見る">?</button>`;
+
+/* =========================================================
+ * 保存（学習記録 P と、ユーザーの編集・追加 U）
+ * ========================================================= */
+const PKEY = 'hoikushi-anki-v2', UKEY = 'hoikushi-anki-user-v1';
+const blankP = () => ({ q: {}, e: {}, best: 0 });
+const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
+const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
+let P = loadJSON(PKEY, blankP), U = loadJSON(UKEY, blankU);
+const saveP = () => { try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) { toast('保存できませんでした'); } };
+const saveU = () => { try { localStorage.setItem(UKEY, JSON.stringify(U)); } catch (_) { toast('保存できませんでした'); } };
+
+/* =========================================================
+ * データの組み立て（ファイルのデータ＋ユーザーの編集・追加）
+ * ========================================================= */
+let UNITS, unitById, TERMS, QUESTIONS, EVENTS, termByKey, termByName, qById, eById, WARNINGS;
+const yearLabel = e => `${e.year}年${e.era ? `（${e.era}）` : ''}`;
+const unitName = id => id === 'all' ? 'すべての単元' : (unitById.get(id)?.name || id);
+const termIn = (unit, name) => termByName.get(unit + '::' + name);
+function buildData(){
+  const base = (window.UNITS || []).map(u => ({ ...u, builtin: true }));
+  const users = (U.units || []).map(u => ({ order: 100, icon: 'book', yearQuiz: true, ...u, builtin: false }));
+  UNITS = [...base, ...users].sort((a, b) => (a.order || 0) - (b.order || 0));
+  unitById = new Map(UNITS.map(u => [u.id, u]));
+  TERMS = []; QUESTIONS = []; EVENTS = [];
+  const addTerm = (unit, raw, key, qBase, user) => {
+    const ed = U.edits['t:' + key];
+    const t = { ...raw, ...(ed || {}), unit, key, user, edited: !!ed };
+    TERMS.push(t);
+    qList(t.q).forEach((text, n) => QUESTIONS.push({
+      id: `${qBase}:${n}`, unit, cat: t.cat, type: 'term', question: text, answer: t.term, termKey: key,
+      exclude: t.exclude || [], explanation: [t.summary, t.detail].filter(Boolean).join('\n'), point: t.point
+    }));
+  };
+  for (const u of base) for (const t of (u.terms || [])) addTerm(u.id, t, u.id + '::' + t.term, `${u.id}:${t.term}`, false);
+  for (const t of U.terms) if (unitById.has(t.unit)) addTerm(t.unit, t, t.unit + '::@' + t.id, `${t.unit}:@${t.id}`, true);
+  const addEvent = (unit, e, user) => { const ed = U.edits['e:' + e.id]; EVENTS.push({ ...e, ...(ed || {}), unit, user, edited: !!ed }); };
+  for (const u of base) for (const e of (u.events || [])) addEvent(u.id, e, false);
+  for (const e of U.events) if (unitById.has(e.unit)) addEvent(e.unit, e, true);
+  for (const e of EVENTS) {
+    if (!unitById.get(e.unit).yearQuiz) continue;
+    QUESTIONS.push({ id: `${e.unit}:y:${e.id}`, unit: e.unit, cat: '年号', type: 'year', eventId: e.id,
+      question: `${e.title}は何年？`, answer: yearLabel(e), exclude: [], explanation: e.explanation || '', point: e.point });
+  }
+  termByKey = new Map(TERMS.map(t => [t.key, t]));
+  termByName = new Map(TERMS.map(t => [t.unit + '::' + t.term, t]));
+  qById = new Map(QUESTIONS.map(q => [q.id, q]));
+  eById = new Map(EVENTS.map(e => [e.id, e]));
+  WARNINGS = validate();
+}
+function validate(){
+  const w = [], seenT = new Set();
+  for (const t of TERMS) { const k = t.unit + '::' + t.term; if (seenT.has(k)) w.push(`${unitName(t.unit)}：用語「${t.term}」が重複しています`); seenT.add(k); }
+  for (const q of QUESTIONS) {
+    const n = distractorsFor(q).length;
+    if (n < 3) w.push(`${unitName(q.unit)}：「${q.answer}」の問題は、誤りの選択肢の候補が${n}個しかありません（同じ単元に用語を増やすと4択になります）`);
+  }
+  return w;
+}
+const memoKey = q => q.type === 'term' ? 'k:' + q.termKey : 'e:' + q.eventId;
+const memoOf = q => U.memos[memoKey(q)] || '';
+const memoOfEvent = e => U.memos['e:' + e.id] || '';
+
+/* =========================================================
+ * 振り分け
+ * ========================================================= */
+const ORDER = ['new', 'wrong', 'unsure', 'correct'];
+const BL = { new: '未回答', wrong: '不正解', unsure: '自信なし', correct: '正解' };
+const bucket = (k, id) => (P[k][id] && P[k][id].b) || 'new';
+function setBucket(k, id, b){ const r = P[k][id] || { n: 0, ok: 0 }; r.b = b; P[k][id] = r; saveP(); }
+function recordAnswer(k, id, ok, unsure){
+  const r = P[k][id] || { n: 0, ok: 0 };
+  r.n++; if (ok) r.ok++;
+  r.b = ok ? (unsure ? 'unsure' : 'correct') : 'wrong'; r.t = Date.now(); P[k][id] = r;
+}
+function countB(k, list){ const c = { new: 0, wrong: 0, unsure: 0, correct: 0, total: list.length }; list.forEach(x => c[bucket(k, x.id)]++); return c; }
+const inUnit = (list, unit) => unit === 'all' ? list : list.filter(x => x.unit === unit);
+
+/* =========================================================
+ * 4択の選択肢
+ * ========================================================= */
+function distractorsFor(q){
+  if (q.type === 'year') {
+    const ev = eById.get(q.eventId), seen = new Set([ev.year]), out = [];
+    for (const e of EVENTS.filter(x => x.unit === q.unit).sort((a, b) => Math.abs(a.year - ev.year) - Math.abs(b.year - ev.year))) {
+      if (seen.has(e.year)) continue; seen.add(e.year); out.push(yearLabel(e));
+      if (out.length >= 8) break;
+    }
+    return out;
+  }
+  const ng = new Set([q.answer, ...(q.exclude || [])]);
+  let c = uniq(TERMS.filter(t => t.unit === q.unit && t.cat === q.cat).map(t => t.term)).filter(a => !ng.has(a));
+  if (c.length < 3) c = uniq([...c, ...TERMS.filter(t => t.unit === q.unit).map(t => t.term)]).filter(a => !ng.has(a));
+  return c;
+}
+function buildChoices(q){
+  const wrongs = [];
+  for (const c of shuffle(distractorsFor(q))) { if (wrongs.length >= 3) break; wrongs.push(c); }
+  return shuffle([q.answer, ...wrongs]);
+}
+function choiceInfo(q, c){
+  if (q.type === 'year') {
+    const evs = EVENTS.filter(e => e.unit === q.unit && yearLabel(e) === c);
+    return { text: evs.map(e => e.title).join('／'), key: null };
+  }
+  const t = termIn(q.unit, c);
+  return { text: t ? t.summary : '', key: t ? t.key : null };
+}
+function linkedTerms(unit, texts, skip){
+  const s = new Set(skip), joined = texts.join('\n'), seen = new Set();
+  return TERMS.filter(t => t.unit === unit && t.term.length >= 3 && !s.has(t.term) && joined.includes(t.term) && !seen.has(t.term) && seen.add(t.term)).slice(0, 10);
+}
+
+/* =========================================================
+ * 画面遷移（戻るボタン・端末の戻る操作に対応）
+ * ========================================================= */
+const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題' };
+const routeTitle = r => r.v === 'unit' ? unitName(r.a) : (TITLES[r.v] || '');
+const TAB_VIEWS = ['home', 'unit', 'list', 'dict', 'data'];
+const stack = [];
+const cur = () => stack[stack.length - 1] || { v: 'home' };
+function go(route, how = 'push'){
+  if (how === 'replace' && stack.length) stack[stack.length - 1] = route;
+  else if (how === 'tab') { stack.length = 0; stack.push({ v: 'home' }); if (route.v !== 'home') { stack.push(route); history.pushState({ a: 1 }, ''); } }
+  else { stack.push(route); history.pushState({ a: 1 }, ''); }
+  render(route);
+}
+function uiBack(){ if (stack.length > 1) history.back(); else go({ v: 'home' }, 'tab'); }
+window.addEventListener('popstate', () => {
+  if (!document.getElementById('modal').hidden) closeModal();
+  const r = cur();
+  if (r.v === 'round' && state.round && state.round.i < state.round.items.length) {
+    if (!confirm('中断しますか？（ここまでの解答と振り分けは保存されています）')) { history.pushState({ a: 1 }, ''); return; }
+  }
+  if (stack.length > 1) stack.pop();
+  render(cur(), true);
+});
+function render(r, keep){
+  if (!keep) scrollTo(0, 0);
+  switch (r.v) {
+    case 'unit': renderUnit(r.a); break;
+    case 'setup': renderSetup(r); break;
+    case 'round': if (state.round) renderItem(); else renderHome(); break;
+    case 'result': if (state.round) renderResult(); else renderHome(); break;
+    case 'list': renderList(); break;
+    case 'dict': renderDict(); break;
+    case 'data': renderData(); break;
+    case 'bulk': renderBulk(); break;
+    case 'one': renderOne(); break;
+    case 'mine': renderMine(); break;
+    default: renderHome();
+  }
+  renderTop();
+  app.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
+}
+function renderTop(){
+  const v = cur().v, top = document.getElementById('top'), inn = document.getElementById('topIn');
+  const tabView = TAB_VIEWS.includes(v);
+  document.getElementById('tabbar').hidden = !tabView;
+  app.classList.toggle('flow', !tabView);
+  const tabOf = v === 'unit' ? 'home' : v;
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-current', t.dataset.v === tabOf ? 'page' : 'false'));
+  if (v === 'round' && state.round) {
+    const r = state.round;
+    top.hidden = false;
+    inn.innerHTML = `<button class="iconbtn" data-act="back" aria-label="中断する">${I('x')}</button>
+      <div class="rprog"><i style="width:${r.i / r.items.length * 100}%"></i></div>
+      <span class="rnum">${Math.min(r.i + 1, r.items.length)} / ${r.items.length}</span>`;
+  } else if (['home', 'list', 'dict', 'data'].includes(v)) { top.hidden = true; inn.innerHTML = ''; }
+  else {
+    const parent = stack.length > 1 ? stack[stack.length - 2] : { v: 'home' };
+    top.hidden = false;
+    inn.innerHTML = `<button class="iconbtn" data-act="back" aria-label="${esc(routeTitle(parent))}に戻る">${I('chevL')}</button><span class="ttl">${esc(routeTitle(parent))}</span>`;
+  }
+}
+
+/* ---------- モーダル ---------- */
+function openModal(html){
+  document.getElementById('mbody').innerHTML = html;
+  const m = document.getElementById('modal');
+  m.hidden = false; document.body.style.overflow = 'hidden';
+  m.querySelector('.msheet').scrollTop = 0;
+  m.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
+  m.querySelector('.mclose').focus({ preventScroll: true });
+}
+function autoGrow(el){ el.style.height = 'auto'; el.style.height = Math.max(el.scrollHeight + 2, 60) + 'px'; }
+function closeModal(){ document.getElementById('modal').hidden = true; document.body.style.overflow = ''; }
+
+/* =========================================================
+ * 状態
+ * ========================================================= */
+const state = {
+  unit: 'all',
+  setup: { buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
+  list: { unit: 'all', kind: 'quiz', filter: 'all' },
+  dict: { tab: 'terms', unit: 'all', cat: 'all', q: '' },
+  bulk: { unit: null, newName: '', text: '', done: null },
+  one: { kind: 'term', unit: null, newName: '', f: {} },
+  open: null, round: null, streak: 0
+};
+const catsFor = (kind, unit) => kind === 'quiz' ? uniq(inUnit(QUESTIONS, unit).map(q => q.cat)) : uniq(inUnit(EVENTS, unit).map(e => e.group || 'その他'));
+function selectedCats(kind, unit){
+  const k = `${unit}|${kind}`, all = catsFor(kind, unit);
+  if (!state.setup.cats[k]) state.setup.cats[k] = new Set(all);
+  return state.setup.cats[k];
+}
+
+/* ---------- 共通パーツ ---------- */
+function stackBar(c){
+  const segs = ['correct', 'unsure', 'wrong', 'new'].filter(b => c[b]).map(b => `<i class="b-${b}" style="flex:${c[b]}"></i>`).join('');
+  return `<div class="sbar" role="img" aria-label="${ORDER.map(b => BL[b] + c[b]).join('、')}">${segs}</div>`;
+}
+const legend = (c, keys = ORDER) => `<div class="legend ${keys.length === 3 ? 'three' : ''}">${keys.map(b => `<div class="lg"><span class="ll"><span class="dot b-${b}"></span>${BL[b]}</span><b>${c[b]}</b></div>`).join('')}</div>`;
+const sumC = (a, b) => { const c = {}; for (const k of [...ORDER, 'total']) c[k] = (a[k] || 0) + (b[k] || 0); return c; };
+function classifySeg(k, id, withNew = false){
+  const curB = bucket(k, id), opts = withNew ? ORDER : ['correct', 'unsure', 'wrong'];
+  return `<div class="seg3 ${withNew ? 'sm' : ''}" role="radiogroup" aria-label="振り分け">${opts.map(b =>
+    `<button class="b-${b}" role="radio" aria-checked="${curB === b}" data-act="classify" data-k="${k}" data-id="${esc(id)}" data-v="${b}" data-new="${withNew ? 1 : 0}"><span class="dot"></span>${BL[b]}</button>`).join('')}</div>`;
+}
+const memoBlock = text => text ? `<section class="block memo"><h3>${I('note')}メモ</h3><p class="prose">${esc(text)}</p></section>` : '';
+const editBtn = (act, v) => `<button class="textbtn" data-act="${act}" data-v="${esc(v)}">${I('pen')}編集・メモ</button>`;
+function qRow(q, showUnit){
+  const b = bucket('q', q.id), open = state.open === 'q:' + q.id, memo = memoOf(q);
+  return `<li class="row ${open ? 'open' : ''}">
+    <button class="row-h" data-act="open" data-v="q:${esc(q.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${showUnit ? `<span class="row-u">${esc(unitName(q.unit))}</span>` : ''}${esc(q.question)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
+    ${open ? `<div class="row-d"><p class="answer"><span>答え</span>${esc(q.answer)}</p><p class="prose">${esc(q.explanation)}</p>
+      ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
+      ${classifySeg('q', q.id, true)}
+      <div class="btnrow">${q.type === 'term' ? `<button class="textbtn" data-act="term" data-v="${esc(q.termKey)}">${I('book')}図鑑で見る</button>` : ''}${editBtn('editQ', q.id)}</div></div>` : ''}
+  </li>`;
+}
+function eRow(e){
+  const b = bucket('e', e.id), open = state.open === 'e:' + e.id, memo = memoOfEvent(e);
+  return `<li class="row ${open ? 'open' : ''}">
+    <button class="row-h" data-act="open" data-v="e:${esc(e.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${esc(e.title)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
+    ${open ? `<div class="row-d"><p class="answer"><span>年号</span>${yearLabel(e)}</p><p class="prose">${esc(e.explanation)}</p>
+      ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
+      ${classifySeg('e', e.id, true)}<div class="btnrow">${editBtn('editE', e.id)}</div></div>` : ''}
+  </li>`;
+}
+const unitIcon = id => id === 'all' ? 'layers' : (unitById.get(id)?.icon || 'book');
+
+/* =========================================================
+ * 学習（単元一覧）
+ * ========================================================= */
+function renderHome(){
+  state.round = null; state.open = null;
+  const unitRow = id => {
+    const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id);
+    const c = sumC(countB('q', qs), countB('e', evs));
+    const parts = [qs.length ? `4択 ${qs.length}問` : '', evs.length ? `年号 ${evs.length}件` : ''].filter(Boolean).join('　');
+    return `<button class="mrow urow" data-act="goUnit" data-v="${esc(id)}">
+      <span class="mi">${I(unitIcon(id))}</span>
+      <span class="mtx"><span class="mt">${esc(unitName(id))}</span>
+      <span class="ms">${parts}${c.total ? `　正解 ${c.correct}／${c.total}` : ''}</span>
+      <span class="mbar">${stackBar(c)}</span></span>${I('chev', 'mchev')}</button>`;
+  };
+  app.innerHTML = `
+  <div class="brandrow"><img class="applogo" src="icon.svg" alt="" width="44" height="44">
+    <div><h1 class="ptitle">暗記ノート ${help('home')}</h1><p class="psub">保育士試験の人物・用語・年号</p></div></div>
+  <section class="sect">
+    <h2 class="stitle">単元</h2>
+    <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
+  </section>
+  <section class="sect"><div class="menu">${unitRow('all')}</div></section>`;
+}
+
+/* =========================================================
+ * 単元ページ
+ * ========================================================= */
+function renderUnit(id){
+  state.unit = id; state.round = null; state.open = null;
+  const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id);
+  const cq = countB('q', qs), ce = countB('e', evs);
+  const reviewN = cq.wrong + cq.unsure + ce.wrong + ce.unsure;
+  const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
+  app.innerHTML = `
+  <span class="uicon">${I(unitIcon(id))}</span>
+  <h1 class="ptitle">${esc(unitName(id))}</h1>
+  ${id !== 'all' && unitById.get(id)?.desc ? `<p class="psub">${esc(unitById.get(id).desc)}</p>` : ''}
+  <section class="sect">
+    <h2 class="stitle">学習する</h2>
+    <div class="menu">
+      ${qs.length ? row('setupQuiz', 'list', '4択問題', `${qs.length}問`) : ''}
+      ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
+      ${reviewN ? row('quickReview', 'retry', '不正解と自信なしを復習', `${reviewN}件`, 'accent') : ''}
+      ${!qs.length && !evs.length ? `<p class="empty">まだ問題がありません</p>` : ''}
+    </div>
+  </section>
+  ${qs.length || evs.length ? `<section class="sect">
+    <div class="shead"><h2 class="stitle">振り返り</h2><button class="textbtn" data-act="unitList">振り分けを見る${I('chev')}</button></div>
+    <div class="panel">
+      ${qs.length ? `<div class="ov"><div class="ovh"><span>4択問題</span><span class="muted">${cq.total}問</span></div>${stackBar(cq)}${legend(cq)}</div>` : ''}
+      ${evs.length ? `<div class="ov"><div class="ovh"><span>年号</span><span class="muted">${ce.total}件</span></div>${stackBar(ce)}${legend(ce)}</div>` : ''}
+    </div>
+  </section>` : ''}
+  <div class="foot btnrow" style="justify-content:center">
+    <button class="textbtn" data-act="unitDict">${I('book')}図鑑</button>
+    ${id !== 'all' ? `<button class="textbtn" data-act="unitAdd">${I('plus')}問題を追加</button>` : ''}
+  </div>`;
+}
+
+/* =========================================================
+ * 出題の設定
+ * ========================================================= */
+function setupPool(kind, unit){
+  const k = kind === 'quiz' ? 'q' : 'e', B = state.setup.buckets[kind], cats = selectedCats(kind, unit);
+  const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
+  return { pool: inScope.filter(x => B.has(bucket(k, x.id))), c: countB(k, inScope) };
+}
+function renderSetup(r){
+  const kind = r.a, unit = r.u; state.unit = unit;
+  const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
+  const { pool, c } = setupPool(kind, unit);
+  let countUI, can, label;
+  if (kind === 'quiz') {
+    const n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
+    countUI = `<div class="seg">${[10, 20, 30, 'all'].map(v => `<button data-act="scount" data-v="${v}" aria-pressed="${S.count === v}">${v === 'all' ? 'すべて' : v + '問'}</button>`).join('')}</div>`;
+    can = n > 0; label = can ? `${n}問をはじめる` : '該当する問題がありません';
+  } else {
+    countUI = `<div class="seg">${[3, 5, 10].map(v => `<button data-act="ssets" data-v="${v}" aria-pressed="${S.sets === v}">${v}セット</button>`).join('')}</div>
+      <div class="seg" style="margin-top:8px">${[4, 5].map(v => `<button data-act="ssize" data-v="${v}" aria-pressed="${S.size === v}">1セット${v}個</button>`).join('')}</div>`;
+    can = pool.length > 0 && uniq(inUnit(EVENTS, unit).map(e => e.year)).length >= 3;
+    label = can ? `${S.sets}セットをはじめる` : '該当する出来事がありません';
+  }
+  app.innerHTML = `
+  <p class="psub" style="margin:0 0 2px">${esc(unitName(unit))}</p>
+  <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'}</h1>
+  <section class="fgroup">
+    <h2 class="stitle">出題する問題 ${help('buckets')}</h2>
+    <div class="checklist" role="group">${ORDER.map(b => `
+      <button class="check" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}">
+        <span class="box">${I('check')}</span><span class="dot b-${b}"></span><span>${BL[b]}</span><span class="cn">${c[b]}</span>
+      </button>`).join('')}</div>
+    <div class="quick"><button class="textbtn" data-act="sall">すべて</button><button class="textbtn" data-act="sreview">不正解と自信なしだけ</button></div>
+  </section>
+  ${cats.length > 1 ? `<section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '分野' : '時代'}</h2><div class="chips">${cats.map(s => `<button class="chip" data-act="scat" data-v="${esc(s)}" aria-pressed="${sel.has(s)}">${esc(s)}</button>`).join('')}</div></section>` : ''}
+  <section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '問題数' : '出題量'}</h2>${countUI}</section>
+  <div class="actionbar static"><button class="btn primary block" data-act="startSetup" ${can ? '' : 'disabled'}>${label}</button></div>`;
+}
+
+/* =========================================================
+ * 出題セット
+ * ========================================================= */
+function makeSortSets(seeds, nSets, unit){
+  const all = inUnit(EVENTS, unit);
+  const size = Math.min(state.setup.size, uniq(all.map(e => e.year)).length);
+  let queue = shuffle(seeds);
+  const sets = [];
+  for (let k = 0; k < nSets; k++) {
+    if (!queue.length) queue = shuffle(seeds);
+    const ids = [], years = new Set();
+    for (let j = 0; j < queue.length && ids.length < size;) {
+      const e = queue[j];
+      if (!years.has(e.year)) { ids.push(e.id); years.add(e.year); queue.splice(j, 1); } else j++;
+    }
+    for (const e of shuffle(all)) { if (ids.length >= size) break; if (!years.has(e.year)) { ids.push(e.id); years.add(e.year); } }
+    sets.push({ type: 'sort', ids });
+  }
+  return sets;
+}
+function startFromSetup(){
+  const r = cur(), kind = r.a, unit = r.u, { pool } = setupPool(kind, unit);
+  if (kind === 'quiz') {
+    const n = state.setup.count === 'all' ? pool.length : Math.min(state.setup.count, pool.length);
+    startRound(shuffle(pool).slice(0, n).map(q => ({ type: 'quiz', id: q.id })), { unit, kind });
+  } else startRound(makeSortSets(pool, state.setup.sets, unit), { unit, kind });
+}
+function quickReview(){
+  const u = state.unit, rev = b => b === 'wrong' || b === 'unsure';
+  const qs = shuffle(inUnit(QUESTIONS, u).filter(q => rev(bucket('q', q.id)))).slice(0, 30).map(q => ({ type: 'quiz', id: q.id }));
+  const evs = inUnit(EVENTS, u).filter(e => rev(bucket('e', e.id)));
+  const nSets = evs.length ? Math.min(5, Math.ceil(evs.length / state.setup.size)) : 0;
+  startRound([...qs, ...makeSortSets(evs, nSets, u)], { unit: u, kind: 'quiz' });
+}
+
+/* =========================================================
+ * 出題
+ * ========================================================= */
+function startRound(items, origin, how = 'push'){
+  if (!items.length) { toast('出題できる問題がありません'); return; }
+  state.round = { items: shuffle(items), i: 0, results: [], origin, cur: null };
+  go({ v: 'round' }, how);
+}
+function renderItem(){
+  const r = state.round;
+  while (r.i < r.items.length) {   // 削除された問題は飛ばす
+    const it = r.items[r.i];
+    if (it.type === 'quiz' ? qById.has(it.id) : it.ids.every(id => eById.has(id))) break;
+    r.i++;
+  }
+  if (r.i >= r.items.length) { go({ v: 'result' }, 'replace'); return; }
+  const it = r.items[r.i];
+  if (it.type === 'quiz') renderQuiz(it); else renderSort(it);
+}
+const prevTag = (k, id) => { const b = bucket(k, id); return b === 'new' ? '' : `<span class="prev"><span class="dot b-${b}"></span>前回 ${BL[b]}</span>`; };
+const unsureToggle = () => `<label class="toggle"><input type="checkbox" id="unsure"><span class="sw" aria-hidden="true"></span><span>自信がない</span></label>`;
+const isLast = () => state.round.i + 1 >= state.round.items.length;
+const nextBar = label => `<div class="actionbar"><button class="btn primary block" data-act="next" id="nextBtn">${label}</button></div>`;
+
+/* ---------- 4択 ---------- */
+function renderQuiz(it){
+  const q = qById.get(it.id), choices = buildChoices(q);
+  state.round.cur = { type: 'quiz', id: q.id, choices, picked: null, ok: null, unsure: false };
+  app.innerHTML = `
+  <p class="meta"><span>${esc(unitName(q.unit))}／${esc(q.cat)}</span>${prevTag('q', q.id)}</p>
+  <h1 class="qtext">${esc(q.question)}</h1>
+  <div class="choices" id="choices">${choices.map((c, i) => `<button class="choice" data-act="choose" data-v="${i}"><span class="key">${KEYS[i]}</span><span class="ctext">${esc(c)}</span><span class="cmark"></span></button>`).join('')}</div>
+  ${unsureToggle()}
+  <div id="fb"></div>`;
+}
+function choose(i){
+  const c = state.round.cur;
+  if (!c || c.type !== 'quiz' || c.picked !== null) return;
+  const q = qById.get(c.id);
+  c.picked = i; c.ok = c.choices[i] === q.answer; c.unsure = document.getElementById('unsure').checked;
+  recordAnswer('q', q.id, c.ok, c.unsure);
+  state.streak = c.ok ? state.streak + 1 : 0;
+  if (state.streak > P.best) P.best = state.streak;
+  saveP();
+  document.querySelectorAll('#choices .choice').forEach((b, k) => {
+    b.disabled = true;
+    if (c.choices[k] === q.answer) { b.classList.add('is-ok'); b.querySelector('.cmark').innerHTML = I('check'); }
+    else if (k === i) { b.classList.add('is-ng'); b.querySelector('.cmark').innerHTML = I('x'); }
+    else b.classList.add('is-dim');
+  });
+  document.querySelector('.toggle').hidden = true;
+  renderQuizFeedback(true);
+}
+function renderQuizFeedback(first){
+  const c = state.round.cur, q = qById.get(c.id);
+  if (!q) return;
+  const clist = c.choices.map((ch, k) => {
+    const info = choiceInfo(q, ch), isAns = ch === q.answer, picked = k === c.picked && !isAns;
+    return `<div class="citem ${isAns ? 'ok' : ''} ${picked ? 'picked' : ''}"><span class="ic">${I(isAns ? 'check' : 'x')}</span>
+      <div class="ct"><div class="cn">${esc(ch)}${isAns ? '<small>正解</small>' : picked ? '<small>あなたの解答</small>' : ''}</div>
+      ${info.text ? `<p class="cs">${esc(info.text)}</p>` : ''}
+      ${info.key ? `<button class="textbtn" data-act="term" data-v="${esc(info.key)}">${I('book')}図鑑で見る</button>` : ''}</div></div>`;
+  }).join('');
+  const links = q.type === 'term' ? linkedTerms(q.unit, [q.question, q.explanation, q.point || ''], c.choices) : [];
+  const vb = c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
+  const sub = c.ok ? (c.unsure ? '「自信なし」に振り分けました' : state.streak >= 3 ? `${state.streak}問連続で正解` : pick(['その調子です', 'よく覚えています', '正確です'])) : '選択肢の違いも確認しておきましょう';
+  document.getElementById('fb').innerHTML = `
+  <div class="verdict b-${vb}"><span class="vi">${I(c.ok ? 'check' : 'x')}</span><div><b>${c.ok ? '正解' : '不正解'}</b><span class="vs">${sub}</span></div></div>
+  <div class="ansrow"><p class="answer"><span>答え</span>${esc(q.answer)}</p>${editBtn('editQ', q.id)}</div>
+  ${memoBlock(memoOf(q))}
+  <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('q', q.id)}</section>
+  <section class="block"><h3>解説</h3><p class="prose">${esc(q.explanation)}</p></section>
+  ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${esc(q.point)}</p></section>` : ''}
+  <details class="block" ${c.ok ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
+  ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${esc(t.term)}</button>`).join('')}</div></section>` : ''}
+  ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
+  if (first) {
+    document.getElementById('nextBtn').focus({ preventScroll: true });
+    setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }), 120);
+  }
+}
+
+/* ---------- 年号並べ替え ---------- */
+function renderSort(it){
+  const sorted = [...it.ids].sort((a, b) => eById.get(a).year - eById.get(b).year);
+  let order = shuffle(it.ids);
+  for (let t = 0; t < 6 && order.join() === sorted.join(); t++) order = shuffle(it.ids);
+  state.round.cur = { type: 'sort', it, order, sel: null, done: false, ok: null, unsure: false };
+  app.innerHTML = `
+  <p class="meta">${esc(unitName(eById.get(it.ids[0]).unit))}／年号並べ替え</p>
+  <h1 class="qtext" style="display:flex;align-items:center;gap:10px">古い順に並べ替え ${help('sort')}</h1>
+  <div id="sortArea"></div>
+  ${unsureToggle()}
+  <div id="fb">${'<div class="actionbar"><button class="btn primary block" data-act="submitSort">この順番で解答する</button></div>'}</div>`;
+  drawSortList();
+}
+function sortMarks(order){
+  const sorted = [...order].sort((a, b) => eById.get(a).year - eById.get(b).year);
+  return order.map((id, i) => eById.get(id).year === eById.get(sorted[i]).year);
+}
+function drawSortList(){
+  const c = state.round.cur, n = c.order.length, marks = c.done ? sortMarks(c.order) : null;
+  document.getElementById('sortArea').innerHTML = `
+    <div class="axis">古い</div>
+    <ol class="slist">${c.order.map((id, i) => {
+      const e = eById.get(id), cls = c.done ? (marks[i] ? 'ok' : 'ng') : (c.sel === i ? 'sel' : '');
+      return `<li class="sitem ${cls}" ${c.done ? '' : `data-act="pick" data-v="${i}" tabindex="0" role="button" aria-label="${i + 1}番目：${esc(e.title)}"`}>
+        <span class="no">${c.done ? I(marks[i] ? 'check' : 'x') : i + 1}</span>
+        <span class="st">${c.done ? `<span class="yr">${yearLabel(e)}</span>` : ''}${esc(e.title)}</span>
+        ${c.done ? '' : `<span class="mv"><button data-act="up" data-v="${i}" aria-label="上へ" ${i === 0 ? 'disabled' : ''}>${I('up')}</button><button data-act="down" data-v="${i}" aria-label="下へ" ${i === n - 1 ? 'disabled' : ''}>${I('down')}</button></span>`}
+      </li>`;
+    }).join('')}</ol>
+    <div class="axis">新しい</div>`;
+}
+function moveItem(i, d){
+  const c = state.round.cur, j = i + d;
+  if (c.done || j < 0 || j >= c.order.length) return;
+  [c.order[i], c.order[j]] = [c.order[j], c.order[i]];
+  c.sel = null; drawSortList();
+  const b = document.querySelector(`.sitem:nth-child(${j + 1}) [data-act="${d < 0 ? 'up' : 'down'}"]`);
+  (b && !b.disabled ? b : document.querySelector(`.sitem:nth-child(${j + 1})`))?.focus();
+}
+function pickItem(i){
+  const c = state.round.cur;
+  if (c.done) return;
+  if (c.sel === null) c.sel = i;
+  else if (c.sel === i) c.sel = null;
+  else { [c.order[c.sel], c.order[i]] = [c.order[i], c.order[c.sel]]; c.sel = null; }
+  drawSortList();
+}
+function submitSort(){
+  const c = state.round.cur;
+  if (c.done) return;
+  c.done = true; c.sel = null;
+  const marks = sortMarks(c.order);
+  c.ok = marks.every(Boolean); c.unsure = document.getElementById('unsure').checked;
+  c.order.forEach((id, i) => recordAnswer('e', id, marks[i], c.unsure));
+  state.streak = c.ok ? state.streak + 1 : 0;
+  if (state.streak > P.best) P.best = state.streak;
+  saveP();
+  drawSortList();
+  document.querySelector('.toggle').hidden = true;
+  renderSortFeedback(true);
+}
+function renderSortFeedback(first){
+  const c = state.round.cur, marks = sortMarks(c.order), okN = marks.filter(Boolean).length;
+  const sorted = [...c.order].sort((a, b) => eById.get(a).year - eById.get(b).year);
+  document.getElementById('fb').innerHTML = `
+  <div class="verdict b-${c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong'}"><span class="vi">${I(c.ok ? 'check' : 'x')}</span>
+    <div><b>${c.ok ? '正解' : `${marks.length}個中${okN}個が正しい位置`}</b><span class="vs">${c.ok ? '時代の流れがつかめています' : '正しい順序を確認しておきましょう'}</span></div></div>
+  <section class="block"><h3 class="stitle">正しい順序と振り分け ${help('classify')}</h3>${timeline(sorted, true)}</section>
+  ${nextBar(isLast() ? '結果を見る' : '次のセットへ')}`;
+  if (first) document.getElementById('nextBtn').focus({ preventScroll: true });
+}
+function timeline(ids, inRound){
+  return `<ol class="tl">${ids.map(id => {
+    const e = eById.get(id), memo = memoOfEvent(e);
+    return `<li><div class="y">${e.year}<small>${esc(e.era || '')}</small></div><div><p class="t">${esc(e.title)}</p><p class="x">${esc(e.explanation || '')}</p>
+      ${memo ? `<div class="memo" style="margin:0 0 10px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
+      ${inRound ? classifySeg('e', e.id) + `<div class="btnrow">${editBtn('editE', e.id)}</div>` : `<div class="btnrow">${editBtn('editE', e.id)}</div>`}</div></li>`;
+  }).join('')}</ol>`;
+}
+function next(){
+  const r = state.round, c = r.cur;
+  if (!c || (c.type === 'quiz' ? c.picked === null : !c.done)) return;
+  r.results.push({ item: r.items[r.i], ok: c.ok });
+  r.i++; r.cur = null;
+  if (r.i >= r.items.length) { state.open = null; go({ v: 'result' }, 'replace'); }
+  else { renderItem(); renderTop(); scrollTo(0, 0); }
+}
+
+/* =========================================================
+ * 結果
+ * ========================================================= */
+function unitBucket(x){
+  if (x.item.type === 'quiz') return bucket('q', x.item.id);
+  const bs = x.item.ids.map(id => bucket('e', id));
+  return bs.includes('wrong') ? 'wrong' : bs.includes('unsure') ? 'unsure' : 'correct';
+}
+function renderResult(){
+  const r = state.round, res = r.results, total = res.length, ok = res.filter(x => x.ok).length;
+  const c = { correct: 0, unsure: 0, wrong: 0, new: 0 };
+  res.forEach(x => c[unitBucket(x)]++);
+  const review = res.filter(x => ['wrong', 'unsure'].includes(unitBucket(x)));
+  const qIds = uniq(res.filter(x => x.item.type === 'quiz').map(x => x.item.id)).filter(id => qById.has(id));
+  const eIds = uniq(res.filter(x => x.item.type === 'sort').flatMap(x => x.item.ids)).filter(id => eById.has(id));
+  app.innerHTML = `
+  <p class="psub" style="margin:0 0 4px">${esc(unitName(r.origin.unit))}</p>
+  <h1 class="ptitle">おつかれさまでした</h1>
+  <p class="score"><b>${ok}</b>/ ${total} ${eIds.length && !qIds.length ? 'セット' : '問'}正解</p>
+  <div class="panel" style="margin-top:18px">${stackBar(c)}${legend(c, ['correct', 'unsure', 'wrong'])}</div>
+  <div class="btns" style="margin-top:20px">
+    ${review.length ? `<button class="btn primary block" data-act="retryReview">不正解と自信なしをもう一度（${review.length}）</button>` : ''}
+    <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
+    <button class="btn block" data-act="setupAgain">条件を変えて解く</button>
+  </div>
+  <div class="foot"><button class="textbtn" data-act="back">終了する</button></div>
+  <section class="sect">
+    <h2 class="stitle">今回の問題</h2>
+    ${qIds.length ? `<ul class="rows">${qIds.map(id => qRow(qById.get(id), r.origin.unit === 'all')).join('')}</ul>` : ''}
+    ${eIds.length ? `<ul class="rows" style="margin-top:12px">${eIds.map(id => eRow(eById.get(id))).join('')}</ul>` : ''}
+  </section>`;
+}
+function retry(kind){
+  const r = state.round;
+  const items = kind === 'review' ? r.results.filter(x => ['wrong', 'unsure'].includes(unitBucket(x))) : r.results;
+  startRound(items.map(x => ({ ...x.item })), r.origin, 'replace');
+}
+
+/* =========================================================
+ * 振り分け一覧
+ * ========================================================= */
+function listItems(){
+  const L = state.list, isQ = L.kind === 'quiz', k = isQ ? 'q' : 'e';
+  const all = inUnit(isQ ? QUESTIONS : EVENTS, L.unit);
+  return { isQ, k, all, items: all.filter(x => L.filter === 'all' || bucket(k, x.id) === L.filter) };
+}
+function renderList(){
+  state.round = null;
+  const L = state.list;
+  if (L.unit !== 'all' && !unitById.has(L.unit)) L.unit = 'all';
+  const hasQ = inUnit(QUESTIONS, L.unit).length > 0, hasE = inUnit(EVENTS, L.unit).length > 0;
+  if (L.kind === 'quiz' && !hasQ && hasE) L.kind = 'sort';
+  if (L.kind === 'sort' && !hasE) L.kind = 'quiz';
+  const { isQ, k, all, items } = listItems();
+  const c = countB(k, all);
+  app.innerHTML = `
+  <h1 class="ptitle">振り分け ${help('list')}</h1>
+  <div class="chips" style="margin-top:18px">
+    ${['all', ...UNITS.map(u => u.id)].map(id => `<button class="chip" data-act="lunit" data-v="${esc(id)}" aria-pressed="${L.unit === id}">${esc(id === 'all' ? 'すべて' : unitName(id))}</button>`).join('')}
+  </div>
+  ${hasQ && hasE ? `<div class="seg" style="margin-top:12px">
+    <button data-act="lkind" data-v="quiz" aria-pressed="${isQ}">4択問題</button>
+    <button data-act="lkind" data-v="sort" aria-pressed="${!isQ}">年号並べ替え</button>
+  </div>` : ''}
+  <div class="chips" style="margin-top:12px">
+    <button class="chip" data-act="lfilter" data-v="all" aria-pressed="${L.filter === 'all'}">すべて<span class="n">${c.total}</span></button>
+    ${ORDER.map(b => `<button class="chip" data-act="lfilter" data-v="${b}" aria-pressed="${L.filter === b}"><span class="dot b-${b}"></span>${BL[b]}<span class="n">${c[b]}</span></button>`).join('')}
+  </div>
+  <div style="margin-top:14px">${items.length ? `<ul class="rows">${items.map(x => isQ ? qRow(x, L.unit === 'all') : eRow(x)).join('')}</ul>` : `<p class="empty">該当する${isQ ? '問題' : '出来事'}はありません</p>`}</div>
+  <div class="actionbar tabbed"><button class="btn primary block" data-act="listStart" ${items.length ? '' : 'disabled'}>${isQ ? `表示中の${items.length}問を解く` : `表示中の${items.length}件で並べ替えを解く`}</button></div>
+  <div class="foot"><button class="textbtn danger" data-act="resetList">表示中の範囲を未回答に戻す</button></div>`;
+}
+function listStart(){
+  const L = state.list, { isQ, items } = listItems(), origin = { unit: L.unit, kind: L.kind };
+  if (isQ) startRound(items.map(q => ({ type: 'quiz', id: q.id })), origin);
+  else startRound(makeSortSets(items, Math.min(10, Math.max(1, Math.ceil(items.length / state.setup.size))), L.unit), origin);
+}
+
+/* =========================================================
+ * 図鑑
+ * ========================================================= */
+function termBucket(t){
+  const bs = QUESTIONS.filter(q => q.termKey === t.key).map(q => bucket('q', q.id));
+  if (!bs.length) return null;
+  return ['wrong', 'unsure', 'new', 'correct'].find(b => bs.includes(b));
+}
+function renderDict(){
+  const d = state.dict;
+  if (d.unit !== 'all' && !unitById.has(d.unit)) d.unit = 'all';
+  const termUnits = uniq(TERMS.map(t => t.unit));
+  const cats = d.unit === 'all' ? [] : uniq(TERMS.filter(t => t.unit === d.unit).map(t => t.cat));
+  app.innerHTML = `
+  <h1 class="ptitle">図鑑 ${help('dict')}</h1>
+  <div class="seg" style="margin-top:20px">
+    <button data-act="dtab" data-v="terms" aria-pressed="${d.tab === 'terms'}">用語・人物</button>
+    <button data-act="dtab" data-v="years" aria-pressed="${d.tab === 'years'}">年表</button>
+  </div>
+  <label class="search">${I('search')}<input id="dictQ" type="search" placeholder="検索" value="${esc(d.q)}" aria-label="図鑑を検索"></label>
+  ${d.tab === 'terms' ? `
+    <div class="chips" style="margin-top:12px">${['all', ...termUnits].map(id => `<button class="chip" data-act="dunit" data-v="${esc(id)}" aria-pressed="${d.unit === id}">${esc(id === 'all' ? 'すべて' : unitName(id))}</button>`).join('')}</div>
+    ${cats.length > 1 ? `<div class="chips" style="margin-top:8px">${['all', ...cats].map(c => `<button class="chip" data-act="dcat" data-v="${esc(c)}" aria-pressed="${d.cat === c}">${c === 'all' ? 'すべての分野' : esc(c)}</button>`).join('')}</div>` : ''}` : ''}
+  <div id="dictList" style="margin-top:14px"></div>`;
+  drawDict();
+}
+function drawDict(){
+  const d = state.dict, q = d.q.trim().toLowerCase(), box = document.getElementById('dictList');
+  const hit = (...xs) => !q || xs.join(' ').toLowerCase().includes(q);
+  if (d.tab === 'terms') {
+    const list = TERMS.filter(t => (d.unit === 'all' || t.unit === d.unit) && (d.cat === 'all' || t.cat === d.cat) && hit(t.term, t.kana, t.summary, t.detail, U.memos['k:' + t.key]));
+    box.innerHTML = list.length ? `<p class="hint">${list.length}件</p><ul class="rows">${list.map(t => { const b = termBucket(t); return `<li class="row">
+      <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${esc(t.term)}</span>${t.kana ? `<span class="dk">${esc(t.kana)}</span>` : ''}${d.unit === 'all' ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div><p class="ds">${esc(t.summary)}</p></button></li>`; }).join('')}</ul>`
+      : `<p class="empty">当てはまる用語はありません</p>`;
+  } else {
+    const list = [...EVENTS].sort((a, b) => a.year - b.year).filter(e => hit(String(e.year), e.era, e.title, e.explanation, e.group, memoOfEvent(e)));
+    box.innerHTML = list.length ? timeline(list.map(e => e.id), false) : `<p class="empty">当てはまる出来事はありません</p>`;
+  }
+}
+function openTerm(key){
+  const t = termByKey.get(key);
+  if (!t) { toast('図鑑にない語です'); return; }
+  const asAns = QUESTIONS.filter(q => q.termKey === key);
+  const others = TERMS.filter(x => x.term === t.term && x.unit !== t.unit);
+  const evs = EVENTS.filter(e => t.term.length >= 3 && (e.title + (e.explanation || '')).includes(t.term));
+  const links = linkedTerms(t.unit, [t.detail || '', t.summary], [t.term]);
+  openModal(`
+    <h2>${esc(t.term)}</h2>
+    <p class="kana">${t.kana ? esc(t.kana) + '　' : ''}${esc(unitName(t.unit))}／${esc(t.cat)}</p>
+    <p class="lead">${esc(t.summary)}</p>
+    <div class="btnrow">${editBtn('editT', t.key)}</div>
+    ${memoBlock(U.memos['k:' + key])}
+    ${t.detail ? `<section class="block"><h3>くわしく</h3><p class="prose">${esc(t.detail)}</p></section>` : ''}
+    ${t.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${esc(t.point)}</p></section>` : ''}
+    ${others.length ? `<section class="block"><h3>他の単元での説明</h3>${others.map(o => `<button class="other" data-act="term" data-v="${esc(o.key)}"><b>${esc(unitName(o.unit))}</b><span>${esc(o.summary)}</span></button>`).join('')}</section>` : ''}
+    ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${esc(x.term)}</button>`).join('')}</div></section>` : ''}
+    ${asAns.length ? `<section class="block"><h3>問題</h3><div class="rel">${asAns.map(q => { const b = bucket('q', q.id); return `<div><span class="dot b-${b}" title="${BL[b]}"></span><span>${esc(q.question)}</span></div>`; }).join('')}</div></section>` : ''}
+    ${evs.length ? `<section class="block"><h3>関係する出来事</h3><div class="rel">${evs.map(e => `<div><strong>${e.year}</strong><span>${esc(e.title)}</span></div>`).join('')}</div></section>` : ''}`);
+}
+
+/* =========================================================
+ * 編集・メモ
+ * ========================================================= */
+function fld(label, name, val, type = 'inp', req = false, list = null, ph = ''){
+  const id = 'f_' + name;
+  const dl = list ? `<datalist id="${id}_l">${list.map(x => `<option value="${esc(x)}">`).join('')}</datalist>` : '';
+  const input = type === 'ta'
+    ? `<textarea class="ta" id="${id}" name="${name}" data-f="${name}" placeholder="${esc(ph)}">${esc(val)}</textarea>`
+    : `<input class="inp" id="${id}" name="${name}" data-f="${name}" value="${esc(val)}" placeholder="${esc(ph)}" ${list ? `list="${id}_l"` : ''} ${type === 'num' ? 'inputmode="numeric"' : ''} autocomplete="off">`;
+  return `<div class="fld"><label for="${id}" class="${req ? 'req' : ''}">${label}</label>${input}${dl}</div>`;
+}
+const catsOfUnit = unit => uniq(TERMS.filter(t => t.unit === unit).map(t => t.cat)).filter(Boolean);
+const groupsOfUnit = unit => uniq(EVENTS.filter(e => e.unit === unit).map(e => e.group)).filter(Boolean);
+function baseTerm(key){
+  const [unit, name] = [key.slice(0, key.indexOf('::')), key.slice(key.indexOf('::') + 2)];
+  return ((window.UNITS || []).find(u => u.id === unit)?.terms || []).find(t => t.term === name);
+}
+const baseEvent = id => (window.UNITS || []).flatMap(u => u.events || []).find(e => e.id === id);
+function openEditTerm(key){
+  const t = termByKey.get(key);
+  if (!t) return;
+  openModal(`
+    <h2 class="sheet-t">編集・メモ</h2><p class="kana">${esc(unitName(t.unit))}${t.user ? '／追加した問題' : t.edited ? '／編集済み' : ''}</p>
+    <form id="editForm" data-kind="term" data-key="${esc(key)}">
+      ${fld('メモ', 'memo', U.memos['k:' + key] || '', 'ta', false, null, '自分用のメモ')}
+      ${fld('問題文', 'q', qList(t.q).join('\n\n'), 'ta', false, null, '空行で区切ると複数の問題になります')}
+      ${fld('答え（用語・人物）', 'term', t.term, 'inp', true)}
+      ${fld('要約', 'summary', t.summary || '', 'ta', true)}
+      ${fld('解説', 'detail', t.detail || '', 'ta')}
+      ${fld('覚え方', 'point', t.point || '', 'ta')}
+      ${fld('分野', 'cat', t.cat || '', 'inp', false, catsOfUnit(t.unit))}
+      ${fld('読み', 'kana', t.kana || '')}
+      <div class="sheet-actions">
+        <button type="submit" class="btn primary block">保存する</button>
+        ${t.edited && !t.user ? `<button type="button" class="btn block" data-act="revert" data-v="t:${esc(key)}">元の内容に戻す</button>` : ''}
+        ${t.user ? `<button type="button" class="textbtn danger" data-act="delTerm" data-v="${esc(key)}">この問題を削除する</button>` : ''}
+      </div>
+    </form>`);
+}
+function openEditEvent(id){
+  const e = eById.get(id);
+  if (!e) return;
+  openModal(`
+    <h2 class="sheet-t">編集・メモ</h2><p class="kana">${esc(unitName(e.unit))}${e.user ? '／追加した出来事' : e.edited ? '／編集済み' : ''}</p>
+    <form id="editForm" data-kind="event" data-id="${esc(id)}">
+      ${fld('メモ', 'memo', U.memos['e:' + id] || '', 'ta', false, null, '自分用のメモ')}
+      ${fld('出来事', 'title', e.title, 'ta', true)}
+      ${fld('年（西暦）', 'year', String(e.year), 'num', true)}
+      ${fld('和暦', 'era', e.era || '', 'inp', false, null, '例：明治5')}
+      ${fld('解説', 'explanation', e.explanation || '', 'ta')}
+      ${fld('時代', 'group', e.group || '', 'inp', false, groupsOfUnit(e.unit))}
+      <div class="sheet-actions">
+        <button type="submit" class="btn primary block">保存する</button>
+        ${e.edited && !e.user ? `<button type="button" class="btn block" data-act="revert" data-v="e:${esc(id)}">元の内容に戻す</button>` : ''}
+        ${e.user ? `<button type="button" class="textbtn danger" data-act="delEvent" data-v="${esc(id)}">この出来事を削除する</button>` : ''}
+      </div>
+    </form>`);
+}
+const formVals = form => Object.fromEntries([...form.querySelectorAll('[data-f]')].map(el => [el.dataset.f, el.value]));
+const setMemo = (k, v) => { v = (v || '').trim(); if (v) U.memos[k] = v; else delete U.memos[k]; };
+const clean = o => { for (const k of Object.keys(o)) if (o[k] === '' || o[k] == null || (Array.isArray(o[k]) && !o[k].length)) delete o[k]; return o; };
+function saveEdit(form){
+  const f = formVals(form);
+  if (form.dataset.kind === 'term') {
+    const key = form.dataset.key, t = termByKey.get(key);
+    const qs = f.q.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+    const vals = { q: qs.length > 1 ? qs : (qs[0] || ''), term: f.term.trim(), kana: f.kana.trim(), cat: f.cat.trim() || t.cat, summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim() };
+    if (!vals.term || !vals.summary) { toast('答えと要約は必須です'); return false; }
+    if (t.user) {
+      const it = U.terms.find(x => t.unit + '::@' + x.id === key);
+      for (const k of Object.keys(vals)) delete it[k];
+      Object.assign(it, clean({ ...vals }));
+    } else {
+      const base = baseTerm(key) || {}, diff = {};
+      for (const k of Object.keys(vals)) {
+        const a = k === 'q' ? qList(base.q) : (base[k] || ''), b = k === 'q' ? qList(vals.q) : vals[k];
+        if (JSON.stringify(a) !== JSON.stringify(b)) diff[k] = vals[k];
+      }
+      if (Object.keys(diff).length) U.edits['t:' + key] = diff; else delete U.edits['t:' + key];
+    }
+    setMemo('k:' + key, f.memo);
+  } else {
+    const id = form.dataset.id, e = eById.get(id);
+    const year = parseInt(toHalf(f.year), 10);
+    const vals = { title: f.title.trim(), year, era: f.era.trim(), explanation: f.explanation.trim(), group: f.group.trim() };
+    if (!vals.title || !year) { toast('出来事と年は必須です'); return false; }
+    if (e.user) {
+      const it = U.events.find(x => x.id === id);
+      for (const k of Object.keys(vals)) delete it[k];
+      Object.assign(it, clean({ ...vals }));
+    } else {
+      const base = baseEvent(id) || {}, diff = {};
+      for (const k of Object.keys(vals)) if (String(base[k] ?? '') !== String(vals[k] ?? '')) diff[k] = vals[k];
+      if (Object.keys(diff).length) U.edits['e:' + id] = diff; else delete U.edits['e:' + id];
+    }
+    setMemo('e:' + id, f.memo);
+  }
+  saveU(); buildData();
+  return true;
+}
+function afterDataChange(){
+  closeModal();
+  const v = cur().v;
+  if (v === 'round' && state.round?.cur) {
+    const c = state.round.cur;
+    if (c.type === 'quiz' && c.picked !== null) { const q = qById.get(c.id); if (q) { document.querySelector('.qtext').textContent = q.question; renderQuizFeedback(false); } }
+    else if (c.type === 'sort' && c.done) { drawSortList(); renderSortFeedback(false); }
+  } else render(cur(), true);
+}
+
+/* =========================================================
+ * データ（追加・バックアップ）
+ * ========================================================= */
+function renderData(){
+  const added = U.terms.length + U.events.length, edited = Object.keys(U.edits).length, memos = Object.keys(U.memos).length;
+  const row = (act, icon, title, sub = '') => `<button class="mrow" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span>${sub ? `<span class="ms">${sub}</span>` : ''}</span>${I('chev', 'mchev')}</button>`;
+  app.innerHTML = `
+  <h1 class="ptitle">データ ${help('data')}</h1>
+  <section class="sect">
+    <h2 class="stitle">問題を追加</h2>
+    <div class="menu">
+      ${row('goBulk', 'paste', 'まとめて追加', 'AIで作った問題やテキストファイルから')}
+      ${row('goOne', 'plus', '1件ずつ追加')}
+    </div>
+  </section>
+  <section class="sect">
+    <h2 class="stitle">自分の変更</h2>
+    <div class="menu">${row('goMine', 'pen', '追加・編集・メモした問題', `追加 ${added}　編集 ${edited}　メモ ${memos}`)}</div>
+  </section>
+  <section class="sect">
+    <h2 class="stitle">バックアップ</h2>
+    <div class="menu">
+      ${row('exportBackup', 'download', 'バックアップを書き出す', '学習記録・編集・メモ・追加した問題')}
+      <label class="mrow filebtn"><span class="mi">${I('upload')}</span><span class="mtx"><span class="mt">バックアップから復元</span></span>${I('chev', 'mchev')}<input type="file" id="importFile" accept=".json,application/json"></label>
+    </div>
+  </section>
+  ${WARNINGS.length ? `<details class="warn"><summary>データの確認事項 ${WARNINGS.length}件</summary><ul>${WARNINGS.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>` : ''}
+  <div class="foot"><button class="textbtn danger" data-act="resetAll">学習記録をすべてリセット</button></div>`;
+}
+function unitSelect(id, val){
+  return `<select class="sel" id="${id}" data-f="unit">${UNITS.map(u => `<option value="${esc(u.id)}" ${val === u.id ? 'selected' : ''}>${esc(u.name)}</option>`).join('')}<option value="__new" ${val === '__new' ? 'selected' : ''}>＋ 新しい単元を作る</option></select>`;
+}
+
+/* ---------- まとめて追加 ---------- */
+const TEMPLATE = `あなたは保育士試験の学習教材を作るアシスタントです。
+次のテーマについて、暗記アプリに取り込む問題を作ってください。
+
+【テーマ】ここに範囲を書く（例：保育所保育指針の「養護」に関する用語）
+【作る数】10件
+
+# ルール
+・下の【形式】のとおりに出力し、1件ごとに「---」だけの行で区切る
+・前置きやまとめなど、形式以外の文章は書かない
+・「問題」は答えの名前を含めず、意味や特徴から答えを導ける文にする
+・「要約」は1〜2文。ほかの問題で誤りの選択肢として表示されるので、それだけで意味が分かるように書く
+・同じ「分野」の用語が4つ以上になるようにする（誤りの選択肢に使うため）
+・事実に自信がない内容は書かない
+
+# 形式（用語・人物）
+用語:
+読み:
+分野:
+要約:
+解説:
+問題:
+覚え方:
+---
+
+# 形式（年号の出来事。年号並べ替え用。必要なときだけ）
+年:
+和暦:
+時代:
+出来事:
+解説:
+---
+
+# 出力例
+用語: ルソー
+読み: るそー
+分野: 西洋の人物
+要約: 18世紀フランスの思想家。『エミール』で消極教育を説き、「子どもの発見者」と呼ばれる。
+解説: 子どもを「小さな大人」ではなく独自の存在と捉えた。「自然に還れ」。
+問題: 『エミール』で、子どもの自然な成長を妨げるものから守る「消極教育」を説いた人物は？
+覚え方: エミール→ルソー→消極教育
+---
+年: 1872
+和暦: 明治5
+時代: 明治
+出来事: 「学制」の制定
+解説: わが国初の近代的な学校制度。「国民皆学」を目指した。
+---`;
+const KEYMAP = { '単元': 'unit', '用語': 'term', '人物': 'term', '見出し': 'term', '答え': 'term', '読み': 'kana', '分野': 'cat', '要約': 'summary', '解説': 'detail', '問題': 'q', '問題文': 'q', '覚え方': 'point', 'ポイント': 'point', '除外': 'exclude', 'メモ': 'memo', '年': 'year', '西暦': 'year', '和暦': 'era', '時代': 'group', '出来事': 'title' };
+const toHalf = s => String(s || '').replace(/[０-９]/g, d => String('０１２３４５６７８９'.indexOf(d)));
+function parseText(text){
+  const blocks = [[]];
+  for (const ln of String(text || '').replace(/\r\n?/g, '\n').split('\n')) {
+    if (/^\s*([-ー―=＝]\s*){3,}\s*$/.test(ln)) blocks.push([]); else blocks[blocks.length - 1].push(ln);
+  }
+  const items = [], errors = [];
+  blocks.forEach((bl, bi) => {
+    const o = {}; let last = null;
+    for (const raw of bl) {
+      if (/^\s*```/.test(raw) || /^\s*#/.test(raw)) continue;
+      const ln = raw.replace(/\*\*/g, '').replace(/^\s*(?:[-*・]\s+)/, '');
+      const m = ln.match(/^\s*[【\[]?\s*([^:：\]】\s]{1,5})\s*[\]】]?\s*[:：]\s*(.*)$/);
+      if (m && KEYMAP[m[1]]) {
+        const k = KEYMAP[m[1]], v = m[2].trim();
+        if (k === 'q') o.q = [...(o.q || []), v]; else o[k] = v;
+        last = k; continue;
+      }
+      const t = ln.trim();
+      if (!t || !last) continue;
+      if (last === 'q') o.q[o.q.length - 1] = (o.q[o.q.length - 1] ? o.q[o.q.length - 1] + '\n' : '') + t;
+      else o[last] = (o[last] ? o[last] + '\n' : '') + t;
+    }
+    if (o.q) o.q = o.q.map(s => s.trim()).filter(Boolean);
+    clean(o);
+    if (!Object.keys(o).length) return;
+    const no = items.length + errors.length + 1;
+    if (o.year || o.title) {
+      const y = parseInt((toHalf(o.year).match(/\d{3,4}/) || [])[0], 10);
+      if (!y || !o.title) { errors.push(`${no}件目：年号の出来事には「年」と「出来事」が必要です`); return; }
+      items.push(clean({ kind: 'event', year: y, era: o.era, group: o.group, title: o.title, explanation: o.detail || o.summary, unit: o.unit, memo: o.memo }));
+    } else {
+      if (!o.term || !o.summary) { errors.push(`${no}件目${o.term ? `（${o.term}）` : ''}：「用語」と「要約」が必要です`); return; }
+      items.push(clean({ kind: 'term', term: o.term, kana: o.kana, cat: o.cat || 'その他', summary: o.summary, detail: o.detail,
+        q: o.q ? (o.q.length === 1 ? o.q[0] : o.q) : undefined, point: o.point,
+        exclude: o.exclude ? o.exclude.split(/[、,，]/).map(s => s.trim()).filter(Boolean) : undefined, unit: o.unit, memo: o.memo }));
+    }
+  });
+  return { items, errors };
+}
+function addItems(items, target, newName){
+  const created = {};
+  const unitFor = name => {
+    if (!name) return target;
+    const u = UNITS.find(x => x.name === name) || U.units.find(x => x.name === name);
+    if (u) return u.id;
+    if (!created[name]) { const id = 'u' + uid(); U.units.push({ id, name, icon: 'book', order: 100 + U.units.length, yearQuiz: true }); created[name] = id; }
+    return created[name];
+  };
+  if (target === '__new') {
+    const name = (newName || '').trim() || '自分で追加した問題';
+    target = unitFor(name);
+  }
+  const haveT = new Set(TERMS.map(t => t.unit + '::' + t.term)), haveE = new Set(EVENTS.map(e => e.unit + '::' + e.year + e.title));
+  let added = 0, skipped = 0;
+  for (const it of items) {
+    const unit = unitFor(it.unit);
+    const { kind, memo, unit: _u, ...rest } = it;
+    if (kind === 'term') {
+      if (haveT.has(unit + '::' + it.term)) { skipped++; continue; }
+      const id = uid(); U.terms.push({ id, unit, ...rest }); haveT.add(unit + '::' + it.term);
+      if (memo) U.memos['k:' + unit + '::@' + id] = memo;
+    } else {
+      if (haveE.has(unit + '::' + it.year + it.title)) { skipped++; continue; }
+      const id = 'ue' + uid(); U.events.push({ id, unit, ...rest }); haveE.add(unit + '::' + it.year + it.title);
+      if (memo) U.memos['e:' + id] = memo;
+    }
+    added++;
+  }
+  saveU(); buildData();
+  return { added, skipped, unit: target };
+}
+function bulkPreviewHTML(){
+  const B = state.bulk;
+  if (B.done) return `<div class="pv"><p class="okmsg">${I('check')}${B.done.added}件を追加しました${B.done.skipped ? `（同じ内容の${B.done.skipped}件は追加しませんでした）` : ''}</p>
+    <div class="btnrow"><button class="textbtn" data-act="goUnit" data-v="${esc(B.done.unit)}">${esc(unitName(B.done.unit))}を開く${I('chev')}</button></div></div>`;
+  if (!B.text.trim()) return '';
+  const { items, errors } = parseText(B.text);
+  const nT = items.filter(x => x.kind === 'term').length, nQ = items.filter(x => x.kind === 'term' && x.q).length, nE = items.length - nT;
+  return `<div class="pv"><b>読み取り結果</b>
+    <p style="margin:4px 0 0">用語 ${nT}件（うち4択問題 ${nQ}件）／年号 ${nE}件</p>
+    ${errors.length ? `<ul class="err">${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : ''}
+    ${items.length ? `<details><summary>内容を確認する</summary><ol>${items.map(x => `<li>${x.kind === 'term' ? `<strong>${esc(x.term)}</strong>（${esc(x.cat)}）` : `<strong>${x.year}</strong> ${esc(x.title)}`}</li>`).join('')}</ol></details>` : ''}
+  </div>`;
+}
+function renderBulk(){
+  const B = state.bulk;
+  if (!B.unit || (B.unit !== '__new' && !unitById.has(B.unit))) B.unit = UNITS[0]?.id || '__new';
+  const n = B.text.trim() ? parseText(B.text).items.length : 0;
+  app.innerHTML = `
+  <h1 class="ptitle">まとめて追加 ${help('bulk')}</h1>
+  <div class="btns" style="margin-top:20px">
+    <button class="btn block" data-act="copyTpl">${I('copy')}AIへの指示をコピー</button>
+  </div>
+  <section class="fgroup">
+    <h2 class="stitle">追加先</h2>
+    ${unitSelect('bulkUnit', B.unit)}
+    ${B.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="bulkNew" value="${esc(B.newName)}" placeholder="新しい単元の名前" autocomplete="off">` : ''}
+  </section>
+  <section class="fgroup">
+    <h2 class="stitle">内容</h2>
+    <textarea class="ta big" id="bulkText" placeholder="AIの出力を貼り付け">${esc(B.text)}</textarea>
+    <div class="btnrow">
+      <label class="textbtn filebtn">${I('file')}テキストファイルを読み込む<input type="file" id="bulkFile" accept=".txt,.md,text/plain"></label>
+      ${B.text ? `<button class="textbtn" data-act="bulkClear">${I('x')}消去</button>` : ''}
+    </div>
+    <div id="bulkPv">${bulkPreviewHTML()}</div>
+  </section>
+  <div class="actionbar static"><button class="btn primary block" id="bulkAdd" data-act="bulkAdd" ${n ? '' : 'disabled'}>${n ? `${n}件を追加する` : '追加する'}</button></div>`;
+}
+let bulkTimer = null;
+function onBulkInput(){
+  clearTimeout(bulkTimer);
+  bulkTimer = setTimeout(() => {
+    state.bulk.done = null;
+    document.getElementById('bulkPv').innerHTML = bulkPreviewHTML();
+    const n = state.bulk.text.trim() ? parseText(state.bulk.text).items.length : 0;
+    const b = document.getElementById('bulkAdd');
+    b.disabled = !n; b.textContent = n ? `${n}件を追加する` : '追加する';
+  }, 250);
+}
+async function copyTemplate(){
+  try { await navigator.clipboard.writeText(TEMPLATE); toast('AIへの指示をコピーしました'); }
+  catch (_) {
+    openModal(`<h2 class="sheet-t">AIへの指示</h2><p class="hint">全体を選択してコピーしてください</p><textarea class="ta big" readonly id="tplArea">${esc(TEMPLATE)}</textarea>`);
+    const ta = document.getElementById('tplArea'); ta.focus(); ta.select();
+  }
+}
+
+/* ---------- 1件ずつ追加 ---------- */
+function renderOne(){
+  const O = state.one;
+  if (!O.unit || (O.unit !== '__new' && !unitById.has(O.unit))) O.unit = UNITS[0]?.id || '__new';
+  const f = O.f, cats = O.unit === '__new' ? [] : catsOfUnit(O.unit), groups = O.unit === '__new' ? [] : groupsOfUnit(O.unit);
+  app.innerHTML = `
+  <h1 class="ptitle">1件ずつ追加 ${help('one')}</h1>
+  <div class="seg" style="margin-top:20px">
+    <button data-act="oneKind" data-v="term" aria-pressed="${O.kind === 'term'}">用語・問題</button>
+    <button data-act="oneKind" data-v="event" aria-pressed="${O.kind === 'event'}">年号の出来事</button>
+  </div>
+  <form id="oneForm">
+    <div class="fld"><label for="oneUnit">追加先</label>${unitSelect('oneUnit', O.unit)}
+      ${O.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="oneNew" value="${esc(O.newName)}" placeholder="新しい単元の名前" autocomplete="off">` : ''}</div>
+    ${O.kind === 'term' ? `
+      ${fld('答え（用語・人物）', 'term', f.term || '', 'inp', true)}
+      ${fld('問題文', 'q', f.q || '', 'ta', false, null, '答えの名前を含めずに書く')}
+      ${fld('要約', 'summary', f.summary || '', 'ta', true, null, '誤りの選択肢になったときにも表示されます')}
+      ${fld('解説', 'detail', f.detail || '', 'ta')}
+      ${fld('覚え方', 'point', f.point || '', 'ta')}
+      ${fld('分野', 'cat', f.cat || '', 'inp', false, cats, cats[0] || '例：西洋の人物')}
+      ${fld('読み', 'kana', f.kana || '')}` : `
+      ${fld('出来事', 'title', f.title || '', 'ta', true)}
+      ${fld('年（西暦）', 'year', f.year || '', 'num', true, null, '例：1872')}
+      ${fld('和暦', 'era', f.era || '', 'inp', false, null, '例：明治5')}
+      ${fld('解説', 'explanation', f.explanation || '', 'ta')}
+      ${fld('時代', 'group', f.group || '', 'inp', false, groups)}`}
+    <div class="actionbar static"><button type="submit" class="btn primary block">追加する</button></div>
+  </form>`;
+}
+function submitOne(){
+  const O = state.one, f = O.f;
+  let item;
+  if (O.kind === 'term') {
+    if (!(f.term || '').trim() || !(f.summary || '').trim()) { toast('答えと要約は必須です'); return; }
+    const qs = (f.q || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+    item = clean({ kind: 'term', term: f.term.trim(), kana: (f.kana || '').trim(), cat: (f.cat || '').trim() || 'その他', summary: f.summary.trim(),
+      detail: (f.detail || '').trim(), point: (f.point || '').trim(), q: qs.length > 1 ? qs : qs[0] });
+  } else {
+    const y = parseInt(toHalf(f.year), 10);
+    if (!(f.title || '').trim() || !y) { toast('出来事と年は必須です'); return; }
+    item = clean({ kind: 'event', title: f.title.trim(), year: y, era: (f.era || '').trim(), explanation: (f.explanation || '').trim(), group: (f.group || '').trim() });
+  }
+  const r = addItems([item], O.unit, O.newName);
+  if (!r.added) { toast('同じ内容がすでにあります'); return; }
+  if (O.unit === '__new') O.unit = r.unit;
+  O.f = O.kind === 'term' ? { cat: f.cat } : { group: f.group };
+  render(cur(), true); toast('追加しました');
+}
+
+/* ---------- 追加・編集・メモした問題 ---------- */
+function renderMine(){
+  const addedT = TERMS.filter(t => t.user), addedE = EVENTS.filter(e => e.user);
+  const editedT = TERMS.filter(t => t.edited), editedE = EVENTS.filter(e => e.edited);
+  const memoT = TERMS.filter(t => U.memos['k:' + t.key]), memoE = EVENTS.filter(e => U.memos['e:' + e.id]);
+  const rowT = t => `<li class="row"><button class="drow" data-act="editT" data-v="${esc(t.key)}"><div class="dh"><span class="dn">${esc(t.term)}</span><span class="dk">${esc(unitName(t.unit))}</span></div><p class="ds">${esc(U.memos['k:' + t.key] || qList(t.q)[0] || t.summary)}</p></button></li>`;
+  const rowE = e => `<li class="row"><button class="drow" data-act="editE" data-v="${esc(e.id)}"><div class="dh"><span class="dn">${e.year}</span><span class="dk">${esc(unitName(e.unit))}</span></div><p class="ds">${esc(U.memos['e:' + e.id] || e.title)}</p></button></li>`;
+  const sec = (title, ts, es) => ts.length + es.length ? `<section class="sect"><h2 class="stitle">${title}（${ts.length + es.length}）</h2><ul class="rows">${ts.map(rowT).join('')}${es.map(rowE).join('')}</ul></section>` : '';
+  const body = sec('メモ', memoT, memoE) + sec('追加した問題', addedT, addedE) + sec('編集した問題', editedT, editedE);
+  app.innerHTML = `<h1 class="ptitle">追加・編集した問題</h1>${body || '<p class="empty">まだありません</p>'}`;
+}
+
+/* ---------- バックアップ ---------- */
+function exportBackup(){
+  const data = { app: 'hoikushi-anki-note', version: 1, exportedAt: new Date().toISOString(), progress: P, user: U };
+  const blob = new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' });
+  const d = new Date(), pad = n => String(n).padStart(2, '0');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `anki-note-backup-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}.json`;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast('書き出しました');
+}
+function importBackup(file){
+  const rd = new FileReader();
+  rd.onload = () => {
+    let data;
+    try { data = JSON.parse(rd.result); } catch (_) { toast('ファイルを読み込めませんでした'); return; }
+    if (!data || data.app !== 'hoikushi-anki-note' || !data.user || !data.progress) { toast('このアプリのバックアップではありません'); return; }
+    const when = data.exportedAt ? new Date(data.exportedAt).toLocaleString('ja-JP') : '';
+    if (!confirm(`${when ? when + ' の' : ''}バックアップで、今の学習記録・編集・メモ・追加した問題を置き換えます。よろしいですか？`)) return;
+    P = { ...blankP(), ...data.progress }; U = { ...blankU(), ...data.user };
+    saveP(); saveU(); buildData(); render(cur(), true); toast('復元しました');
+  };
+  rd.readAsText(file);
+}
+
+/* =========================================================
+ * 操作
+ * ========================================================= */
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act, v = el.dataset.v, S = state.setup;
+  switch (act) {
+    case 'tab': go({ v }, 'tab'); break;
+    case 'back': uiBack(); break;
+    case 'help': openModal(`<h2 class="sheet-t">${esc(HELP[v][0])}</h2><p class="prose">${esc(HELP[v][1])}</p>`); break;
+    case 'goUnit': closeModal(); go({ v: 'unit', a: v }); break;
+    case 'unitList': state.list.unit = state.unit; state.list.filter = 'all'; state.open = null; go({ v: 'list' }); break;
+    case 'unitDict': {
+      const hasT = TERMS.some(t => state.unit === 'all' || t.unit === state.unit);
+      Object.assign(state.dict, { tab: hasT ? 'terms' : 'years', unit: hasT ? state.unit : 'all', cat: 'all', q: '' });
+      go({ v: 'dict' }); break;
+    }
+    case 'unitAdd': state.bulk.unit = state.unit; state.bulk.done = null; go({ v: 'bulk' }); break;
+    case 'setupQuiz': go({ v: 'setup', a: 'quiz', u: state.unit }); break;
+    case 'setupSort': go({ v: 'setup', a: 'sort', u: state.unit }); break;
+    case 'quickReview': quickReview(); break;
+    case 'sbucket': { const k = cur().a, B = S.buckets[k]; B.has(v) ? B.delete(v) : B.add(v); render(cur(), true); break; }
+    case 'sall': S.buckets[cur().a] = new Set(ORDER); render(cur(), true); break;
+    case 'sreview': S.buckets[cur().a] = new Set(['wrong', 'unsure']); render(cur(), true); break;
+    case 'scat': { const s = selectedCats(cur().a, cur().u); s.has(v) ? s.delete(v) : s.add(v); render(cur(), true); break; }
+    case 'scount': S.count = v === 'all' ? 'all' : +v; render(cur(), true); break;
+    case 'ssets': S.sets = +v; render(cur(), true); break;
+    case 'ssize': S.size = +v; render(cur(), true); break;
+    case 'startSetup': startFromSetup(); break;
+    case 'choose': choose(+v); break;
+    case 'up': ev.stopPropagation(); moveItem(+v, -1); break;
+    case 'down': ev.stopPropagation(); moveItem(+v, 1); break;
+    case 'pick': pickItem(+v); break;
+    case 'submitSort': submitSort(); break;
+    case 'next': next(); break;
+    case 'classify':
+      setBucket(el.dataset.k, el.dataset.id, v);
+      if (cur().v === 'round') el.closest('.seg3').outerHTML = classifySeg(el.dataset.k, el.dataset.id, el.dataset.new === '1');
+      else render(cur(), true);
+      toast(`「${BL[v]}」に振り分けました`);
+      break;
+    case 'open': state.open = state.open === v ? null : v; render(cur(), true); break;
+    case 'retryReview': retry('review'); break;
+    case 'retryAll': retry('all'); break;
+    case 'setupAgain': {
+      const o = state.round.origin, prev = stack[stack.length - 2];
+      if (prev && prev.v === 'setup') uiBack(); else go({ v: 'setup', a: o.kind === 'sort' ? 'sort' : 'quiz', u: o.unit }, 'replace');
+      break;
+    }
+    case 'lunit': state.list.unit = v; state.list.filter = 'all'; state.open = null; render(cur()); break;
+    case 'lkind': state.list.kind = v; state.list.filter = 'all'; state.open = null; render(cur(), true); break;
+    case 'lfilter': state.list.filter = v; state.open = null; render(cur(), true); break;
+    case 'listStart': listStart(); break;
+    case 'resetList': {
+      const { k, all } = listItems();
+      if (confirm(`表示中の${all.length}件を「未回答」に戻します。よろしいですか？`)) { all.forEach(x => delete P[k][x.id]); saveP(); state.open = null; render(cur(), true); toast('未回答に戻しました'); }
+      break;
+    }
+    case 'dtab': state.dict.tab = v; state.dict.q = ''; render(cur()); break;
+    case 'dunit': state.dict.unit = v; state.dict.cat = 'all'; render(cur(), true); break;
+    case 'dcat': state.dict.cat = v; render(cur(), true); break;
+    case 'term': openTerm(v); break;
+    case 'closeModal': closeModal(); break;
+    case 'editQ': { const q = qById.get(v); if (!q) break; q.type === 'term' ? openEditTerm(q.termKey) : openEditEvent(q.eventId); break; }
+    case 'editT': openEditTerm(v); break;
+    case 'editE': openEditEvent(v); break;
+    case 'revert':
+      if (confirm('編集を取り消して、元の内容に戻しますか？（メモは残ります）')) { delete U.edits[v]; saveU(); buildData(); afterDataChange(); toast('元に戻しました'); }
+      break;
+    case 'delTerm': {
+      if (!confirm('この問題を削除しますか？')) break;
+      U.terms = U.terms.filter(x => el.dataset.v !== x.unit + '::@' + x.id); delete U.memos['k:' + v];
+      saveU(); buildData(); afterDataChange(); toast('削除しました'); break;
+    }
+    case 'delEvent': {
+      if (!confirm('この出来事を削除しますか？')) break;
+      U.events = U.events.filter(x => x.id !== v); delete U.memos['e:' + v];
+      saveU(); buildData(); afterDataChange(); toast('削除しました'); break;
+    }
+    case 'goBulk': state.bulk.done = null; go({ v: 'bulk' }); break;
+    case 'goOne': go({ v: 'one' }); break;
+    case 'goMine': go({ v: 'mine' }); break;
+    case 'copyTpl': copyTemplate(); break;
+    case 'bulkClear': state.bulk.text = ''; state.bulk.done = null; render(cur(), true); break;
+    case 'bulkAdd': {
+      const { items } = parseText(state.bulk.text);
+      if (!items.length) break;
+      if (state.bulk.unit === '__new' && !state.bulk.newName.trim()) { toast('新しい単元の名前を入力してください'); document.getElementById('bulkNew')?.focus(); break; }
+      const r = addItems(items, state.bulk.unit, state.bulk.newName);
+      state.bulk = { unit: r.unit, newName: '', text: '', done: r };
+      render(cur(), true); toast(`${r.added}件を追加しました`);
+      break;
+    }
+    case 'oneKind': state.one.kind = v; render(cur(), true); break;
+    case 'exportBackup': exportBackup(); break;
+    case 'resetAll':
+      if (confirm('すべての学習記録（振り分け）を消去します。編集・メモ・追加した問題は残ります。よろしいですか？')) { P = blankP(); saveP(); render(cur(), true); toast('リセットしました'); }
+      break;
+  }
+});
+document.addEventListener('submit', ev => {
+  ev.preventDefault();
+  if (ev.target.id === 'editForm') { if (saveEdit(ev.target)) { afterDataChange(); toast('保存しました'); } }
+  else if (ev.target.id === 'oneForm') submitOne();
+});
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if (t.matches && t.matches('textarea.ta:not(.big)')) autoGrow(t);
+  if (t.id === 'dictQ') { state.dict.q = t.value; drawDict(); }
+  else if (t.id === 'bulkText') { state.bulk.text = t.value; onBulkInput(); }
+  else if (t.id === 'bulkNew') state.bulk.newName = t.value;
+  else if (t.id === 'oneNew') state.one.newName = t.value;
+  else if (t.closest('#oneForm') && t.dataset.f && t.dataset.f !== 'unit') state.one.f[t.dataset.f] = t.value;
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.id === 'bulkUnit') { state.bulk.unit = t.value; render(cur(), true); }
+  else if (t.id === 'oneUnit') { state.one.unit = t.value; render(cur(), true); }
+  else if (t.id === 'importFile' && t.files[0]) { importBackup(t.files[0]); t.value = ''; }
+  else if (t.id === 'bulkFile' && t.files[0]) {
+    const rd = new FileReader();
+    rd.onload = () => { state.bulk.text = (state.bulk.text ? state.bulk.text.trim() + '\n---\n' : '') + String(rd.result); state.bulk.done = null; render(cur(), true); toast('読み込みました'); };
+    rd.readAsText(t.files[0]); t.value = '';
+  }
+});
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape' && !document.getElementById('modal').hidden) { closeModal(); return; }
+  const r = state.round;
+  if (cur().v !== 'round' || !r || !r.cur || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName) || !document.getElementById('modal').hidden) return;
+  if (r.cur.type === 'quiz' && r.cur.picked === null && /^[1-4]$/.test(ev.key)) { choose(+ev.key - 1); ev.preventDefault(); }
+  else if (ev.key === 'Enter' && ev.target.classList.contains('sitem')) { pickItem(+ev.target.dataset.v); ev.preventDefault(); }
+});
+
+buildData();
+history.replaceState({ a: 1 }, '');
+go({ v: 'home' }, 'tab');
+})();
+
+</script>
+</body>
+</html>
