@@ -681,7 +681,7 @@ const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
   buckets: ['出題する問題', '出題したい振り分けを選びます。複数選ぶと組み合わせて出題します。\n\n「苦手だけ」は、不正解・わからない・自信なしをまとめて選びます。'],
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
-  resume: ['中断と再開', '問題の途中で × を押すと中断できます。それまでの振り分けは保存され、学習画面の「続きから再開」から再開できます。\n\n中断中に別の問題を始めると、中断していた分は破棄されます。'],
+  resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
   units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
   import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
@@ -776,7 +776,8 @@ const SFX = (() => {
 })();
 
 /* ---------- 中断・再開 ---------- */
-function saveSession(){
+function saveSession(){ return; /* 中断した残りは持ち越さない */
+
   const r = state.round; if (!r) return;
   const c = r.cur, answered = c && (c.type === 'quiz' ? c.picked !== null : c.done);
   try { localStorage.setItem(SKEY, JSON.stringify({ items: r.items, i: r.i, results: r.results, origin: r.origin, answered: answered ? { ok: c.ok } : null, t: Date.now() })); } catch (_) {}
@@ -796,8 +797,8 @@ function sessionLabel(s){
   return `${unitName(s.origin.unit)}・${kinds.length > 1 ? '復習' : kinds[0] === 'sort' ? '年号並べ替え' : '4択'}`;
 }
 function resumeCard(){
+  return '';
   const s = loadSession();
-  if (!s) return '';
   return `<section class="sect"><div class="shead"><h2 class="stitle">中断中 ${help('resume')}</h2><button class="textbtn" data-act="discardSession">破棄</button></div>
     <div class="menu"><button class="mrow resume" data-act="resume"><span class="mi">${I('play')}</span><span class="mtx"><span class="mt">続きから再開</span><span class="ms">${esc(sessionLabel(s))}　あと${s.left}${s.items.every(x => x.type === 'sort') ? 'セット' : '問'}（${s.done}/${s.items.length}）</span></span>${I('chev', 'mchev')}</button></div></section>`;
 }
@@ -967,11 +968,12 @@ window.addEventListener('popstate', () => {
   if (modalOpen()) closeModal(true);
   document.querySelectorAll('.dlg').forEach(d => d.remove());
   const r = cur();
-  if (r.v === 'round' && state.round && state.round.i < state.round.items.length && !leaving) {
-    history.pushState({ a: 1 }, '');
-    confirmDialog({ title: '中断しますか？', body: 'ここまでの振り分けは保存されます。\n「学習」の「続きから再開」から、いつでも再開できます。', ok: '中断する', danger: false })
-      .then(ok => { if (ok) { saveSession(); leaving = true; history.back(); } });
-    return;
+  if (r.v === 'round' && state.round && state.round.i < state.round.items.length) {
+    /* 中断：解いた分の振り分けは、解いたその場で保存済み。残りの問題はここで終わりにする（確認は出さない） */
+    const rd = state.round, c = rd.cur;
+    const done = rd.results.length + (c && (c.type === 'quiz' ? c.picked !== null : c.done) ? 1 : 0);
+    state.round = null; clearSession();
+    toast(done ? `ここまでの${done}${rd.items.every(x => x.type === 'sort') ? 'セット' : '問'}の結果を保存しました` : '中断しました');
   }
   leaving = false;
   if (stack.length <= 1) { render(cur(), true); return; }
@@ -1188,7 +1190,7 @@ function renderHome(){
     <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
   </section>
   <section class="sect"><div class="menu">${unitRow('all')}</div></section>`;
-  if (loadSession()) app.querySelector('.brandrow').insertAdjacentHTML('afterend', resumeCard());
+
 }
 
 /* =========================================================
@@ -1201,8 +1203,8 @@ function renderUnit(id){
   const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b], 0);
   const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   app.innerHTML = `
-  ${loadSession()?.origin?.unit === id ? resumeCard() : ''}
-  <span class="uicon" ${loadSession()?.origin?.unit === id ? 'style="margin-top:24px"' : ''}>${I(unitIcon(id))}</span>
+  
+  <span class="uicon" >${I(unitIcon(id))}</span>
   <h1 class="ptitle">${esc(unitName(id))}</h1>
   ${id !== 'all' && unitById.get(id)?.desc ? `<p class="psub">${esc(unitById.get(id).desc)}</p>` : ''}
   <section class="sect">
@@ -1307,7 +1309,7 @@ function quickReview(){
  * ========================================================= */
 async function startRound(items, origin, how = 'push'){
   if (!items.length) { toast('出題できる問題がありません'); return; }
-  const old = loadSession();
+  const old = null;
   if (old && how !== 'replace' && !await confirmDialog({ title: '中断中の問題があります', body: `${sessionLabel(old)}（あと${old.left}）を破棄して、新しく始めますか？\n続きから解くときは「学習」の「続きから再開」を使ってください。`, ok: '新しく始める' })) return;
   state.round = { items: shuffle(items), i: 0, results: [], origin, cur: null };
   saveSession();
@@ -2756,6 +2758,7 @@ document.addEventListener('keydown', ev => {
   else if (r.cur.type === 'quiz' && r.cur.picked === null && (ev.key === '0' || ev.key === '?')) { choose(-1); ev.preventDefault(); }
 });
 
+clearSession();
 buildData();
 history.replaceState({ a: 1 }, '');
 go({ v: 'home' }, 'tab');
