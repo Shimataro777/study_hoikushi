@@ -512,6 +512,32 @@ mark.hit{background:#CDE7F6;color:inherit}
 .idup{display:flex;align-items:center;gap:4px;font-size:var(--fs-caption);color:var(--b-unsure);font-weight:600}
 .idup .i{width:15px;height:15px}
 
+
+/* ===== 検索欄と絞り込み（キーワードが先、条件は必要なときだけ） ===== */
+.sfield{display:flex;gap:8px;align-items:stretch}
+.sfield .lsearch{flex:1;min-width:0}
+.fbtn{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 14px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);font-size:var(--fs-label);font-weight:600;position:relative}
+.fbtn .i{width:18px;height:18px}
+.fbtn.on{border-color:var(--tint-line);background:var(--tint);color:var(--primary)}
+.fbadge{min-width:20px;height:20px;border-radius:10px;background:var(--primary);color:#FFFFFF;font-size:var(--fs-micro);display:grid;place-items:center;padding:0 6px}
+.fchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.fchip{display:inline-flex;align-items:center;gap:4px;min-height:34px;padding:0 8px 0 12px;border-radius:999px;border:1px solid var(--tint-line);background:var(--tint);color:var(--primary);font-size:var(--fs-label);font-weight:600}
+.fchip .i{width:14px;height:14px}
+/* 件数の左の小さなプルダウン */
+.isel{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;font-size:var(--fs-body-sm);font-weight:700;color:var(--ink);padding:6px 22px 6px 0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A7E9B' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;background-size:16px;max-width:60%}
+.isel:focus-visible{outline:2px solid var(--primary);border-radius:6px}
+.reshead{gap:10px}
+.reshead .cnt{margin-right:auto}
+/* 設定の一覧（項目名とプルダウンを1行ずつ） */
+.flist{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.frow{display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 8px 6px 16px}
+.frow + .frow{border-top:1px solid var(--line)}
+.frow > span{flex:none;font-size:var(--fs-body);color:var(--ink2);font-weight:500}
+.frow .sel{flex:1;min-width:0;width:auto;border:0;background-color:transparent;text-align:right;text-align-last:right;padding:10px 26px 10px 8px;font-weight:600;color:var(--primary);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:16px}
+.frow.sub{padding:10px 12px 12px 16px;background:var(--tint)}
+.iconbtn.round{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--primary)}
+.iconbtn.round .i{width:20px;height:20px}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* ---------- 単元 ---------- */
@@ -690,7 +716,7 @@ function toast(text){
  * ========================================================= */
 const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
-  buckets: ['出題する問題', '出題したい振り分けを選びます。複数選ぶと組み合わせて出題します。\n\n「苦手だけ」は、不正解・わからない・自信なしをまとめて選びます。'],
+  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかを選びます。「苦手」は不正解・わからない・自信なしをまとめたものです。「自分で組み合わせる」を選ぶと、振り分けを自由に組み合わせられます。'],
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
   resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
@@ -698,8 +724,8 @@ const HELP = {
   units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
   import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
   sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
-  list: ['振り分け', '検索の帯を押すと、キーワード・単元・振り分けで絞り込めます。読みをひらがなで打っても探せます。\n\n項目を押すと、解説とメモの確認、振り分けの変更、編集ができます。「解く」で表示中の問題をそのまま解けます。'],
-  dict: ['図鑑', '検索の帯を押すと、キーワード・単元・分野で絞り込めます。読みをひらがなで打っても探せます（例：くらはし）。\n\n用語を押すと、くわしい説明や他の単元での説明が出ます。'],
+  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。単元や振り分けで絞りたいときは「絞り込み」を使います。\n\n種類は件数の左のプルダウンで切り替えます。項目を押すと解説と振り分けを確認・変更できます。'],
+  dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。単元や分野で絞りたいときは「絞り込み」を使います。\n\n「用語・人物」と「年表」は、件数の左のプルダウンで切り替えます。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
@@ -1006,6 +1032,7 @@ let ignorePop = 0;           // こちらで起こした戻り（読み飛ばす
 const afterIgnored = [];     // 読み飛ばしたあとにすること（置きかえなど）
 let pendingTab = null;       // 下タブ：戻し終わったあとに出す画面
 let navLock = 0;             // 戻るの二度押し止め
+let floor = 0;               // いちばん下の本物の履歴の深さ（読み込み直したあとは、それより下の履歴が無い）
 const userActive = () => !navigator.userActivation || navigator.userActivation.isActive;
 const overlayEntries = () => overlays.filter(o => o.entry).length;
 const histDepth = () => stack.length - 1 + overlayEntries() + pendingBacks;
@@ -1028,7 +1055,8 @@ function overlayClose(o){
 function closeAllOverlays(){
   [...overlays].reverse().forEach(o => { if (o.kind === 'dlg') o.el._cancel && o.el._cancel(); else closeModal(true); });
 }
-function finishTab(route){
+function finishTab(route, fl){
+  if (fl !== undefined) floor = fl;
   const snap = snapshot();
   stack.length = 0; stack.push({ v: 'home' });
   if (route.v !== 'home') stack.push(route);
@@ -1041,14 +1069,19 @@ function go(route, how = 'push'){
   const k = takePending();          // 閉じた重ね物の履歴（まだ戻していないもの）
   const base = Math.max(0, stack.length - 1);    // 画面だけの深さ
   if (how === 'tab') {
-    const D = base + k;
+    const above = base - floor + k;   // いちばん下の本物の履歴より上にある履歴の数
     if (route.v === 'home') {
-      if (D === 0) { finishTab(route); return; }
-      pendingTab = route; history.go(-D); return;                       // 続きは popstate
+      if (above === 0) { history.replaceState({ d: 0 }, ''); finishTab(route, 0); return; }
+      pendingTab = { route, d: 0, floor: 0 }; history.go(-above); return;            // 続きは popstate
     }
-    if (D === 0) { history.pushState({ d: 1 }, ''); finishTab(route); return; }   // 押したその場なので積んでよい
-    if (D === 1) { history.replaceState({ d: 1 }, ''); finishTab(route); return; }
-    pendingTab = route; history.go(-(D - 1)); return;                   // 深さ1まで戻して置きかえる
+    if (floor === 0) {
+      const D = base + k;
+      if (D === 0) { history.pushState({ d: 1 }, ''); finishTab(route, 0); return; }  // 押したその場なので積んでよい
+      if (D === 1) { history.replaceState({ d: 1 }, ''); finishTab(route, 0); return; }
+      pendingTab = { route, d: 1, floor: 0 }; history.go(-(D - 1)); return;           // 深さ1まで戻して置きかえる
+    }
+    if (above === 0) { history.replaceState({ d: 1 }, ''); finishTab(route, 1); return; }
+    pendingTab = { route, d: 1, floor: 1 }; history.go(-above); return;
   }
   const snap = snapshot();
   let anim = 'none';
@@ -1073,7 +1106,25 @@ function uiBack(){
   closeAllOverlays();
   const k = takePending();
   if (stack.length <= 1) { selfBack(k); go({ v: 'home' }, 'tab'); return; }
+  if (stack.length - 1 <= floor) {   // 下に本物の履歴が無い（読み込み直したあと）：アプリの中だけで戻る
+    const d = stack.length - 2;
+    selfBack(k, () => history.replaceState({ d }, ''));
+    if (!k) history.replaceState({ d }, '');
+    floor = d;
+    popTo(d);
+    return;
+  }
   history.go(-(1 + k));
+}
+function popTo(d){
+  quitRoundIfNeeded();
+  const snap = snapshot(), popped = cur();
+  while (stack.length - 1 > d && stack.length > 1) stack.pop();
+  const back = cur();
+  render(back, true);
+  scrollTo(0, back.y || 0);
+  playTransition(FROM_BOTTOM.includes(popped.v) ? 'pop-down' : 'pop-right', snap);
+  navLock = Date.now();
 }
 function quitRoundIfNeeded(){
   if (cur().v !== 'round' || !state.round || state.round.i >= state.round.items.length) return;
@@ -1088,9 +1139,9 @@ window.addEventListener('popstate', e => {
   hideTip();
   const d = e.state && typeof e.state.d === 'number' ? e.state.d : 0;
   if (pendingTab) {
-    const r = pendingTab; pendingTab = null;
-    if (r.v !== 'home') history.replaceState({ d: 1 }, '');
-    finishTab(r); return;
+    const t = pendingTab; pendingTab = null;
+    history.replaceState({ d: t.d }, '');
+    finishTab(t.route, t.floor); return;
   }
   /* 重ね物が開いていたら、いちばん上だけを閉じる（その履歴はもう戻っている） */
   const top = overlays[overlays.length - 1];
@@ -1108,14 +1159,8 @@ window.addEventListener('popstate', e => {
   if (d > want) { selfBack(d - want); return; }
   if (d >= stack.length - 1) return;
   /* 戻る：d の深さまで画面を下ろす（長押しで何段か戻ったときも、ここでまとめて） */
-  quitRoundIfNeeded();
-  const snap = snapshot(), popped = cur();
-  while (stack.length - 1 > d && stack.length > 1) stack.pop();
-  const back = cur();
-  render(back, true);
-  scrollTo(0, back.y || 0);
-  playTransition(FROM_BOTTOM.includes(popped.v) ? 'pop-down' : 'pop-right', snap);
-  navLock = Date.now();
+  floor = Math.min(floor, d);
+  popTo(d);
 });
 /* 左端から右へ払うと戻る（ホーム画面に追加したiPhoneだけ。ブラウザでは、ブラウザ自身の払いに任せる） */
 const OWN_SWIPE = navigator.standalone === true;
@@ -1141,6 +1186,50 @@ function tabTap(v){
 
   render(cur(), true);
 }
+/* =========================================================
+ * いまの画面を覚えておく
+ *   ホーム画面に追加したWebアプリは、ほかのアプリへ切り替えたあとなどに iOS が裏で読み込み直す。
+ *   そのとき最初の画面に戻らないよう、画面の道すじと解いている途中の問題を、操作のたびに保存する
+ * ========================================================= */
+const NAVKEY = 'hoikushi-anki-nav-v1';
+function persistNav(){
+  try {
+    const r = state.round, c = r && r.cur, answered = c && (c.type === 'quiz' ? c.picked !== null : c.done);
+    localStorage.setItem(NAVKEY, JSON.stringify({
+      t: Date.now(), stack: stack.map(({ y, ...x }) => x), y: scrollY,
+      round: r ? { items: r.items, i: r.i, results: r.results, origin: r.origin, answered: answered ? { ok: c.ok } : null } : null,
+      search: state.search, list: state.list, dict: state.dict, unit: state.unit, imp: state.imp, bulkText: state.bulk.text,
+      setup: { dir: state.setup.dir, count: state.setup.count, sets: state.setup.sets, size: state.setup.size }
+    }));
+  } catch (_) {}
+}
+function restoreNav(){
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(NAVKEY) || 'null'); } catch (_) {}
+  if (!s || !Array.isArray(s.stack) || Date.now() - s.t > 12 * 3600e3) return false;
+  const known = ['home', 'unit', 'setup', 'round', 'result', 'list', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
+  const ok = r => r && known.includes(r.v) && (r.v !== 'unit' || r.a === 'all' || unitById.has(r.a)) && (r.v !== 'setup' || r.u === 'all' || unitById.has(r.u));
+  let st = s.stack.filter(ok);
+  if (s.round && Array.isArray(s.round.items)) {
+    const r = { items: s.round.items, i: s.round.i, results: s.round.results || [], origin: s.round.origin, cur: null };
+    if (s.round.answered && r.i < r.items.length) { r.results.push({ item: r.items[r.i], ok: s.round.answered.ok }); r.i++; }
+    state.round = r;
+    if (r.i >= r.items.length) st = st.map(x => x.v === 'round' ? { v: 'result' } : x);
+  } else st = st.filter(x => x.v !== 'round' && x.v !== 'result');
+  if (s.imp) state.imp = s.imp; else { const i = st.findIndex(x => x.v === 'import'); if (i >= 0) st = st.slice(0, i); }
+  if (!st.length || st[0].v !== 'home') st.unshift({ v: 'home' });
+  for (const k of ['list', 'dict']) if (s[k]) Object.assign(state[k], s[k]);
+  for (const c of ['list', 'dict']) { const o = s.search && s.search[c]; if (o && typeof o.q === 'string' && 'unit' in o) state.search[c] = { ...blankSearchState(), ...o }; }
+  if (s.unit) state.unit = s.unit;
+  if (s.setup) Object.assign(state.setup, s.setup);
+  if (typeof s.bulkText === 'string') state.bulk.text = s.bulkText;
+  stack.length = 0; stack.push(...st);
+  floor = stack.length - 1;
+  history.replaceState({ d: floor }, '');
+  render(cur(), true);
+  scrollTo(0, s.y || 0);
+  return true;
+}
 function render(r, keep){
   if (!keep) scrollTo(0, 0);
   switch (r.v) {
@@ -1161,6 +1250,7 @@ function render(r, keep){
   }
   renderTop();
   app.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
+  persistNav();
 }
 function renderTop(){
   const v = cur().v, top = document.getElementById('top'), inn = document.getElementById('topIn');
@@ -1304,10 +1394,10 @@ addEventListener('resize', hideTip);
  * ========================================================= */
 const state = {
   unit: 'all',
-  setup: { dir: 'fwd', buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
+  setup: { custom: {}, dir: 'fwd', buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
   list: { kind: 'quiz' },
   dict: { tab: 'terms' },
-  search: { list: { draft: { q: '', units: [], cats: [], buckets: [] }, applied: null, open: false }, dict: { draft: { q: '', units: [], cats: [], buckets: [] }, applied: null, open: false } },
+  search: { list: { q: '', unit: '', cat: '', bucket: '' }, dict: { q: '', unit: '', cat: '', bucket: '' } },
   mine: { q: '' },
   ruby: { q: '' },
   imp: null,
@@ -1412,36 +1502,38 @@ function setupPool(kind, unit){
   const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat) && dirOk(q, dir)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
   return { pool: inScope.filter(x => B.has(bucket(k, x.id))), c: countB(k, inScope) };
 }
+/* 出題の設定：項目名とプルダウンを1行ずつ並べるだけの、すっきりした形 */
+const PRESETS = [['all', 'すべて', ORDER], ['weak', '苦手（不正解・わからない・自信なし）', WEAK], ['new', '未回答だけ', ['new']], ['unknown', 'わからないだけ', ['unknown']], ['wrong', '不正解だけ', ['wrong']], ['unsure', '自信なしだけ', ['unsure']], ['correct', '正解だけ', ['correct']]];
+function presetOf(B){ const p = PRESETS.find(([, , bs]) => bs.length === B.size && bs.every(b => B.has(b))); return p ? p[0] : 'custom'; }
 function renderSetup(r){
   const kind = r.a, unit = r.u; state.unit = unit;
   const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
   const { pool, c } = setupPool(kind, unit);
-  let countUI, can, label;
+  const hasRev = kind === 'quiz' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
+  const pre = S.custom?.[kind] ? 'custom' : presetOf(B);
+  const cnt = bs => bs.reduce((n, b) => n + c[b], 0);
+  const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
+  const catVal = sel.size === cats.length ? '' : [...sel][0];
+  let n, can, label;
   if (kind === 'quiz') {
-    const n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
-    countUI = `<div class="seg">${[10, 20, 30, 'all'].map(v => `<button data-act="scount" data-v="${v}" aria-pressed="${S.count === v}">${v === 'all' ? 'すべて' : v + '問'}</button>`).join('')}</div>`;
+    n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
     can = n > 0; label = can ? `${n}問をはじめる` : '該当する問題がありません';
   } else {
-    countUI = `<div class="seg">${[3, 5, 10].map(v => `<button data-act="ssets" data-v="${v}" aria-pressed="${S.sets === v}">${v}セット</button>`).join('')}</div>
-      <div class="seg" style="margin-top:8px">${[4, 5].map(v => `<button data-act="ssize" data-v="${v}" aria-pressed="${S.size === v}">1セット${v}個</button>`).join('')}</div>`;
     can = pool.length > 0 && uniq(inUnit(EVENTS, unit).map(e => e.year)).length >= 3;
     label = can ? `${S.sets}セットをはじめる` : '該当する出来事がありません';
   }
   app.innerHTML = `
-  <p class="psub" style="margin:0 0 2px">${esc(unitName(unit))}</p>
-  <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'}</h1>
-  ${kind === 'quiz' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev') ? `<section class="fgroup"><h2 class="stitle">出題の向き ${help('dir')}</h2>
-    <div class="seg">${DIRS.map(([v, l]) => `<button data-act="sdir" data-v="${v}" aria-pressed="${S.dir === v}">${l}</button>`).join('')}</div></section>` : ''}
-  <section class="fgroup">
-    <h2 class="stitle">出題する問題 ${help('buckets')}</h2>
-    <div class="checklist" role="group">${ORDER.map(b => `
-      <button class="check" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}">
-        <span class="box">${I('check')}</span><span class="dot b-${b}"></span><span>${BL[b]}</span><span class="cn">${c[b]}</span>
-      </button>`).join('')}</div>
-    <div class="quick"><button class="textbtn" data-act="sall">すべて</button><button class="textbtn" data-act="sreview">苦手だけ</button></div>
-  </section>
-  ${cats.length > 1 ? `<section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '分野' : '時代'}</h2><div class="chips">${cats.map(s => `<button class="chip" data-act="scat" data-v="${esc(s)}" aria-pressed="${sel.has(s)}">${esc(s)}</button>`).join('')}</div></section>` : ''}
-  <section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '問題数' : '出題量'}</h2>${countUI}</section>
+  <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'} ${help('buckets')}</h1>
+  <div class="flist" style="margin-top:20px">
+    ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
+    <label class="frow"><span>出題する問題</span><select class="sel" id="sPreset">${PRESETS.map(([v, l, bs]) => opt(v, `${l}（${cnt(bs)}）`, pre)).join('')}${opt('custom', '自分で組み合わせる…', pre)}</select></label>
+    ${pre === 'custom' ? `<div class="frow sub"><div class="chips">${ORDER.map(b => `<button type="button" class="pill" data-act="sbucket" data-v="${b}" aria-pressed="${B.has(b)}"><span class="dot b-${b}"></span>${BL[b]}<span class="n">${c[b]}</span></button>`).join('')}</div></div>` : ''}
+    ${cats.length > 1 ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
+    ${kind === 'quiz'
+      ? `<label class="frow"><span>問題数</span><select class="sel" id="sCount">${[10, 20, 30, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select></label>`
+      : `<label class="frow"><span>セット数</span><select class="sel" id="sSets">${[3, 5, 10].map(v => opt(v, `${v}セット`, S.sets)).join('')}</select></label>
+         <label class="frow"><span>1セットの数</span><select class="sel" id="sSize">${[4, 5].map(v => opt(v, `${v}個`, S.size)).join('')}</select></label>`}
+  </div>
   <div class="actionbar static"><button class="btn primary block" data-act="startSetup" ${can ? '' : 'disabled'}>${label}</button></div>`;
 }
 
@@ -1534,7 +1626,7 @@ function choose(i){
   recordAnswer('q', q.id, c.ok, c.unsure, unknown);
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
-  saveP(); saveSession();
+  saveP(); persistNav();
   if (unknown) SFX.unknown();
   else if (!c.ok) SFX.wrong();
   else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak);
@@ -1627,7 +1719,7 @@ function submitSort(){
   c.order.forEach((id, i) => recordAnswer('e', id, marks[i], c.unsure));
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
-  saveP(); saveSession();
+  saveP(); persistNav();
   if (!c.ok) SFX.wrong(); else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak); else SFX.correct();
   drawSortList();
   document.querySelector('.toggle').hidden = true;
@@ -1639,7 +1731,7 @@ function sortDontKnow(){
   c.done = true; c.sel = null; c.unknown = true; c.ok = false;
   c.order = [...c.order].sort((a, b) => eById.get(a).year - eById.get(b).year);
   c.order.forEach(id => recordAnswer('e', id, false, false, true));
-  state.streak = 0; saveP(); saveSession(); SFX.unknown();
+  state.streak = 0; saveP(); persistNav(); SFX.unknown();
   drawSortList();
   document.querySelector('.toggle').hidden = true;
   renderSortFeedback(true);
@@ -1668,7 +1760,7 @@ function next(){
   r.results.push({ item: r.items[r.i], ok: c.ok });
   r.i++; r.cur = null;
   if (r.i >= r.items.length) finishRound();
-  else { saveSession(); renderItem(); renderTop(); scrollTo(0, 0); }
+  else { renderItem(); renderTop(); scrollTo(0, 0); persistNav(); }
 }
 
 /* =========================================================
@@ -2289,12 +2381,13 @@ function importBackup(file){
  *   ・ひらがなで読みを打っても探せる（ふりがなの読みも対象）
  *   ・当たった語を塗り、「見つかった場所」を札の下に出す
  * ========================================================= */
-const blankDraft = () => ({ q: '', units: [], cats: [], buckets: [] });
-const blankSearchState = () => ({ draft: blankDraft(), applied: null, open: false });
+const blankSearchState = () => ({ q: '', unit: '', cat: '', bucket: '' });
+const FILTER_KEYS = ['unit', 'cat', 'bucket'];
+const filterCount = S => FILTER_KEYS.filter(k => S[k]).length;
+const searchOn = S => !!(S.q.trim() || filterCount(S));
 const kataToHira = s => s.replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const norm = s => kataToHira(String(s || '').normalize('NFKC').toLowerCase());
 const searchWords = q => norm(q).split(/\s+/).filter(Boolean);
-const draftHas = d => !!d.q.trim() || d.units.length > 0 || d.cats.length > 0 || d.buckets.length > 0;
 function readingsOf(text){
   if (!RUBY_RE) return '';
   return (String(text || '').match(RUBY_RE) || []).map(w => RUBY_MAP[w]).join(' ');
@@ -2334,7 +2427,7 @@ function hitsOf(fields, words){
 }
 const fieldsOfTerm = t => [['用語', t.term], ['読み', t.kana], ['国・時代', lifeText(t)], ['要約', t.summary], ['解説', t.detail], ['問題', qList(t.q).join('\n')], ['覚え方', t.point], ['メモ', U.memos['k:' + t.key]], ['分野', t.cat]];
 function fieldsOfQ(q){
-  if (q.termKey) { const t = termByKey.get(q.termKey) || {}; return [['問題', q.question], ['答え', q.answer], ['用語', t.term], ['読み', t.kana], ['解説', q.explanation], ['覚え方', q.point], ['メモ', memoOf(q)]]; }
+  if (q.termKey) { const t = termByKey.get(q.termKey) || {}; return [['問題', q.question], ['答え', q.answer], ...(q.type === 'rev' ? [['用語', t.term]] : []), ['読み', t.kana], ['解説', q.explanation], ['覚え方', q.point], ['メモ', memoOf(q)]]; }
   const e = eById.get(q.eventId); return [['問題', q.question], ['年', yearLabel(e)], ['解説', e.explanation], ['メモ', memoOfEvent(e)]];
 }
 const fieldsOfE = e => [['出来事', e.title], ['年', yearLabel(e)], ['時代', e.group], ['解説', e.explanation], ['メモ', memoOfEvent(e)]];
@@ -2348,76 +2441,38 @@ function hitBox(hits, words, skip = []){
     ${hs.length > HIT_MAX ? `<span class="hh">ほか ${hs.length - HIT_MAX} か所</span>` : ''}</div>`;
 }
 /* 条件の欄に並べる選択肢 */
-function searchGroups(ctx){
-  const S = state.search[ctx], d = S.draft;
-  const pills = (key, values, label = x => x, count = null) => values.map(v => `<button type="button" class="pill" data-act="sPill" data-k="${key}" data-c="${ctx}" data-v="${esc(v)}" aria-pressed="${d[key].includes(v)}">${esc(label(v))}${count ? `<span class="n">${count(v)}</span>` : ''}</button>`).join('');
-  const out = [];
-  if (ctx === 'dict') {
-    const yr = state.dict.tab === 'years';
-    const units = uniq((yr ? EVENTS : TERMS).map(x => x.unit));
-    if (units.length > 1) out.push(['単元', pills('units', units, unitName)]);
-    if (!yr) {
-      const cats = uniq(TERMS.filter(t => !d.units.length || d.units.includes(t.unit)).map(t => t.cat)).filter(Boolean);
-      if (cats.length > 1) out.push(['分野', pills('cats', cats)]);
-    } else {
-      const gs = uniq(EVENTS.filter(e => !d.units.length || d.units.includes(e.unit)).map(e => e.group)).filter(Boolean);
-      if (gs.length > 1) out.push(['時代', pills('cats', gs)]);
-    }
-  } else {
-    const isQ = state.list.kind !== 'sort', k = isQ ? 'q' : 'e';
-    const QS = QUESTIONS.filter(q => state.list.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev');
-    const units = uniq((isQ ? QS : EVENTS).map(x => x.unit));
-    if (units.length > 1) out.push(['単元', pills('units', units, unitName)]);
-    const scope = (isQ ? QS : EVENTS).filter(x => !d.units.length || d.units.includes(x.unit));
-    const c = countB(k, scope);
-    out.push(['振り分け', pills('buckets', ORDER, b => BL[b], b => c[b])]);
+
+
+
+
+
+
+/* ---------- 検索欄（まずキーワード。足りないときだけ「絞り込み」） ---------- */
+function filterLabel(k, v){ return k === 'unit' ? unitName(v) : k === 'bucket' ? BL[v] : v; }
+function searchField(ctx){
+  const S = state.search[ctx], n = filterCount(S);
+  return `<div class="sfield">
+    <label class="lsearch">${I('search')}<input id="sq-${ctx}" type="search" enterkeyhint="search" placeholder="キーワードで探す" value="${esc(S.q)}" autocomplete="off" aria-label="キーワードで探す（読みでも可）"><button type="button" class="lsx" data-act="lsClear" data-v="sq-${ctx}" aria-label="キーワードを消す">${I('x')}</button></label>
+    <button type="button" class="fbtn ${n ? 'on' : ''}" data-act="sFilter" data-v="${ctx}" aria-label="絞り込み${n ? `（${n}件の条件）` : ''}">${I('sliders')}<span>絞り込み</span>${n ? `<b class="fbadge">${n}</b>` : ''}</button>
+  </div>
+  ${n ? `<div class="fchips">${FILTER_KEYS.filter(k => S[k]).map(k => `<button type="button" class="fchip" data-act="sDrop" data-c="${ctx}" data-k="${k}" aria-label="${esc(filterLabel(k, S[k]))}の条件を外す">${esc(filterLabel(k, S[k]))}${I('x')}</button>`).join('')}</div>` : ''}`;
+}
+function openFilterSheet(ctx){
+  const S = state.search[ctx];
+  const opt = (v, l, sel) => `<option value="${esc(v)}" ${sel === v ? 'selected' : ''}>${esc(l)}</option>`;
+  const yr = ctx === 'dict' && state.dict.tab === 'years', isQ = ctx === 'list' && state.list.kind !== 'sort';
+  const units = uniq((ctx === 'dict' ? (yr ? EVENTS : TERMS) : (isQ ? QUESTIONS : EVENTS)).map(x => x.unit));
+  const catList = u => ctx !== 'dict' ? [] : uniq((yr ? EVENTS : TERMS).filter(x => !u || x.unit === u).map(x => yr ? x.group : x.cat)).filter(Boolean);
+  let rows = `<label class="frow"><span>単元</span><select class="sel" id="fUnit">${opt('', 'すべての単元', S.unit)}${units.map(u => opt(u, unitName(u), S.unit)).join('')}</select></label>`;
+  if (ctx === 'dict') rows += `<label class="frow"><span>${yr ? '時代' : '分野'}</span><select class="sel" id="fCat">${opt('', yr ? 'すべての時代' : 'すべての分野', S.cat)}${catList(S.unit).map(c => opt(c, c, S.cat)).join('')}</select></label>`;
+  else {
+    const k = isQ ? 'q' : 'e', scope = (isQ ? QUESTIONS.filter(q => state.list.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !S.unit || x.unit === S.unit), c = countB(k, scope);
+    rows += `<label class="frow"><span>振り分け</span><select class="sel" id="fBucket">${opt('', `すべて（${c.total}）`, S.bucket)}${ORDER.map(b => opt(b, `${BL[b]}（${c[b]}）`, S.bucket)).join('')}</select></label>`;
   }
-  return out.map(([t, h]) => `<div class="pgroup"><b>${t}</b><div class="chips">${h}</div></div>`).join('');
-}
-function searchSummary(ctx, a){
-  const out = [];
-  if (a.q.trim()) out.push(`「${a.q.trim()}」`);
-  if (a.units.length) out.push(a.units.map(unitName).join('・'));
-  if (a.cats.length) out.push(a.cats.join('・'));
-  if (a.buckets.length) out.push(a.buckets.map(b => BL[b]).join('・'));
-  return out.join('　');
-}
-function searchBar(ctx){
-  const S = state.search[ctx], a = S.applied, d = S.draft;
-  const label = a ? searchSummary(ctx, a) : (S.open ? '条件をえらんで検索' : '検索・しぼりこみ');
-  return `<div class="sbar2-wrap" data-ctx="${ctx}">
-    <div class="sbar2 ${a ? 'on' : ''}">
-      <button type="button" class="sbar2-main" data-act="sToggle" data-v="${ctx}" aria-expanded="${S.open}">${I('search')}<span class="sbar2-t">${esc(label)}</span>${I('chevD', 'chev' + (S.open ? ' rot' : ''))}</button>
-      ${a ? `<button type="button" class="sbar2-x" data-act="sClear" data-v="${ctx}" aria-label="検索をやめる">${I('x')}</button>` : ''}
-    </div>
-    <div class="collapse ${S.open ? 'open' : ''}"><div class="collapse-in"><div class="spanel">
-      <input class="inp" id="sq-${ctx}" type="search" enterkeyhint="search" placeholder="キーワード・読み（ひらがなでも可）" value="${esc(d.q)}" autocomplete="off" aria-label="キーワード">
-      ${searchGroups(ctx)}
-      <div class="spanel-btns">
-        ${draftHas(d) ? `<button type="button" class="btn" data-act="sReset" data-v="${ctx}">選択解除</button>` : ''}
-        <button type="button" class="btn primary" data-act="sGo" data-v="${ctx}" ${draftHas(d) ? '' : 'disabled'}>${I('search')}検索する</button>
-      </div>
-    </div></div></div>
-  </div>`;
-}
-function applySearch(ctx){
-  const S = state.search[ctx];
-  S.applied = draftHas(S.draft) ? JSON.parse(JSON.stringify(S.draft)) : null;
-  S.open = false; state.opened.clear();
-  document.activeElement?.blur?.();
-  render(cur(), true);
-  scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
-}
-function toggleSearch(ctx){
-  const S = state.search[ctx];
-  S.open = !S.open;
-  const w = app.querySelector(`.sbar2-wrap[data-ctx="${ctx}"]`);
-  if (!w) { render(cur(), true); return; }
-  w.querySelector('.collapse').classList.toggle('open', S.open);
-  w.querySelector('.chev').classList.toggle('rot', S.open);
-  w.querySelector('.sbar2-main').setAttribute('aria-expanded', S.open);
-  if (!S.applied) w.querySelector('.sbar2-t').textContent = S.open ? '条件をえらんで検索' : '検索・しぼりこみ';
-  if (S.open) scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+  openModal(`<h2 class="sheet-t">絞り込み</h2>
+    <form id="filterForm" data-ctx="${ctx}"><div class="flist">${rows}</div>
+      <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="fClear" data-v="${ctx}">条件をクリア</button><button type="submit" class="btn primary">この条件で表示</button></div></div></form>`, { noFocus: true });
+  openFilterSheet.catList = catList;
 }
 
 /* ---------- 一覧の行 ---------- */
@@ -2452,7 +2507,7 @@ function redrawRow(el, key){
   const [kind, id] = [key.slice(0, 1), key.slice(2)];
   let html = '';
   if (cur().v === 'list') {
-    const { items, words, applied } = listItems(), multi = !applied || applied.units.length !== 1;
+    const { items, words } = listItems(), multi = !state.search.list.unit;
     const it = items.find(({ x }) => x.id === id) || { x: kind === 'q' ? qById.get(id) : eById.get(id), hits: null };
     if (!it.x) return;
     html = kind === 'q' ? qRow(it.x, multi, it.hits, words) : eRow(it.x, it.hits, words);
@@ -2467,39 +2522,43 @@ function redrawRow(el, key){
   nli?.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
 }
 function listItems(){
-  const L = state.list, a = state.search.list.applied, isQ = L.kind !== 'sort', k = isQ ? 'q' : 'e';
-  const words = a ? searchWords(a.q) : [];
-  const scoped = (isQ ? QUESTIONS.filter(q => L.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !a || !a.units.length || a.units.includes(x.unit));
+  const L = state.list, S = state.search.list, isQ = L.kind !== 'sort', k = isQ ? 'q' : 'e';
+  const words = searchWords(S.q);
+  const scoped = (isQ ? QUESTIONS.filter(q => L.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !S.unit || x.unit === S.unit);
   const items = [];
   for (const x of scoped) {
-    if (a && a.buckets.length && !a.buckets.includes(bucket(k, x.id))) continue;
+    if (S.bucket && bucket(k, x.id) !== S.bucket) continue;
     let hits = null;
     if (words.length) { hits = hitsOf(isQ ? fieldsOfQ(x) : fieldsOfE(x), words); if (hits === false) continue; }
     items.push({ x, hits });
   }
-  return { isQ, k, items, words, applied: a };
+  return { isQ, k, items, words, on: searchOn(S) };
 }
 function renderList(){
   state.round = null;
-  const L = state.list, { isQ, items, words, applied } = listItems();
-  const multiUnit = !applied || applied.units.length !== 1;
   app.innerHTML = `
   <h1 class="ptitle">振り分け ${help('list')}</h1>
-  <div class="seg" style="margin-top:18px">
-    <button data-act="lkind" data-v="quiz" aria-pressed="${L.kind === 'quiz'}">説明→答え</button>
-    <button data-act="lkind" data-v="rev" aria-pressed="${L.kind === 'rev'}">答え→説明</button>
-    <button data-act="lkind" data-v="sort" aria-pressed="${L.kind === 'sort'}">年号並べ替え</button>
-  </div>
-  <div style="margin-top:12px">${searchBar('list')}</div>
-  <div class="reshead"><span class="cnt">${applied ? '検索結果 ' : ''}${items.length}件</span>
-    ${items.length ? `<button class="btn primary sm" data-act="listStart">${I('play')}この${items.length}${isQ ? '問' : '件'}を解く</button>` : ''}</div>
-  ${items.length ? `<ul class="rows">${items.map(({ x, hits }) => isQ ? qRow(x, multiUnit, hits, words) : eRow(x, hits, words)).join('')}</ul>`
-    : `<p class="empty">${applied ? '見つかりません' : `まだ${isQ ? '問題' : '出来事'}がありません`}</p>`}
+  <div style="margin-top:16px">${searchField('list')}</div>
+  <div id="res-list"></div>`;
+  drawList();
+}
+function drawList(){
+  const L = state.list, S = state.search.list, { isQ, items, words, on } = listItems();
+  const box = document.getElementById('res-list'); if (!box) return;
+  box.innerHTML = `
+  <div class="reshead"><select class="isel" id="lkind" aria-label="問題の種類">
+      <option value="quiz" ${L.kind === 'quiz' ? 'selected' : ''}>説明 → 答え</option>
+      <option value="rev" ${L.kind === 'rev' ? 'selected' : ''}>答え → 説明</option>
+      <option value="sort" ${L.kind === 'sort' ? 'selected' : ''}>年号並べ替え</option></select>
+    <span class="cnt">${items.length}件</span>
+    ${items.length ? `<button class="btn primary sm" data-act="listStart">${I('play')}解く</button>` : ''}</div>
+  ${items.length ? `<ul class="rows">${items.map(({ x, hits }) => isQ ? qRow(x, !S.unit, hits, words) : eRow(x, hits, words)).join('')}</ul>`
+    : `<p class="empty">${on ? '見つかりません' : `まだ${isQ ? '問題' : '出来事'}がありません`}</p>`}
   ${items.length ? `<div class="foot"><button class="textbtn danger" data-act="resetList">表示中の${items.length}件を未回答に戻す</button></div>` : ''}`;
 }
 function listStart(){
   const L = state.list, { isQ, items } = listItems(), xs = items.map(i => i.x);
-  const a = state.search.list.applied, unit = a && a.units.length === 1 ? a.units[0] : 'all';
+  const unit = state.search.list.unit || 'all';
   const origin = { unit, kind: L.kind === 'sort' ? 'sort' : 'quiz' };
   if (isQ) startRound(xs.map(q => ({ type: 'quiz', id: q.id })), origin);
   else startRound(makeSortSets(xs, Math.min(10, Math.max(1, Math.ceil(xs.length / state.setup.size))), unit), origin);
@@ -2509,21 +2568,28 @@ function listStart(){
  * 図鑑
  * ========================================================= */
 function dictItems(){
-  const a = state.search.dict.applied, words = a ? searchWords(a.q) : [], yr = state.dict.tab === 'years';
+  const S = state.search.dict, words = searchWords(S.q), yr = state.dict.tab === 'years';
   const out = [];
   const src = yr ? [...EVENTS].sort((x, y) => x.year - y.year) : TERMS;
   for (const x of src) {
-    if (a && a.units.length && !a.units.includes(x.unit)) continue;
-    if (a && a.cats.length && !a.cats.includes(yr ? x.group : x.cat)) continue;
+    if (S.unit && x.unit !== S.unit) continue;
+    if (S.cat && (yr ? x.group : x.cat) !== S.cat) continue;
     let hits = null;
     if (words.length) { hits = hitsOf(yr ? fieldsOfE(x) : fieldsOfTerm(x), words); if (hits === false) continue; }
     out.push({ x, hits });
   }
-  return { yr, items: out, words, applied: a };
+  return { yr, items: out, words, on: searchOn(S) };
 }
 function renderDict(){
-  const d = state.dict, { yr, items, words, applied } = dictItems();
-  const showUnit = !applied || applied.units.length !== 1;
+  app.innerHTML = `
+  <div class="headact"><h1 class="ptitle">図鑑 ${help('dict')}</h1><button class="iconbtn round" data-act="goOne" aria-label="用語・出来事を追加">${I('plus')}</button></div>
+  <div style="margin-top:16px">${searchField('dict')}</div>
+  <div id="res-dict"></div>`;
+  drawDict();
+}
+function drawDict(){
+  const { yr, items, words, on } = dictItems(), showUnit = !state.search.dict.unit;
+  const box = document.getElementById('res-dict'); if (!box) return;
   const termRow = ({ x: t, hits }) => { const b = termBucket(t); return `<li class="row">
     <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${markHTML(t.term, words)}</span>${showUnit ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div>
     ${lifeText(t) ? `<p class="lifeln sm">${I('clock')}${esc(lifeText(t))}</p>` : ''}
@@ -2532,16 +2598,12 @@ function renderDict(){
     ${hitBox(hits, words, ['出来事', '解説', '年'])}
     ${memo ? `<div class="memo" style="margin:0 0 10px"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(memo)}</p></div>` : ''}
     <div class="btnrow">${editBtn('editE', e.id)}</div></div></li>`; };
-  app.innerHTML = `
-  <div class="headact"><h1 class="ptitle">図鑑 ${help('dict')}</h1><button class="btn sm" data-act="goOne">${I('plus')}追加</button></div>
-  <div class="seg" style="margin-top:16px">
-    <button data-act="dtab" data-v="terms" aria-pressed="${!yr}">用語・人物</button>
-    <button data-act="dtab" data-v="years" aria-pressed="${yr}">年表</button>
-  </div>
-  <div style="margin-top:12px">${searchBar('dict')}</div>
-  <div class="reshead"><span class="cnt">${applied ? '検索結果 ' : ''}${items.length}件</span></div>
+  box.innerHTML = `
+  <div class="reshead"><select class="isel" id="dtab" aria-label="表示するもの">
+      <option value="terms" ${!yr ? 'selected' : ''}>用語・人物</option><option value="years" ${yr ? 'selected' : ''}>年表</option></select>
+    <span class="cnt">${items.length}件</span></div>
   ${items.length ? (yr ? `<ol class="tl">${items.map(yearRow).join('')}</ol>` : `<ul class="rows">${items.map(termRow).join('')}</ul>`)
-    : `<p class="empty">${applied ? '見つかりません' : 'まだありません'}</p>`}`;
+    : `<p class="empty">${on ? '見つかりません' : 'まだありません'}</p>`}`;
 }
 
 /* =========================================================
@@ -2736,14 +2798,12 @@ async function onAction(el, ev){
     case 'goUnit': go({ v: 'unit', a: v }); break;
     case 'unitList':
       state.list.kind = QUESTIONS.some(q => q.unit === state.unit) ? 'quiz' : 'sort';
-      state.search.list = blankSearchState();
-      if (state.unit !== 'all') { state.search.list.draft.units = [state.unit]; state.search.list.applied = JSON.parse(JSON.stringify(state.search.list.draft)); }
+      state.search.list = { ...blankSearchState(), unit: state.unit !== 'all' ? state.unit : '' };
       state.opened.clear(); go({ v: 'list' }, 'tab'); break;
     case 'unitDict': {
       const hasT = TERMS.some(t => state.unit === 'all' || t.unit === state.unit);
       state.dict.tab = hasT ? 'terms' : 'years';
-      state.search.dict = blankSearchState();
-      if (state.unit !== 'all') { state.search.dict.draft.units = [state.unit]; state.search.dict.applied = JSON.parse(JSON.stringify(state.search.dict.draft)); }
+      state.search.dict = { ...blankSearchState(), unit: state.unit !== 'all' && hasT ? state.unit : '' };
       go({ v: 'dict' }, 'tab'); break;
     }
     case 'unitAdd': state.bulk.unit = state.unit; state.bulk.done = null; go({ v: 'bulk' }); break;
@@ -2785,16 +2845,9 @@ async function onAction(el, ev){
       break;
 
     /* 検索 */
-    case 'sToggle': toggleSearch(v); break;
-    case 'sGo': applySearch(v); break;
-    case 'sClear': state.search[v] = blankSearchState(); state.opened.clear(); render(cur(), true); break;
-    case 'sReset': { const s = state.search[v]; s.draft = blankDraft(); s.applied = null; state.opened.clear(); render(cur(), true); document.getElementById('sq-' + v)?.focus({ preventScroll: true }); break; }
-    case 'sPill': {
-      const s = state.search[el.dataset.c].draft, key = el.dataset.k, arr = s[key];
-      const i = arr.indexOf(v); if (i >= 0) arr.splice(i, 1); else arr.push(v);
-      if (key === 'units') s.cats = [];
-      render(cur(), true); break;
-    }
+    case 'sFilter': openFilterSheet(v); break;
+    case 'sDrop': { const S = state.search[el.dataset.c]; S[el.dataset.k] = ''; if (el.dataset.k === 'unit') S.cat = ''; state.opened.clear(); render(cur(), true); break; }
+    case 'fClear': { const S = state.search[v]; FILTER_KEYS.forEach(k => { S[k] = ''; }); closeModal(); state.opened.clear(); render(cur(), true); break; }
     case 'lsClear': {
       const inp = document.getElementById(v); if (!inp) break;
       inp.value = ''; inp.dispatchEvent(new Event('input', { bubbles: true })); inp.focus();
@@ -2802,7 +2855,6 @@ async function onAction(el, ev){
     }
 
     /* 振り分け・図鑑 */
-    case 'lkind': state.list.kind = v; state.opened.clear(); state.search.list.draft.buckets = []; if (state.search.list.applied) state.search.list.applied.buckets = []; render(cur(), true); break;
     case 'listStart': listStart(); break;
     case 'resetList': {
       const { k, items } = listItems();
@@ -2811,7 +2863,6 @@ async function onAction(el, ev){
       }
       break;
     }
-    case 'dtab': state.dict.tab = v; { const s = state.search.dict; s.draft.cats = []; if (s.applied) { s.applied.cats = []; if (!draftHas(s.applied)) s.applied = null; } } render(cur(), true); break;
     case 'term': openTerm(v); break;
     case 'closeModal': requestCloseModal(); break;
 
@@ -2925,17 +2976,21 @@ document.addEventListener('submit', ev => {
   else if (f.id === 'rubyForm') saveRubyForm(f);
   else if (f.id === 'unitForm') saveUnitForm(f);
   else if (f.id === 'impForm') saveImpForm(f);
+  else if (f.id === 'filterForm') {
+    const S = state.search[f.dataset.ctx];
+    S.unit = f.querySelector('#fUnit')?.value || '';
+    S.cat = f.querySelector('#fCat')?.value || '';
+    S.bucket = f.querySelector('#fBucket')?.value || '';
+    closeModal(); state.opened.clear(); render(cur(), true); scrollTo(0, 0);
+  }
 });
+let sqTimer = null;
 document.addEventListener('input', ev => {
   const t = ev.target;
   if (t.matches && t.matches('textarea.ta:not(.big)')) autoGrow(t);
-  if (t.id === 'sq-list' || t.id === 'sq-dict') {
-    const ctx = t.id.slice(3), s = state.search[ctx];
-    const before = draftHas(s.draft); s.draft.q = t.value;
-    if (before !== draftHas(s.draft)) {   // 「選択解除」「検索する」の出し入れだけ直す
-      const btns = t.closest('.spanel').querySelector('.spanel-btns');
-      btns.innerHTML = `${draftHas(s.draft) ? `<button type="button" class="btn" data-act="sReset" data-v="${ctx}">選択解除</button>` : ''}<button type="button" class="btn primary" data-act="sGo" data-v="${ctx}" ${draftHas(s.draft) ? '' : 'disabled'}>${I('search')}検索する</button>`;
-    }
+  if (t.id === 'sq-list' || t.id === 'sq-dict') {   // 打つそばから絞る（少し待ってから）
+    const ctx = t.id.slice(3); state.search[ctx].q = t.value;
+    clearTimeout(sqTimer); sqTimer = setTimeout(() => { state.opened.clear(); ctx === 'list' ? drawList() : drawDict(); persistNav(); }, 220);
   }
   else if (t.id === 'mineQ') { state.mine.q = t.value; drawMine(); }
   else if (t.id === 'rubyQ') { state.ruby.q = t.value; drawRuby(); }
@@ -2952,6 +3007,23 @@ document.addEventListener('input', ev => {
 });
 document.addEventListener('change', ev => {
   const t = ev.target;
+  if (cur().v === 'setup' && ['sDir', 'sPreset', 'sCat', 'sCount', 'sSets', 'sSize'].includes(t.id)) {
+    const S = state.setup, kind = cur().a, unit = cur().u, v = t.value;
+    if (t.id === 'sDir') S.dir = v;
+    if (t.id === 'sPreset') { S.custom[kind] = v === 'custom'; if (v !== 'custom') S.buckets[kind] = new Set(PRESETS.find(p => p[0] === v)[2]); }
+    if (t.id === 'sCat') { const cs = catsFor(kind, unit); state.setup.cats[`${unit}|${kind}`] = new Set(v ? [v] : cs); }
+    if (t.id === 'sCount') S.count = v === 'all' ? 'all' : +v;
+    if (t.id === 'sSets') S.sets = +v;
+    if (t.id === 'sSize') S.size = +v;
+    render(cur(), true); return;
+  }
+  if (t.id === 'lkind') { state.list.kind = t.value; state.opened.clear(); render(cur(), true); return; }
+  if (t.id === 'dtab') { state.dict.tab = t.value; state.search.dict.cat = ''; render(cur(), true); return; }
+  if (t.id === 'fUnit' && document.getElementById('fCat')) {
+    const yr = state.dict.tab === 'years', sel = document.getElementById('fCat');
+    sel.innerHTML = `<option value="">${yr ? 'すべての時代' : 'すべての分野'}</option>` + openFilterSheet.catList(t.value).map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    return;
+  }
   if (t.id === 'impUnit') { state.imp.unit = t.value; state.imp.items.forEach(x => { if (!x.unitPreset && !x.unitName) x.sel = !impDup(x); }); render(cur(), true); }
   else if (t.dataset && t.dataset.imp != null) { const it = state.imp.items[+t.dataset.imp]; it.sel = t.checked; render(cur(), true); }
   else if (t.id === 'oneUnit') { state.one.unit = t.value; render(cur(), true); }
@@ -2965,7 +3037,7 @@ document.addEventListener('change', ev => {
 document.addEventListener('keydown', ev => {
   if (document.querySelector('.dlg')) return;
   if (ev.key === 'Escape') { if (tipEl) { hideTip(); return; } if (modalOpen()) { requestCloseModal(); return; } }
-  if (ev.key === 'Enter' && (ev.target.id === 'sq-list' || ev.target.id === 'sq-dict') && !ev.isComposing) { ev.preventDefault(); applySearch(ev.target.id.slice(3)); return; }
+  if (ev.key === 'Enter' && (ev.target.id === 'sq-list' || ev.target.id === 'sq-dict') && !ev.isComposing) { ev.preventDefault(); ev.target.blur(); return; }
   if (ev.key === 'Enter' && ev.target.id === 'newUnit' && !ev.isComposing) { ev.preventDefault(); createUnit(); return; }
   const r = state.round;
   if (cur().v !== 'round' || !r || !r.cur || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName) || modalOpen()) return;
@@ -2975,8 +3047,11 @@ document.addEventListener('keydown', ev => {
 
 clearSession();
 buildData();
-history.replaceState({ d: 0 }, '');
-go({ v: 'home' }, 'tab');
+let scrollSave = null;
+addEventListener('scroll', () => { clearTimeout(scrollSave); scrollSave = setTimeout(persistNav, 300); }, { passive: true });
+addEventListener('pagehide', persistNav);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') persistNav(); });
+if (!restoreNav()) { history.replaceState({ d: 0 }, ''); go({ v: 'home' }, 'tab'); }
 })();
 
 </script>
