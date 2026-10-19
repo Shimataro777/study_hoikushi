@@ -925,7 +925,6 @@ const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matche
    階層が深くなる → 右から／一時的な作業の全画面（問題） → 下から／同じ階層（下タブ） → 動かさない
    戻るときは、入ってきた向きへ出ていく */
 const FROM_BOTTOM = ['round', 'result'];
-let leaving = false;
 function snapshot(){ return { html: app.innerHTML, cls: app.className, top: app.getBoundingClientRect().top }; }
 function playTransition(kind, snap){
   if (reduceMotion() || !snap || kind === 'none') return;
@@ -948,45 +947,119 @@ function playTransition(kind, snap){
   }
   setTimeout(done, 600);
 }
+/* =========================================================
+ * 画面遷移と履歴
+ *   決まり：アプリの画面の積み重ね（stack）と、ブラウザの履歴の深さを、いつも一致させる。
+ *     履歴の深さ ＝ stack の段数 − 1 ＋（紙が開いていれば 1）
+ *   ・進む（push）……履歴を1つ積む
+ *   ・置きかえ（replace）……履歴は積まない
+ *   ・下タブ（tab）……積んだ履歴をいったん底まで戻してから、積み直す（古い履歴を残さない）
+ *   ・戻る……かならず history.back() を通し、popstate の中だけで画面を戻す
+ *   ・紙（シート）は履歴を1つ持つ。「戻る」は紙だけを閉じる
+ *   ・確かめる小窓が出ているときの「戻る」は、小窓を閉じるだけ
+ *   ・ブラウザが自分で持っている「左端から払って戻る」（iPhoneのSafari・Android）と二重にならないよう、
+ *     アプリ独自の払いは、ホーム画面に追加して開いたiPhone（払う戻るが無い）だけで使う
+ * ========================================================= */
+let modalEntry = false;      // 紙のぶんの履歴があるか
+let ignorePop = 0;           // こちらで起こした戻り（数えて読み飛ばす）
+let pendingTab = null;       // 下タブ：底まで戻ったあとに出す画面
+let pendingModalBack = null; // 紙を閉じたあとの「履歴を1つ戻す」（すぐ次の遷移があれば取り消して使い回す）
+let navLock = 0;             // 戻るの二度押し止め
+const histDepth = () => stack.length - 1 + (modalEntry ? 1 : 0);
+function takeModalEntry(){   // 紙の履歴を、次の遷移で使い回す
+  if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; return true; }
+  if (modalEntry) { modalEntry = false; return true; }
+  return false;
+}
+function finishTab(route){
+  const snap = snapshot();
+  stack.length = 0; stack.push({ v: 'home' });
+  if (route.v !== 'home') { stack.push(route); history.pushState({ d: 1 }, ''); }
+  render(route);
+  playTransition('none', snap);
+}
 function go(route, how = 'push'){
   hideTip();
+  if (how === 'tab') {
+    const reuse = takeModalEntry();
+    if (modalOpen()) closeModal(true, true);
+    const d = stack.length - 1 + (reuse ? 1 : 0);
+    if (d > 0) { pendingTab = route; history.go(-d); return; }   // 続きは popstate で
+    finishTab(route); return;
+  }
   const snap = snapshot();
+  const reuse = takeModalEntry();
+  if (modalOpen()) closeModal(true, true);
   let anim = 'none';
-  if (how === 'replace' && stack.length) stack[stack.length - 1] = route;
-  else if (how === 'tab') { stack.length = 0; stack.push({ v: 'home' }); if (route.v !== 'home') { stack.push(route); history.pushState({ a: 1 }, ''); } }
-  else {
+  if (how === 'replace' && stack.length) {
+    stack[stack.length - 1] = route;
+    if (reuse) { ignorePop++; history.back(); }   // 紙の履歴だけ片づける
+  } else {
     if (stack.length) stack[stack.length - 1].y = scrollY;
-    stack.push(route); history.pushState({ a: 1 }, '');
+    stack.push(route);
+    if (reuse) history.replaceState({ d: stack.length - 1 }, ''); else history.pushState({ d: stack.length - 1 }, '');
     anim = FROM_BOTTOM.includes(route.v) ? 'up' : 'push';
   }
   render(route);
   playTransition(anim, snap);
 }
-function uiBack(){ if (stack.length > 1) history.back(); else go({ v: 'home' }, 'tab'); }
-window.addEventListener('popstate', () => {
+function uiBack(){
+  if (Date.now() - navLock < 350) return;   // 二度押しで2画面戻らないように
+  navLock = Date.now();
+  if (stack.length <= 1) { go({ v: 'home' }, 'tab'); return; }
+  const extra = takeModalEntry() ? 1 : 0;
+  if (modalOpen()) closeModal(true, true);
+  history.go(-(1 + extra));
+}
+function quitRoundIfNeeded(){
+  if (cur().v !== 'round' || !state.round || state.round.i >= state.round.items.length) return;
+  /* 中断：解いた分の振り分けは、解いたその場で保存済み。残りの問題はここで終わりにする（確認は出さない） */
+  const rd = state.round, c = rd.cur;
+  const done = rd.results.length + (c && (c.type === 'quiz' ? c.picked !== null : c.done) ? 1 : 0);
+  state.round = null; clearSession();
+  toast(done ? `ここまでの${done}${rd.items.every(x => x.type === 'sort') ? 'セット' : '問'}の結果を保存しました` : '中断しました');
+}
+window.addEventListener('popstate', e => {
+  if (ignorePop > 0) { ignorePop--; return; }
   hideTip();
-  if (modalOpen()) closeModal(true);
-  document.querySelectorAll('.dlg').forEach(d => d.remove());
-  const r = cur();
-  if (r.v === 'round' && state.round && state.round.i < state.round.items.length) {
-    /* 中断：解いた分の振り分けは、解いたその場で保存済み。残りの問題はここで終わりにする（確認は出さない） */
-    const rd = state.round, c = rd.cur;
-    const done = rd.results.length + (c && (c.type === 'quiz' ? c.picked !== null : c.done) ? 1 : 0);
-    state.round = null; clearSession();
-    toast(done ? `ここまでの${done}${rd.items.every(x => x.type === 'sort') ? 'セット' : '問'}の結果を保存しました` : '中断しました');
+  const d = e.state && typeof e.state.d === 'number' ? e.state.d : 0;
+  /* 下タブ：底まで戻ったところで、新しい画面を積む */
+  if (pendingTab) { const r = pendingTab; pendingTab = null; finishTab(r); return; }
+  /* 確かめる小窓が出ていたら、小窓を閉じるだけ（画面は戻さない） */
+  const dl = document.querySelector('.dlg:not(.closing)');
+  if (dl) { dl._cancel && dl._cancel(); history.pushState({ d: histDepth() }, ''); return; }
+  /* 紙が開いていたら、紙を閉じるだけ */
+  if (modalEntry && modalOpen() && modalGuard && modalGuard()) {
+    /* 書きかけの紙は、戻るでも黙って閉じない（✕と同じく確かめる） */
+    history.pushState({ d: histDepth() }, '');
+    requestCloseModal();
+    return;
   }
-  leaving = false;
-  if (stack.length <= 1) { render(cur(), true); return; }
-  const snap = snapshot(), popped = stack.pop(), back = cur();
+  if (modalEntry || pendingModalBack) {
+    if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; }
+    modalEntry = false;
+    if (modalOpen()) closeModal(false, true);
+    if (d >= stack.length - 1) return;
+  }
+  /* 進む（右端から払うなど）は受けない：元の深さへ戻す */
+  if (d > stack.length - 1) { ignorePop++; history.go((stack.length - 1) - d); return; }
+  if (d === stack.length - 1) return;
+  /* 戻る：d の深さまで画面を下ろす（長押しで何段か戻ったときも、ここでまとめて） */
+  quitRoundIfNeeded();
+  const snap = snapshot(), popped = cur();
+  while (stack.length - 1 > d && stack.length > 1) stack.pop();
+  const back = cur();
   render(back, true);
   scrollTo(0, back.y || 0);
   playTransition(FROM_BOTTOM.includes(popped.v) ? 'pop-down' : 'pop-right', snap);
+  navLock = Date.now();
 });
-/* 左端から右へ払うと戻る（右から入ってきた画面だけ） */
+/* 左端から右へ払うと戻る（ホーム画面に追加したiPhoneだけ。ブラウザでは、ブラウザ自身の払いに任せる） */
+const OWN_SWIPE = navigator.standalone === true;
 let edge = null;
 document.addEventListener('touchstart', e => {
   const t = e.touches[0];
-  edge = (e.touches.length === 1 && t.clientX < 24 && stack.length > 1 && !modalOpen() && !TAB_ROOTS.includes(cur().v) && !FROM_BOTTOM.includes(cur().v)) ? { x: t.clientX, y: t.clientY } : null;
+  edge = (OWN_SWIPE && e.touches.length === 1 && t.clientX < 24 && stack.length > 1 && !modalOpen() && !document.querySelector('.dlg:not(.closing)') && !TAB_ROOTS.includes(cur().v) && !FROM_BOTTOM.includes(cur().v)) ? { x: t.clientX, y: t.clientY } : null;
 }, { passive: true });
 document.addEventListener('touchend', e => {
   if (!edge) return;
@@ -994,6 +1067,7 @@ document.addEventListener('touchend', e => {
   edge = null;
   if (dx > 72 && dy < 60) uiBack();
 }, { passive: true });
+
 /* 下タブ：1回め＝いまの表示のいちばん上へ／2回め＝最初の表示へ（参考：My手帳の下タブの決まり） */
 function tabTap(v){
   const atRoot = stack.length === (v === 'home' ? 1 : 2) && cur().v === v;
@@ -1047,7 +1121,8 @@ function renderTop(){
   }
 }
 
-/* ---------- 下から出る紙（シート） ---------- */
+/* ---------- 下から出る紙（シート） ----------
+   開くと履歴を1つ持つ。✕・キャンセル・保存で閉じたときは、その履歴を1つ戻す */
 let modalGuard = null;
 const modalOpen = () => !document.getElementById('modal').hidden;
 function openModal(html, opts = {}){
@@ -1056,6 +1131,8 @@ function openModal(html, opts = {}){
   document.getElementById('mbody').innerHTML = html;
   m.hidden = false; m.classList.remove('closing'); document.body.style.overflow = 'hidden';
   if (!was) { m.classList.remove('opening'); void m.offsetWidth; m.classList.add('opening'); }
+  if (pendingModalBack) { clearTimeout(pendingModalBack); pendingModalBack = null; modalEntry = true; }   // 閉じてすぐ開き直した
+  if (!modalEntry) { modalEntry = true; history.pushState({ d: histDepth() }, ''); }
   m.querySelector('.msheet').scrollTop = 0;
   m.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
   const form = m.querySelector('form[data-guard]');
@@ -1064,14 +1141,20 @@ function openModal(html, opts = {}){
   if (!opts.noFocus) m.querySelector('.mclose').focus({ preventScroll: true });
 }
 function autoGrow(el){ el.style.height = 'auto'; el.style.height = Math.max(el.scrollHeight + 2, 60) + 'px'; }
-function closeModal(instant){
+/* instant：動かさずに閉じる／fromNav：遷移の側で履歴を扱うので、ここでは触らない */
+function closeModal(instant, fromNav){
   const m = document.getElementById('modal');
+  if (!fromNav && modalEntry) {
+    modalEntry = false;
+    /* すぐあとに画面の遷移が続くなら、そちらで履歴を使い回す（back と push が入れ違いにならないように） */
+    pendingModalBack = setTimeout(() => { pendingModalBack = null; ignorePop++; history.back(); }, 0);
+  }
   if (!modalOpen()) return;
   modalGuard = null;
   const fin = () => { m.hidden = true; m.classList.remove('closing', 'opening'); document.body.style.overflow = ''; };
   if (instant === true || reduceMotion()) { fin(); return; }
   m.classList.add('closing');
-  setTimeout(fin, 280);
+  setTimeout(() => { if (m.classList.contains('closing')) fin(); }, 280);
 }
 async function requestCloseModal(){
   if (modalGuard && modalGuard()) {
@@ -1101,6 +1184,7 @@ function confirmDialog({ title, body = '', ok = '削除する', danger = true, c
       const b = e.target.closest('[data-r]');
       if (b) done(b.dataset.r === '1'); else if (e.target.classList.contains('dlg-bg')) done(false);
     });
+    d._cancel = () => done(false);
     document.addEventListener('keydown', key, true);
     document.body.appendChild(d);
     d.querySelector('[data-r="1"]').focus({ preventScroll: true });
@@ -2520,7 +2604,7 @@ async function onAction(el, ev){
     case 'tab': tabTap(v); break;
     case 'back': uiBack(); break;
     case 'help': showTip(el, v); break;
-    case 'goUnit': closeModal(true); go({ v: 'unit', a: v }); break;
+    case 'goUnit': go({ v: 'unit', a: v }); break;
     case 'unitList':
       state.list.kind = QUESTIONS.some(q => q.unit === state.unit) ? 'quiz' : 'sort';
       state.search.list = blankSearchState();
@@ -2760,7 +2844,7 @@ document.addEventListener('keydown', ev => {
 
 clearSession();
 buildData();
-history.replaceState({ a: 1 }, '');
+history.replaceState({ d: 0 }, '');
 go({ v: 'home' }, 'tab');
 })();
 
