@@ -294,6 +294,8 @@ button{-webkit-tap-highlight-color:transparent}
 main#app{position:relative;z-index:1;background:var(--bg);min-height:100vh}
 #app.enter-right{animation:enterRight var(--t-push) var(--ease-out) backwards;box-shadow:-10px 0 28px rgba(0,0,0,.08)}
 #app.enter-up{animation:enterUp var(--t-modal) var(--ease-out) backwards}
+#app.enter-fade{animation:enterFade .18s var(--ease-out) backwards}
+@keyframes enterFade{from{opacity:.4}}
 @keyframes enterRight{from{transform:translateX(100%)}}
 @keyframes enterUp{from{transform:translateY(100%)}}
 @keyframes exitRight{to{transform:translateX(100%)}}
@@ -311,7 +313,7 @@ main#app{position:relative;z-index:1;background:var(--bg);min-height:100vh}
 .modal.closing .backdrop{animation:fadeOut .28s var(--ease-in) forwards}
 .modal.closing .msheet{animation:sheetDown .28s var(--ease-in) forwards}
 .msheet{animation:none}
-@media (prefers-reduced-motion:reduce){#app.enter-right,#app.enter-up{animation:none}}
+@media (prefers-reduced-motion:reduce){#app.enter-right,#app.enter-up,#app.enter-fade{animation:none}}
 
 /* 戻るボタン：‹ と戻り先の名前を、ひとつの押せる場所にする */
 .backbtn{display:inline-flex;align-items:center;gap:2px;border:0;background:none;padding:8px 10px 8px 2px;min-height:44px;font-size:var(--fs-body);font-weight:600;color:var(--ink);border-radius:10px}
@@ -985,146 +987,65 @@ const TAB_ROOTS = ['home', 'list', 'dict', 'data'];
 const stack = [];
 const cur = () => stack[stack.length - 1] || { v: 'home' };
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-/* 画面の入ってくる向き（参考：My手帳の「画面遷移の決まり」）
-   階層が深くなる → 右から／一時的な作業の全画面（問題） → 下から／同じ階層（下タブ） → 動かさない
-   戻るときは、入ってきた向きへ出ていく */
-const FROM_BOTTOM = ['round', 'result'];
-function snapshot(){ return { html: app.innerHTML, cls: app.className, top: app.getBoundingClientRect().top }; }
-function playTransition(kind, snap){
-  if (reduceMotion() || !snap || kind === 'none') return;
-  const ghost = document.createElement('div');
-  ghost.className = 'ghost';
-  ghost.setAttribute('aria-hidden', 'true');
-  ghost.innerHTML = `<main class="${snap.cls}" style="top:${snap.top}px">${snap.html}</main>`;
-  ghost.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
-  const done = () => { app.classList.remove('enter-right', 'enter-up'); ghost.remove(); };
-  if (kind === 'push' || kind === 'up') {
-    ghost.classList.add('under');
-    document.body.insertBefore(ghost, document.body.firstChild);
-    app.classList.remove('enter-right', 'enter-up'); void app.offsetWidth;
-    app.classList.add(kind === 'push' ? 'enter-right' : 'enter-up');
-    app.addEventListener('animationend', done, { once: true });
-  } else {
-    ghost.classList.add(kind === 'pop-down' ? 'exit-down' : 'exit-right');
-    document.body.appendChild(ghost);
-    ghost.addEventListener('animationend', done, { once: true });
-  }
-  setTimeout(done, 600);
-}
 /* =========================================================
- * 画面遷移と履歴
- *   決まり（すべての遷移はこの決まりだけを通す）
- *   1. 画面の積み重ね（stack）＋開いている重ね物（紙・確認の小窓）の数 ＝ ブラウザの履歴の深さ。
- *   2. 履歴を新しく積む（pushState）のは、利用者が押したその場だけ。
- *      ブラウザ（Chrome・Safari）は、操作なしに積まれた履歴を「戻る」で飛ばすため、
- *      popstate やタイマーの中では積まない（置きかえ replaceState と、戻す go/back だけ使う）。
- *   3. 下タブ：今の深さが0なら積む／1なら置きかえる／2以上なら深さ1まで戻してから置きかえる。
- *   4. 戻る：かならず history.back()/go() を通し、画面を戻すのは popstate の中だけ。
- *   5. 紙と確認の小窓は、それぞれ履歴を1つ持つ。「戻る」はいちばん上の重ね物だけを閉じる。
- *      ボタンで閉じたときは、その履歴をまとめて戻す（すぐ次の遷移があれば、そちらで使い回す）。
- *   6. ブラウザ自身の「左端から払って戻る」と二重にならないよう、
- *      アプリ独自の払いは、ホーム画面に追加して開いたiPhoneでだけ使う。
+ * 画面遷移
+ *   決まり（ブラウザの「戻る履歴」は使わない）
+ *   ・画面の積み重ね（stack）はアプリの中だけで持つ。
+ *   ・進む＝積む／置きかえ＝いちばん上を差しかえる／下タブ＝積み直す。
+ *   ・「‹ 戻る」を押したら、その場で一つ前の画面を出す（必ず一つだけ戻る）。
+ *   ・ホーム画面に追加したアプリは、iOS が裏で読み込み直すことがあるので、
+ *     積み重ねは保存しておき、読み込み直しても同じ画面から続ける（persistNav / restoreNav）。
+ *   ・画面の動き：深くなる＝右から入る／問題（一時的な作業）＝下から入る／戻る・下タブ＝すっと出る
  * ========================================================= */
-const overlays = [];         // 開いている重ね物 { kind:'modal'|'dlg', entry:履歴を持つか, el }
-let pendingBacks = 0;        // 閉じたが、まだ戻していない重ね物の履歴の数
-let flushTimer = null;
-let ignorePop = 0;           // こちらで起こした戻り（読み飛ばす）
-const afterIgnored = [];     // 読み飛ばしたあとにすること（置きかえなど）
-let pendingTab = null;       // 下タブ：戻し終わったあとに出す画面
+const FROM_BOTTOM = ['round', 'result'];
+function snapshot(){ return null; }
+function playTransition(kind){
+  if (reduceMotion()) return;
+  const cls = kind === 'push' ? 'enter-right' : kind === 'up' ? 'enter-up' : kind === 'pop' ? 'enter-fade' : '';
+  app.classList.remove('enter-right', 'enter-up', 'enter-fade');
+  if (!cls) return;
+  void app.offsetWidth;
+  app.classList.add(cls);
+  const done = () => app.classList.remove(cls);
+  app.addEventListener('animationend', done, { once: true });
+  setTimeout(done, 500);
+}
 let navLock = 0;             // 戻るの二度押し止め
-let floor = 0;               // いちばん下の本物の履歴の深さ（読み込み直したあとは、それより下の履歴が無い）
-const userActive = () => !navigator.userActivation || navigator.userActivation.isActive;
-const overlayEntries = () => overlays.filter(o => o.entry).length;
-const histDepth = () => stack.length - 1 + overlayEntries() + pendingBacks;
-function selfBack(n, then){ if (n <= 0) { then && then(); return; } ignorePop++; afterIgnored.push(then || null); history.go(-n); }
-function flushBacks(){ flushTimer = null; const n = pendingBacks; pendingBacks = 0; selfBack(n); }
-function takePending(){ clearTimeout(flushTimer); flushTimer = null; const n = pendingBacks; pendingBacks = 0; return n; }
-function overlayOpen(kind, el){
-  const o = { kind, el, entry: false };
-  if (pendingBacks > 0) { pendingBacks--; o.entry = true; if (!pendingBacks) { clearTimeout(flushTimer); flushTimer = null; } }   // 閉じてすぐ開き直した：履歴を使い回す
-  else if (userActive()) { o.entry = true; history.pushState({ d: histDepth() + 1 }, ''); }
-  overlays.push(o);
-  return o;
-}
-function overlayClose(o){
-  const i = overlays.indexOf(o);
-  if (i < 0) return;
-  overlays.splice(i, 1);
-  if (o.entry) { pendingBacks++; if (!flushTimer) flushTimer = setTimeout(flushBacks, 0); }
-}
+const overlays = [];         // 開いている重ね物（紙・確認の小窓）
+function overlayOpen(kind, el){ const o = { kind, el }; overlays.push(o); return o; }
+function overlayClose(o){ const i = overlays.indexOf(o); if (i >= 0) overlays.splice(i, 1); }
 function closeAllOverlays(){
   [...overlays].reverse().forEach(o => { if (o.kind === 'dlg') o.el._cancel && o.el._cancel(); else closeModal(true); });
-}
-function finishTab(route, fl){
-  if (fl !== undefined) floor = fl;
-  const snap = snapshot();
-  stack.length = 0; stack.push({ v: 'home' });
-  if (route.v !== 'home') stack.push(route);
-  render(route);
-  playTransition('none', snap);
 }
 function go(route, how = 'push'){
   hideTip();
   closeAllOverlays();
-  const k = takePending();          // 閉じた重ね物の履歴（まだ戻していないもの）
-  const base = Math.max(0, stack.length - 1);    // 画面だけの深さ
-  if (how === 'tab') {
-    const above = base - floor + k;   // いちばん下の本物の履歴より上にある履歴の数
-    if (route.v === 'home') {
-      if (above === 0) { history.replaceState({ d: 0 }, ''); finishTab(route, 0); return; }
-      pendingTab = { route, d: 0, floor: 0 }; history.go(-above); return;            // 続きは popstate
-    }
-    if (floor === 0) {
-      const D = base + k;
-      if (D === 0) { history.pushState({ d: 1 }, ''); finishTab(route, 0); return; }  // 押したその場なので積んでよい
-      if (D === 1) { history.replaceState({ d: 1 }, ''); finishTab(route, 0); return; }
-      pendingTab = { route, d: 1, floor: 0 }; history.go(-(D - 1)); return;           // 深さ1まで戻して置きかえる
-    }
-    if (above === 0) { history.replaceState({ d: 1 }, ''); finishTab(route, 1); return; }
-    pendingTab = { route, d: 1, floor: 1 }; history.go(-above); return;
-  }
-  const snap = snapshot();
   let anim = 'none';
-  if (how === 'replace' && stack.length) {
+  if (how === 'tab') {
+    stack.length = 0; stack.push({ v: 'home' });
+    if (route.v !== 'home') stack.push(route);
+  } else if (how === 'replace' && stack.length) {
     stack[stack.length - 1] = route;
-    selfBack(k);
   } else {
     if (stack.length) stack[stack.length - 1].y = scrollY;
     stack.push(route);
-    const d = stack.length - 1;
-    if (k === 0) history.pushState({ d }, '');
-    else if (k === 1) history.replaceState({ d }, '');                  // 閉じた重ね物の履歴を使い回す
-    else selfBack(k - 1, () => history.replaceState({ d }, ''));
     anim = FROM_BOTTOM.includes(route.v) ? 'up' : 'push';
   }
   render(route);
-  playTransition(anim, snap);
+  playTransition(anim);
 }
 function uiBack(){
-  if (Date.now() - navLock < 350) return;   // 二度押しで2画面戻らないように
+  if (Date.now() - navLock < 300) return;   // 二度押しで2画面戻らないように
   navLock = Date.now();
+  hideTip();
   closeAllOverlays();
-  const k = takePending();
-  if (stack.length <= 1) { selfBack(k); go({ v: 'home' }, 'tab'); return; }
-  if (stack.length - 1 <= floor) {   // 下に本物の履歴が無い（読み込み直したあと）：アプリの中だけで戻る
-    const d = stack.length - 2;
-    selfBack(k, () => history.replaceState({ d }, ''));
-    if (!k) history.replaceState({ d }, '');
-    floor = d;
-    popTo(d);
-    return;
-  }
-  history.go(-(1 + k));
-}
-function popTo(d){
+  if (stack.length <= 1) { if (cur().v !== 'home') go({ v: 'home' }, 'tab'); return; }
   quitRoundIfNeeded();
-  const snap = snapshot(), popped = cur();
-  while (stack.length - 1 > d && stack.length > 1) stack.pop();
+  stack.pop();
   const back = cur();
   render(back, true);
   scrollTo(0, back.y || 0);
-  playTransition(FROM_BOTTOM.includes(popped.v) ? 'pop-down' : 'pop-right', snap);
-  navLock = Date.now();
+  playTransition('pop');
 }
 function quitRoundIfNeeded(){
   if (cur().v !== 'round' || !state.round || state.round.i >= state.round.items.length) return;
@@ -1134,48 +1055,6 @@ function quitRoundIfNeeded(){
   state.round = null; clearSession();
   toast(done ? `ここまでの${done}${rd.items.every(x => x.type === 'sort') ? 'セット' : '問'}の結果を保存しました` : '中断しました');
 }
-window.addEventListener('popstate', e => {
-  if (ignorePop > 0) { ignorePop--; const f = afterIgnored.shift(); f && f(); return; }
-  hideTip();
-  const d = e.state && typeof e.state.d === 'number' ? e.state.d : 0;
-  if (pendingTab) {
-    const t = pendingTab; pendingTab = null;
-    history.replaceState({ d: t.d }, '');
-    finishTab(t.route, t.floor); return;
-  }
-  /* 重ね物が開いていたら、いちばん上だけを閉じる（その履歴はもう戻っている） */
-  const top = overlays[overlays.length - 1];
-  if (top && top.entry) {
-    top.entry = false;          // 履歴は消費済み
-    if (top.kind === 'dlg') { top.el._cancel && top.el._cancel(); }
-    else closeModalByBack();
-    if (d >= stack.length - 1) return;
-  } else if (top) {
-    closeAllOverlays(); takePending();
-  }
-  if (pendingBacks) { takePending(); }
-  /* 進む（右端から払うなど）は受けない：元の深さへ戻す */
-  const want = stack.length - 1 + overlayEntries();
-  if (d > want) { selfBack(d - want); return; }
-  if (d >= stack.length - 1) return;
-  /* 戻る：d の深さまで画面を下ろす（長押しで何段か戻ったときも、ここでまとめて） */
-  floor = Math.min(floor, d);
-  popTo(d);
-});
-/* 左端から右へ払うと戻る（ホーム画面に追加したiPhoneだけ。ブラウザでは、ブラウザ自身の払いに任せる） */
-const OWN_SWIPE = navigator.standalone === true;
-let edge = null;
-document.addEventListener('touchstart', e => {
-  const t = e.touches[0];
-  edge = (OWN_SWIPE && e.touches.length === 1 && t.clientX < 24 && stack.length > 1 && !modalOpen() && !document.querySelector('.dlg:not(.closing)') && !TAB_ROOTS.includes(cur().v) && !FROM_BOTTOM.includes(cur().v)) ? { x: t.clientX, y: t.clientY } : null;
-}, { passive: true });
-document.addEventListener('touchend', e => {
-  if (!edge) return;
-  const t = e.changedTouches[0], dx = t.clientX - edge.x, dy = Math.abs(t.clientY - edge.y);
-  edge = null;
-  if (dx > 72 && dy < 60) uiBack();
-}, { passive: true });
-
 /* 下タブ：1回め＝いまの表示のいちばん上へ／2回め＝最初の表示へ（参考：My手帳の下タブの決まり） */
 function tabTap(v){
   const atRoot = stack.length === (v === 'home' ? 1 : 2) && cur().v === v;
@@ -1224,8 +1103,6 @@ function restoreNav(){
   if (s.setup) Object.assign(state.setup, s.setup);
   if (typeof s.bulkText === 'string') state.bulk.text = s.bulkText;
   stack.length = 0; stack.push(...st);
-  floor = stack.length - 1;
-  history.replaceState({ d: floor }, '');
   render(cur(), true);
   scrollTo(0, s.y || 0);
   return true;
@@ -1306,22 +1183,6 @@ function hideModalNow(instant){
 function closeModal(instant){
   if (modalOv) { const o = modalOv; modalOv = null; overlayClose(o); }
   hideModalNow(instant);
-}
-function closeModalByBack(){
-  const m = document.getElementById('modal'), dirty = modalGuard && modalGuard();
-  let saved = null;
-  if (dirty) { const form = m.querySelector('form'); saved = { html: document.getElementById('mbody').innerHTML, vals: [...form.querySelectorAll('[data-f]')].map(el => el.type === 'radio' ? el.checked : el.value) }; }
-  const o = modalOv; modalOv = null; if (o) { const i = overlays.indexOf(o); if (i >= 0) overlays.splice(i, 1); }
-  hideModalNow();
-  if (saved) {
-    toastAction('入力した内容を閉じました', '元に戻す', () => {
-      openModal(saved.html, { noFocus: true });
-      const form = document.querySelector('#mbody form');
-      [...form.querySelectorAll('[data-f]')].forEach((el, i) => { if (el.type === 'radio') el.checked = saved.vals[i]; else el.value = saved.vals[i]; });
-      form.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
-      modalGuard = () => true;
-    });
-  }
 }
 async function requestCloseModal(){
   if (modalGuard && modalGuard()) {
@@ -3051,7 +2912,8 @@ let scrollSave = null;
 addEventListener('scroll', () => { clearTimeout(scrollSave); scrollSave = setTimeout(persistNav, 300); }, { passive: true });
 addEventListener('pagehide', persistNav);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') persistNav(); });
-if (!restoreNav()) { history.replaceState({ d: 0 }, ''); go({ v: 'home' }, 'tab'); }
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (!restoreNav()) go({ v: 'home' }, 'tab');
 })();
 
 </script>
