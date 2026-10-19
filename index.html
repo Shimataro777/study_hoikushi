@@ -656,7 +656,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const APP_BUILD = '2026-10-19';
 
 /* =========================================================
@@ -1708,7 +1708,7 @@ function fld(label, name, val, type = 'inp', req = false, list = null, ph = ''){
   const dl = list ? `<datalist id="${id}_l">${list.map(x => `<option value="${esc(x)}">`).join('')}</datalist>` : '';
   const input = type === 'ta'
     ? `<textarea class="ta" id="${id}" name="${name}" data-f="${name}" placeholder="${esc(ph)}">${esc(val)}</textarea>`
-    : `<input class="inp" id="${id}" name="${name}" data-f="${name}" value="${esc(val)}" placeholder="${esc(ph)}" ${list ? `list="${id}_l"` : ''} ${type === 'num' ? 'inputmode="numeric"' : ''} autocomplete="off">`;
+    : `<input class="inp" id="${id}" name="${name}" data-f="${name}" value="${esc(val)}" placeholder="${esc(ph)}" ${list ? `list="${id}_l"` : ''} ${type === 'num' ? 'inputmode="numeric"' : ''}>`;
   return `<div class="fld"><label for="${id}" class="${req ? 'req' : ''}">${label}</label>${input}${dl}</div>`;
 }
 const catsOfUnit = unit => uniq(TERMS.filter(t => t.unit === unit).map(t => t.cat)).filter(Boolean);
@@ -1997,7 +1997,7 @@ function renderOne(){
   </div>
   <form id="oneForm">
     <div class="fld"><label for="oneUnit">追加先</label><select class="sel" id="oneUnit" data-f="unit">${unitOptions(O.unit)}</select>
-      ${O.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="oneNew" value="${esc(O.newName)}" placeholder="新しい単元の名前" autocomplete="off">` : ''}</div>
+      ${O.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="oneNew" value="${esc(O.newName)}" placeholder="新しい単元の名前">` : ''}</div>
     ${O.kind === 'term' ? `
       ${fld('答え（用語・人物）', 'term', f.term || '', 'inp', true)}
       ${fld('読み', 'kana', f.kana || '', 'inp', false, null, 'ひらがな（ふりがなになります）')}
@@ -2159,7 +2159,7 @@ function renderImport(){
   app.innerHTML = `
   <h1 class="ptitle">取り込む内容の確認 ${help('import')}</h1>
   ${needUnit ? `<section class="fgroup"><h2 class="stitle">追加先の単元</h2><select class="sel" id="impUnit">${unitOptions(I0.unit)}</select>
-    ${I0.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="impNew" value="${esc(I0.newName)}" placeholder="新しい単元の名前" autocomplete="off">` : ''}</section>` : ''}
+    ${I0.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="impNew" value="${esc(I0.newName)}" placeholder="新しい単元の名前">` : ''}</section>` : ''}
   ${I0.errors.length ? `<details class="warn" style="margin-top:16px"><summary>読み取れなかったもの ${I0.errors.length}件</summary><ul>${I0.errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></details>` : ''}
   <div class="impbar"><span class="cnt">${n}件中 <b>${sel}</b>件を選択</span><span class="btnrow" style="margin:0"><button class="textbtn" data-act="impAll">すべて選ぶ</button><button class="textbtn" data-act="impNone">すべて外す</button></span></div>
   <ul class="ilist">${I0.items.map(card).join('')}</ul>
@@ -2317,7 +2317,7 @@ function filterLabel(k, v){ return k === 'unit' ? unitName(v) : k === 'bucket' ?
 function searchField(ctx){
   const S = state.search[ctx], n = filterCount(S);
   return `<div class="sfield">
-    <label class="lsearch">${I('search')}<input id="sq-${ctx}" type="search" enterkeyhint="search" placeholder="キーワードで探す" value="${esc(S.q)}" autocomplete="off" aria-label="キーワードで探す（読みでも可）"><button type="button" class="lsx" data-act="lsClear" data-v="sq-${ctx}" aria-label="キーワードを消す">${I('x')}</button></label>
+    <label class="lsearch">${I('search')}<input id="sq-${ctx}" type="search" enterkeyhint="search" placeholder="キーワードで探す" value="${esc(S.q)}" aria-label="キーワードで探す（読みでも可）"><button type="button" class="lsx" data-act="lsClear" data-v="sq-${ctx}" aria-label="キーワードを消す">${I('x')}</button></label>
     <button type="button" class="fbtn ${n ? 'on' : ''}" data-act="sFilter" data-v="${ctx}" aria-label="絞り込み${n ? `（${n}件の条件）` : ''}">${I('sliders')}<span>絞り込み</span>${n ? `<b class="fbadge">${n}</b>` : ''}</button>
   </div>
   ${n ? `<div class="fchips">${FILTER_KEYS.filter(k => S[k]).map(k => `<button type="button" class="fchip" data-act="sDrop" data-c="${ctx}" data-k="${k}" aria-label="${esc(filterLabel(k, S[k]))}の条件を外す">${esc(filterLabel(k, S[k]))}${I('x')}</button>`).join('')}</div>` : ''}`;
@@ -2513,7 +2513,7 @@ function renderData(){
 }
 
 /* ---------- 一覧の中だけを探す欄（打つそばから絞る。My手帳の ListSearchBar） ---------- */
-const listSearch = (id, val, ph) => `<label class="lsearch">${I('search')}<input id="${id}" type="search" placeholder="${esc(ph)}" value="${esc(val)}" autocomplete="off" aria-label="${esc(ph)}"><button type="button" class="lsx" data-act="lsClear" data-v="${id}" aria-label="消す">${I('x')}</button></label>`;
+const listSearch = (id, val, ph) => `<label class="lsearch">${I('search')}<input id="${id}" type="search" placeholder="${esc(ph)}" value="${esc(val)}" aria-label="${esc(ph)}"><button type="button" class="lsx" data-act="lsClear" data-v="${id}" aria-label="消す">${I('x')}</button></label>`;
 const tabsHTML = (act, tabs, value) => `<div class="seg">${tabs.map(([v, label, n]) => `<button data-act="${act}" data-v="${v}" aria-pressed="${value === v}">${label}${n != null ? `<span class="segn">${n}</span>` : ''}</button>`).join('')}</div>`;
 
 /* ---------- 追加・編集・メモした問題 ---------- */
@@ -2582,8 +2582,8 @@ function openRubySheet(word){
   openModal(`
     <h2 class="sheet-t">${word ? 'ふりがなの編集' : 'ふりがなを追加'}</h2>
     <form id="rubyForm" data-guard data-word="${esc(word || '')}">
-      <div class="fld"><label for="rbWord" class="req">語</label><input class="inp" id="rbWord" data-f="word" value="${esc(word || '')}" placeholder="例：恩物" autocomplete="off"></div>
-      <div class="fld"><label for="rbRead" class="req">読み</label><input class="inp" id="rbRead" data-f="reading" value="${esc(r || '')}" placeholder="例：おんぶつ" autocomplete="off"></div>
+      <div class="fld"><label for="rbWord" class="req">語</label><input class="inp" id="rbWord" data-f="word" value="${esc(word || '')}" placeholder="例：恩物"></div>
+      <div class="fld"><label for="rbRead" class="req">読み</label><input class="inp" id="rbRead" data-f="reading" value="${esc(r || '')}" placeholder="例：おんぶつ"></div>
       <div class="rpv" id="rbPv">${word ? `<ruby>${esc(word)}<rt>${esc(r)}</rt></ruby>` : '<span class="muted">ここに見え方が出ます</span>'}</div>
       <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="closeModal">キャンセル</button><button type="submit" class="btn primary">保存する</button></div>
         ${word ? `<div class="sheet-sub"><button type="button" class="textbtn danger" data-act="rubyDel" data-v="${esc(word)}">このふりがなを削除</button></div>` : ''}</div>
@@ -2616,7 +2616,7 @@ function renderUnits(){
   };
   app.innerHTML = `
   <h1 class="ptitle">単元 ${help('units')}</h1>
-  <div class="addrow"><input class="inp" id="newUnit" placeholder="新しい単元" autocomplete="off" enterkeyhint="done"><button class="btn primary" data-act="unitCreate" id="unitCreateBtn" disabled>${I('plus')}作る</button></div>
+  <div class="addrow"><input class="inp" id="newUnit" placeholder="新しい単元" enterkeyhint="done"><button class="btn primary" data-act="unitCreate" id="unitCreateBtn" disabled>${I('plus')}作る</button></div>
   ${UNITS.length ? `<ul class="dlist" data-reorder="units">${UNITS.map(row).join('')}</ul>` : '<p class="empty">まだ単元がありません</p>'}`;
 }
 function openUnitSheet(id){
@@ -2853,7 +2853,7 @@ document.addEventListener('submit', ev => {
 let sqTimer = null;
 document.addEventListener('input', ev => {
   const t = ev.target;
-  if (t.matches && t.matches('textarea.ta:not(.big)')) autoGrow(t);
+  if (t.matches && t.matches('textarea.ta:not(.big)') && !ev.isComposing) autoGrow(t);   // 変換中は高さを変えない（予測変換を妨げないように）
   if (t.id === 'sq-list' || t.id === 'sq-dict') {   // 打つそばから絞る（少し待ってから）
     const ctx = t.id.slice(3); state.search[ctx].q = t.value;
     clearTimeout(sqTimer); sqTimer = setTimeout(() => { state.opened.clear(); ctx === 'list' ? drawList() : drawDict(); persistNav(); }, 220);
@@ -2870,6 +2870,10 @@ document.addEventListener('input', ev => {
   else if (t.id === 'newUnit') { const b = document.getElementById('unitCreateBtn'); if (b) b.disabled = !t.value.trim(); }
   else if (t.id === 'oneNew') state.one.newName = t.value;
   else if (t.closest('#oneForm') && t.dataset.f && t.dataset.f !== 'unit') state.one.f[t.dataset.f] = t.value;
+});
+document.addEventListener('compositionend', ev => {   // 変換が確定してから高さを合わせる
+  const t = ev.target;
+  if (t.matches && t.matches('textarea.ta:not(.big)')) autoGrow(t);
 });
 document.addEventListener('change', ev => {
   const t = ev.target;
