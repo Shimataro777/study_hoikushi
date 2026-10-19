@@ -16,7 +16,7 @@
 :root{
   --bg:#f6f6f3; --surface:#ffffff; --surface2:#efefeb; --ink:#1c1c1e; --ink2:#3d3d41; --muted:#77777d; --line:#e2e2dd;
   --primary:#1c1c1e; --on-primary:#ffffff;
-  --b-new:#bdbdb6; --b-wrong:#c4553f; --b-unsure:#c0972f; --b-correct:#3e8767;
+  --b-new:#bdbdb6; --b-wrong:#c4553f; --b-unsure:#c0972f; --b-correct:#3e8767; --b-unknown:#6f7fb3;
   --font:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
   color-scheme:light;
 }
@@ -24,7 +24,7 @@
   :root{
     --bg:#111112; --surface:#1a1a1c; --surface2:#252528; --ink:#f1f1f2; --ink2:#d2d2d6; --muted:#9a9aa1; --line:#2e2e32;
     --primary:#f1f1f2; --on-primary:#111112;
-    --b-new:#5c5c62; --b-wrong:#e07b64; --b-unsure:#d9b257; --b-correct:#63b38e;
+    --b-new:#5c5c62; --b-wrong:#e07b64; --b-unsure:#d9b257; --b-correct:#63b38e; --b-unknown:#97a6dc;
     color-scheme:dark;
   }
 }
@@ -39,7 +39,7 @@ button{cursor:pointer}
 .i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* 振り分けの色（ここだけ有彩色） */
-.b-new{--c:var(--b-new)} .b-wrong{--c:var(--b-wrong)} .b-unsure{--c:var(--b-unsure)} .b-correct{--c:var(--b-correct)}
+.b-new{--c:var(--b-new)} .b-unknown{--c:var(--b-unknown)} .b-wrong{--c:var(--b-wrong)} .b-unsure{--c:var(--b-unsure)} .b-correct{--c:var(--b-correct)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
 
 /* ---------- 上部バー ---------- */
@@ -322,6 +322,29 @@ body{overflow-wrap:anywhere}
 .okmsg{display:flex;align-items:center;gap:8px;color:var(--b-correct);font-weight:600}
 .mrow .mc{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .tl .x + .btnrow{margin:-4px 0 10px}
+rt{font-size:.5em;font-weight:400;color:var(--muted);letter-spacing:0;font-feature-settings:normal}
+ruby{ruby-align:center}
+.qtext,.prose,.cs,.row-t,.ds,.lead,.tl .x,.tl .t,.ctext,.dn,.st{line-height:1.95}
+.legend{grid-template-columns:repeat(var(--n,5),minmax(0,1fr))}
+@media (max-width:420px){.legend{grid-template-columns:repeat(min(var(--n,5),3),minmax(0,1fr));row-gap:10px}}
+.lg .ll{white-space:nowrap;font-size:11.5px}
+.seg3{display:grid!important;grid-template-columns:repeat(4,1fr)}
+.seg3.sm{grid-template-columns:repeat(5,1fr)}
+.seg3 button{min-width:0!important;padding:9px 4px!important}
+@media (max-width:560px){.seg3{grid-template-columns:repeat(2,1fr)}.seg3.sm{grid-template-columns:repeat(3,1fr)}}
+.tl .seg3{grid-template-columns:repeat(2,1fr)}
+.choice.dontknow{justify-content:center;border-style:dashed;color:var(--ink2);min-height:48px;font-size:15px}
+.choice.dontknow .i{width:18px;height:18px}
+.swrow{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border:0;background:none;text-align:left;font-size:16px}
+.swrow+.swrow,.swrow+.mrow,.mrow+.swrow{border-top:1px solid var(--line)}
+.swrow .mtx{flex:1}
+.sw2{width:42px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.sw2::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .2s}
+.swrow[aria-checked="true"] .sw2{background:var(--b-correct)}
+.swrow[aria-checked="true"] .sw2::after{transform:translateX(16px)}
+.resume .mi{background:var(--primary);color:var(--on-primary)}
+.sitem.reveal{border-color:var(--b-unknown);cursor:default}
+.sitem.reveal .no{color:var(--b-unknown)}
 </style>
 </head>
 <body>
@@ -349,6 +372,7 @@ body{overflow-wrap:anywhere}
 <script src="hoiku-genri.js"></script>
 <script src="hoiku-shinri.js"></script>
 <script src="seido-nengo.js"></script>
+<script src="ruby.js"></script>
 <script>
 (function(){
 'use strict';
@@ -383,6 +407,11 @@ const ICONS = {
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   note: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  vol: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>',
+  mute: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/>',
+  play: '<path d="M7 4.5v15a.8.8 0 0 0 1.2.7l12-7.5a.8.8 0 0 0 0-1.4l-12-7.5A.8.8 0 0 0 7 4.5z"/>',
+  question: '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+  ruby: '<path d="M4 20h7M7.5 20V9M3 9h9M14 4h7M17.5 4v6"/><path d="M14 14h7M14 18h7"/>',
   paste: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
   copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
   download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
@@ -407,9 +436,11 @@ function toast(text){
  * ========================================================= */
 const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
-  buckets: ['出題する問題', '出題したい振り分けを選びます。複数選ぶと組み合わせて出題します。'],
-  classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」になります。'],
-  sort: ['年号並べ替え', '上が古くなるように並べます。矢印で1つずつ動かすか、2つの出来事を続けてタップすると入れ替わります。'],
+  buckets: ['出題する問題', '出題したい振り分けを選びます。複数選ぶと組み合わせて出題します。\n\n「苦手だけ」は、不正解・わからない・自信なしをまとめて選びます。'],
+  classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
+  resume: ['中断と再開', '問題の途中で × を押すと中断できます。それまでの振り分けは保存され、学習画面の「続きから再開」から再開できます。\n\n中断中に別の問題を始めると、中断していた分は破棄されます。'],
+  ruby: ['ふりがなの辞書', '1行に1語ずつ「語=よみ」の形で書きます。\n例：恩物=おんぶつ\n\n最初から入っている読みを消したいときは「語=」と読みを空にします。'],
+  sort: ['年号並べ替え', '上が古くなるように並べます。矢印で1つずつ動かすか、2つの出来事を続けてタップすると入れ替わります。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
   list: ['振り分け', '振り分けごとに問題を確認できます。項目をタップすると、解説とメモの確認、振り分けの変更、問題の編集ができます。'],
   dict: ['図鑑', 'すべての用語・人物と年表を確認できます。用語をタップすると、くわしい説明や、他の単元での説明が表示されます。'],
   data: ['データ', '編集・メモ・追加した問題・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。'],
@@ -426,6 +457,75 @@ const blankP = () => ({ q: {}, e: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP), U = loadJSON(UKEY, blankU);
+const SETKEY = 'hoikushi-anki-settings-v1', SKEY = 'hoikushi-anki-session-v1';
+let SET = loadJSON(SETKEY, () => ({ sound: true, ruby: true }));
+const saveSet = () => { try { localStorage.setItem(SETKEY, JSON.stringify(SET)); } catch (_) {} };
+
+/* ---------- 効果音（Web Audioで合成。音声ファイル不要） ---------- */
+const SFX = (() => {
+  let ac = null;
+  const ctx = () => {
+    if (!ac) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; ac = new C(); }
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  };
+  function tone(freq, at, dur, type = 'sine', vol = 0.16){
+    const c = ctx(); if (!c) return;
+    const t = c.currentTime + at, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.05);
+  }
+  const play = fn => { if (SET.sound) { try { fn(); } catch (_) {} } };
+  return {
+    unlock: () => { if (SET.sound) ctx(); },
+    correct: () => play(() => { tone(880, 0, 0.16); tone(1318.5, 0.09, 0.32); tone(2637, 0.09, 0.2, 'sine', 0.03); }),
+    streak: n => play(() => { [1046.5, 1318.5, 1568, 2093].forEach((f, i) => tone(f, i * 0.07, 0.22, 'sine', 0.12)); if (n >= 10) tone(2637, 0.3, 0.4, 'sine', 0.06); }),
+    wrong: () => play(() => { tone(392, 0, 0.16, 'triangle', 0.13); tone(311, 0.13, 0.3, 'triangle', 0.11); }),
+    unknown: () => play(() => { tone(659, 0, 0.14, 'sine', 0.09); tone(784, 0.1, 0.24, 'sine', 0.08); }),
+    finish: rate => play(() => {
+      const notes = rate >= 80 ? [523.25, 659.25, 784, 1046.5, 1318.5] : rate >= 50 ? [523.25, 659.25, 784, 1046.5] : [523.25, 659.25, 784];
+      notes.forEach((f, i) => tone(f, i * 0.1, i === notes.length - 1 ? 0.6 : 0.2, 'sine', 0.12));
+      if (rate >= 80) { tone(659.25, 0.4, 0.6, 'sine', 0.06); tone(784, 0.4, 0.6, 'sine', 0.06); }
+    })
+  };
+})();
+
+/* ---------- 中断・再開 ---------- */
+function saveSession(){
+  const r = state.round; if (!r) return;
+  const c = r.cur, answered = c && (c.type === 'quiz' ? c.picked !== null : c.done);
+  try { localStorage.setItem(SKEY, JSON.stringify({ items: r.items, i: r.i, results: r.results, origin: r.origin, answered: answered ? { ok: c.ok } : null, t: Date.now() })); } catch (_) {}
+}
+function loadSession(){
+  try {
+    const s = JSON.parse(localStorage.getItem(SKEY) || 'null');
+    if (!s || !Array.isArray(s.items)) return null;
+    const done = s.i + (s.answered ? 1 : 0);
+    if (done >= s.items.length) return null;
+    return { ...s, done, left: s.items.length - done };
+  } catch (_) { return null; }
+}
+const clearSession = () => { try { localStorage.removeItem(SKEY); } catch (_) {} };
+function sessionLabel(s){
+  const kinds = uniq(s.items.map(x => x.type));
+  return `${unitName(s.origin.unit)}・${kinds.length > 1 ? '復習' : kinds[0] === 'sort' ? '年号並べ替え' : '4択'}`;
+}
+function resumeCard(){
+  const s = loadSession();
+  if (!s) return '';
+  return `<section class="sect"><div class="shead"><h2 class="stitle">中断中 ${help('resume')}</h2><button class="textbtn" data-act="discardSession">破棄</button></div>
+    <div class="menu"><button class="mrow resume" data-act="resume"><span class="mi">${I('play')}</span><span class="mtx"><span class="mt">続きから再開</span><span class="ms">${esc(sessionLabel(s))}　あと${s.left}${s.items.every(x => x.type === 'sort') ? 'セット' : '問'}（${s.done}/${s.items.length}）</span></span>${I('chev', 'mchev')}</button></div></section>`;
+}
+function resumeSession(){
+  const s = loadSession(); if (!s) return;
+  const r = { items: s.items, i: s.i, results: s.results || [], origin: s.origin, cur: null };
+  if (s.answered) { r.results.push({ item: r.items[r.i], ok: s.answered.ok }); r.i++; }
+  state.round = r;
+  go({ v: 'round' });
+}
 const saveP = () => { try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) { toast('保存できませんでした'); } };
 const saveU = () => { try { localStorage.setItem(UKEY, JSON.stringify(U)); } catch (_) { toast('保存できませんでした'); } };
 
@@ -466,6 +566,7 @@ function buildData(){
   qById = new Map(QUESTIONS.map(q => [q.id, q]));
   eById = new Map(EVENTS.map(e => [e.id, e]));
   WARNINGS = validate();
+  buildRuby();
 }
 function validate(){
   const w = [], seenT = new Set();
@@ -476,6 +577,16 @@ function validate(){
   }
   return w;
 }
+let RUBY_MAP = {}, RUBY_RE = null;
+function buildRuby(){
+  const m = { ...(window.RUBY || {}) };
+  for (const t of TERMS) if (t.kana && /[\u4e00-\u9fff々]/.test(t.term) && !/[ぁ-んァ-ヶー・]/.test(t.term) && !/・/.test(t.kana)) m[t.term] = t.kana.replace(/\s+/g, '');
+  for (const [k, v] of Object.entries(U.ruby || {})) { if (v) m[k] = v; else delete m[k]; }
+  RUBY_MAP = m;
+  const keys = Object.keys(m).filter(k => /[\u4e00-\u9fff々]/.test(k)).sort((a, b) => b.length - a.length);
+  RUBY_RE = keys.length ? new RegExp(keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g') : null;
+}
+const rb = s => { const e = esc(s); return SET.ruby && RUBY_RE ? e.replace(RUBY_RE, w => `<ruby>${w}<rt>${RUBY_MAP[w]}</rt></ruby>`) : e; };
 const memoKey = q => q.type === 'term' ? 'k:' + q.termKey : 'e:' + q.eventId;
 const memoOf = q => U.memos[memoKey(q)] || '';
 const memoOfEvent = e => U.memos['e:' + e.id] || '';
@@ -483,16 +594,18 @@ const memoOfEvent = e => U.memos['e:' + e.id] || '';
 /* =========================================================
  * 振り分け
  * ========================================================= */
-const ORDER = ['new', 'wrong', 'unsure', 'correct'];
-const BL = { new: '未回答', wrong: '不正解', unsure: '自信なし', correct: '正解' };
+const ORDER = ['new', 'unknown', 'wrong', 'unsure', 'correct'];
+const BL = { new: '未回答', unknown: 'わからない', wrong: '不正解', unsure: '自信なし', correct: '正解' };
+const WEAK = ['unknown', 'wrong', 'unsure'];
+const isWeak = b => WEAK.includes(b);
 const bucket = (k, id) => (P[k][id] && P[k][id].b) || 'new';
 function setBucket(k, id, b){ const r = P[k][id] || { n: 0, ok: 0 }; r.b = b; P[k][id] = r; saveP(); }
-function recordAnswer(k, id, ok, unsure){
+function recordAnswer(k, id, ok, unsure, unknown){
   const r = P[k][id] || { n: 0, ok: 0 };
   r.n++; if (ok) r.ok++;
-  r.b = ok ? (unsure ? 'unsure' : 'correct') : 'wrong'; r.t = Date.now(); P[k][id] = r;
+  r.b = unknown ? 'unknown' : ok ? (unsure ? 'unsure' : 'correct') : 'wrong'; r.t = Date.now(); P[k][id] = r;
 }
-function countB(k, list){ const c = { new: 0, wrong: 0, unsure: 0, correct: 0, total: list.length }; list.forEach(x => c[bucket(k, x.id)]++); return c; }
+function countB(k, list){ const c = { new: 0, unknown: 0, wrong: 0, unsure: 0, correct: 0, total: list.length }; list.forEach(x => c[bucket(k, x.id)]++); return c; }
 const inUnit = (list, unit) => unit === 'all' ? list : list.filter(x => x.unit === unit);
 
 /* =========================================================
@@ -533,7 +646,7 @@ function linkedTerms(unit, texts, skip){
 /* =========================================================
  * 画面遷移（戻るボタン・端末の戻る操作に対応）
  * ========================================================= */
-const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題' };
+const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書' };
 const routeTitle = r => r.v === 'unit' ? unitName(r.a) : (TITLES[r.v] || '');
 const TAB_VIEWS = ['home', 'unit', 'list', 'dict', 'data'];
 const stack = [];
@@ -549,7 +662,8 @@ window.addEventListener('popstate', () => {
   if (!document.getElementById('modal').hidden) closeModal();
   const r = cur();
   if (r.v === 'round' && state.round && state.round.i < state.round.items.length) {
-    if (!confirm('中断しますか？（ここまでの解答と振り分けは保存されています）')) { history.pushState({ a: 1 }, ''); return; }
+    if (!confirm('中断しますか？\nここまでの振り分けは保存され、「学習」の「続きから再開」から再開できます。')) { history.pushState({ a: 1 }, ''); return; }
+    saveSession();
   }
   if (stack.length > 1) stack.pop();
   render(cur(), true);
@@ -567,6 +681,7 @@ function render(r, keep){
     case 'bulk': renderBulk(); break;
     case 'one': renderOne(); break;
     case 'mine': renderMine(); break;
+    case 'ruby': renderRuby(); break;
     default: renderHome();
   }
   renderTop();
@@ -584,7 +699,8 @@ function renderTop(){
     top.hidden = false;
     inn.innerHTML = `<button class="iconbtn" data-act="back" aria-label="中断する">${I('x')}</button>
       <div class="rprog"><i style="width:${r.i / r.items.length * 100}%"></i></div>
-      <span class="rnum">${Math.min(r.i + 1, r.items.length)} / ${r.items.length}</span>`;
+      <span class="rnum">${Math.min(r.i + 1, r.items.length)} / ${r.items.length}</span>
+      <button class="iconbtn" data-act="toggleSound" aria-label="効果音 ${SET.sound ? 'オン' : 'オフ'}">${I(SET.sound ? 'vol' : 'mute')}</button>`;
   } else if (['home', 'list', 'dict', 'data'].includes(v)) { top.hidden = true; inn.innerHTML = ''; }
   else {
     const parent = stack.length > 1 ? stack[stack.length - 2] : { v: 'home' };
@@ -626,23 +742,23 @@ function selectedCats(kind, unit){
 
 /* ---------- 共通パーツ ---------- */
 function stackBar(c){
-  const segs = ['correct', 'unsure', 'wrong', 'new'].filter(b => c[b]).map(b => `<i class="b-${b}" style="flex:${c[b]}"></i>`).join('');
+  const segs = ['correct', 'unsure', 'wrong', 'unknown', 'new'].filter(b => c[b]).map(b => `<i class="b-${b}" style="flex:${c[b]}"></i>`).join('');
   return `<div class="sbar" role="img" aria-label="${ORDER.map(b => BL[b] + c[b]).join('、')}">${segs}</div>`;
 }
-const legend = (c, keys = ORDER) => `<div class="legend ${keys.length === 3 ? 'three' : ''}">${keys.map(b => `<div class="lg"><span class="ll"><span class="dot b-${b}"></span>${BL[b]}</span><b>${c[b]}</b></div>`).join('')}</div>`;
+const legend = (c, keys = ORDER) => `<div class="legend" style="--n:${keys.length}">${keys.map(b => `<div class="lg"><span class="ll"><span class="dot b-${b}"></span>${BL[b]}</span><b>${c[b]}</b></div>`).join('')}</div>`;
 const sumC = (a, b) => { const c = {}; for (const k of [...ORDER, 'total']) c[k] = (a[k] || 0) + (b[k] || 0); return c; };
 function classifySeg(k, id, withNew = false){
-  const curB = bucket(k, id), opts = withNew ? ORDER : ['correct', 'unsure', 'wrong'];
+  const curB = bucket(k, id), opts = withNew ? ORDER : ['correct', 'unsure', 'wrong', 'unknown'];
   return `<div class="seg3 ${withNew ? 'sm' : ''}" role="radiogroup" aria-label="振り分け">${opts.map(b =>
     `<button class="b-${b}" role="radio" aria-checked="${curB === b}" data-act="classify" data-k="${k}" data-id="${esc(id)}" data-v="${b}" data-new="${withNew ? 1 : 0}"><span class="dot"></span>${BL[b]}</button>`).join('')}</div>`;
 }
-const memoBlock = text => text ? `<section class="block memo"><h3>${I('note')}メモ</h3><p class="prose">${esc(text)}</p></section>` : '';
+const memoBlock = text => text ? `<section class="block memo"><h3>${I('note')}メモ</h3><p class="prose">${rb(text)}</p></section>` : '';
 const editBtn = (act, v) => `<button class="textbtn" data-act="${act}" data-v="${esc(v)}">${I('pen')}編集・メモ</button>`;
 function qRow(q, showUnit){
   const b = bucket('q', q.id), open = state.open === 'q:' + q.id, memo = memoOf(q);
   return `<li class="row ${open ? 'open' : ''}">
-    <button class="row-h" data-act="open" data-v="q:${esc(q.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${showUnit ? `<span class="row-u">${esc(unitName(q.unit))}</span>` : ''}${esc(q.question)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
-    ${open ? `<div class="row-d"><p class="answer"><span>答え</span>${esc(q.answer)}</p><p class="prose">${esc(q.explanation)}</p>
+    <button class="row-h" data-act="open" data-v="q:${esc(q.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${showUnit ? `<span class="row-u">${esc(unitName(q.unit))}</span>` : ''}${rb(q.question)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
+    ${open ? `<div class="row-d"><p class="answer"><span>答え</span>${rb(q.answer)}</p><p class="prose">${rb(q.explanation)}</p>
       ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
       ${classifySeg('q', q.id, true)}
       <div class="btnrow">${q.type === 'term' ? `<button class="textbtn" data-act="term" data-v="${esc(q.termKey)}">${I('book')}図鑑で見る</button>` : ''}${editBtn('editQ', q.id)}</div></div>` : ''}
@@ -651,8 +767,8 @@ function qRow(q, showUnit){
 function eRow(e){
   const b = bucket('e', e.id), open = state.open === 'e:' + e.id, memo = memoOfEvent(e);
   return `<li class="row ${open ? 'open' : ''}">
-    <button class="row-h" data-act="open" data-v="e:${esc(e.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${esc(e.title)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
-    ${open ? `<div class="row-d"><p class="answer"><span>年号</span>${yearLabel(e)}</p><p class="prose">${esc(e.explanation)}</p>
+    <button class="row-h" data-act="open" data-v="e:${esc(e.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t">${rb(e.title)}</span>${memo ? I('note', 'mini-i') : ''}<span class="row-b">${BL[b]}</span>${I('chevD')}</button>
+    ${open ? `<div class="row-d"><p class="answer"><span>年号</span>${yearLabel(e)}</p><p class="prose">${rb(e.explanation)}</p>
       ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
       ${classifySeg('e', e.id, true)}<div class="btnrow">${editBtn('editE', e.id)}</div></div>` : ''}
   </li>`;
@@ -682,6 +798,7 @@ function renderHome(){
     <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
   </section>
   <section class="sect"><div class="menu">${unitRow('all')}</div></section>`;
+  if (loadSession()) app.querySelector('.brandrow').insertAdjacentHTML('afterend', resumeCard());
 }
 
 /* =========================================================
@@ -691,10 +808,11 @@ function renderUnit(id){
   state.unit = id; state.round = null; state.open = null;
   const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id);
   const cq = countB('q', qs), ce = countB('e', evs);
-  const reviewN = cq.wrong + cq.unsure + ce.wrong + ce.unsure;
+  const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b], 0);
   const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   app.innerHTML = `
-  <span class="uicon">${I(unitIcon(id))}</span>
+  ${loadSession()?.origin?.unit === id ? resumeCard() : ''}
+  <span class="uicon" ${loadSession()?.origin?.unit === id ? 'style="margin-top:24px"' : ''}>${I(unitIcon(id))}</span>
   <h1 class="ptitle">${esc(unitName(id))}</h1>
   ${id !== 'all' && unitById.get(id)?.desc ? `<p class="psub">${esc(unitById.get(id).desc)}</p>` : ''}
   <section class="sect">
@@ -702,7 +820,7 @@ function renderUnit(id){
     <div class="menu">
       ${qs.length ? row('setupQuiz', 'list', '4択問題', `${qs.length}問`) : ''}
       ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
-      ${reviewN ? row('quickReview', 'retry', '不正解と自信なしを復習', `${reviewN}件`, 'accent') : ''}
+      ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
   </section>
@@ -751,7 +869,7 @@ function renderSetup(r){
       <button class="check" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}">
         <span class="box">${I('check')}</span><span class="dot b-${b}"></span><span>${BL[b]}</span><span class="cn">${c[b]}</span>
       </button>`).join('')}</div>
-    <div class="quick"><button class="textbtn" data-act="sall">すべて</button><button class="textbtn" data-act="sreview">不正解と自信なしだけ</button></div>
+    <div class="quick"><button class="textbtn" data-act="sall">すべて</button><button class="textbtn" data-act="sreview">苦手だけ</button></div>
   </section>
   ${cats.length > 1 ? `<section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '分野' : '時代'}</h2><div class="chips">${cats.map(s => `<button class="chip" data-act="scat" data-v="${esc(s)}" aria-pressed="${sel.has(s)}">${esc(s)}</button>`).join('')}</div></section>` : ''}
   <section class="fgroup"><h2 class="stitle">${kind === 'quiz' ? '問題数' : '出題量'}</h2>${countUI}</section>
@@ -786,7 +904,7 @@ function startFromSetup(){
   } else startRound(makeSortSets(pool, state.setup.sets, unit), { unit, kind });
 }
 function quickReview(){
-  const u = state.unit, rev = b => b === 'wrong' || b === 'unsure';
+  const u = state.unit, rev = isWeak;
   const qs = shuffle(inUnit(QUESTIONS, u).filter(q => rev(bucket('q', q.id)))).slice(0, 30).map(q => ({ type: 'quiz', id: q.id }));
   const evs = inUnit(EVENTS, u).filter(e => rev(bucket('e', e.id)));
   const nSets = evs.length ? Math.min(5, Math.ceil(evs.length / state.setup.size)) : 0;
@@ -798,8 +916,17 @@ function quickReview(){
  * ========================================================= */
 function startRound(items, origin, how = 'push'){
   if (!items.length) { toast('出題できる問題がありません'); return; }
+  const old = loadSession();
+  if (old && how !== 'replace' && !confirm(`中断中の問題（${sessionLabel(old)}・あと${old.left}）があります。新しく始めると破棄されます。よろしいですか？`)) return;
   state.round = { items: shuffle(items), i: 0, results: [], origin, cur: null };
+  saveSession();
   go({ v: 'round' }, how);
+}
+function finishRound(){
+  const r = state.round, total = r.results.length, ok = r.results.filter(x => x.ok).length;
+  clearSession(); state.open = null;
+  SFX.finish(total ? ok / total * 100 : 0);
+  go({ v: 'result' }, 'replace');
 }
 function renderItem(){
   const r = state.round;
@@ -808,7 +935,7 @@ function renderItem(){
     if (it.type === 'quiz' ? qById.has(it.id) : it.ids.every(id => eById.has(id))) break;
     r.i++;
   }
-  if (r.i >= r.items.length) { go({ v: 'result' }, 'replace'); return; }
+  if (r.i >= r.items.length) { finishRound(); return; }
   const it = r.items[r.i];
   if (it.type === 'quiz') renderQuiz(it); else renderSort(it);
 }
@@ -823,8 +950,9 @@ function renderQuiz(it){
   state.round.cur = { type: 'quiz', id: q.id, choices, picked: null, ok: null, unsure: false };
   app.innerHTML = `
   <p class="meta"><span>${esc(unitName(q.unit))}／${esc(q.cat)}</span>${prevTag('q', q.id)}</p>
-  <h1 class="qtext">${esc(q.question)}</h1>
-  <div class="choices" id="choices">${choices.map((c, i) => `<button class="choice" data-act="choose" data-v="${i}"><span class="key">${KEYS[i]}</span><span class="ctext">${esc(c)}</span><span class="cmark"></span></button>`).join('')}</div>
+  <h1 class="qtext">${rb(q.question)}</h1>
+  <div class="choices" id="choices">${choices.map((c, i) => `<button class="choice" data-act="choose" data-v="${i}"><span class="key">${KEYS[i]}</span><span class="ctext">${rb(c)}</span><span class="cmark"></span></button>`).join('')}
+    <button class="choice dontknow" data-act="dontknow">${I('question')}わからない</button></div>
   ${unsureToggle()}
   <div id="fb"></div>`;
 }
@@ -832,13 +960,19 @@ function choose(i){
   const c = state.round.cur;
   if (!c || c.type !== 'quiz' || c.picked !== null) return;
   const q = qById.get(c.id);
-  c.picked = i; c.ok = c.choices[i] === q.answer; c.unsure = document.getElementById('unsure').checked;
-  recordAnswer('q', q.id, c.ok, c.unsure);
+  const unknown = i === -1;
+  c.picked = i; c.unknown = unknown; c.ok = !unknown && c.choices[i] === q.answer; c.unsure = document.getElementById('unsure').checked;
+  recordAnswer('q', q.id, c.ok, c.unsure, unknown);
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
-  saveP();
+  saveP(); saveSession();
+  if (unknown) SFX.unknown();
+  else if (!c.ok) SFX.wrong();
+  else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak);
+  else SFX.correct();
   document.querySelectorAll('#choices .choice').forEach((b, k) => {
     b.disabled = true;
+    if (b.classList.contains('dontknow')) { if (!unknown) b.hidden = true; else b.classList.add('is-dim'); return; }
     if (c.choices[k] === q.answer) { b.classList.add('is-ok'); b.querySelector('.cmark').innerHTML = I('check'); }
     else if (k === i) { b.classList.add('is-ng'); b.querySelector('.cmark').innerHTML = I('x'); }
     else b.classList.add('is-dim');
@@ -852,22 +986,25 @@ function renderQuizFeedback(first){
   const clist = c.choices.map((ch, k) => {
     const info = choiceInfo(q, ch), isAns = ch === q.answer, picked = k === c.picked && !isAns;
     return `<div class="citem ${isAns ? 'ok' : ''} ${picked ? 'picked' : ''}"><span class="ic">${I(isAns ? 'check' : 'x')}</span>
-      <div class="ct"><div class="cn">${esc(ch)}${isAns ? '<small>正解</small>' : picked ? '<small>あなたの解答</small>' : ''}</div>
-      ${info.text ? `<p class="cs">${esc(info.text)}</p>` : ''}
+      <div class="ct"><div class="cn">${rb(ch)}${isAns ? '<small>正解</small>' : picked ? '<small>あなたの解答</small>' : ''}</div>
+      ${info.text ? `<p class="cs">${rb(info.text)}</p>` : ''}
       ${info.key ? `<button class="textbtn" data-act="term" data-v="${esc(info.key)}">${I('book')}図鑑で見る</button>` : ''}</div></div>`;
   }).join('');
   const links = q.type === 'term' ? linkedTerms(q.unit, [q.question, q.explanation, q.point || ''], c.choices) : [];
-  const vb = c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
-  const sub = c.ok ? (c.unsure ? '「自信なし」に振り分けました' : state.streak >= 3 ? `${state.streak}問連続で正解` : pick(['その調子です', 'よく覚えています', '正確です'])) : '選択肢の違いも確認しておきましょう';
+  const vb = c.unknown ? 'unknown' : c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
+  const sub = c.unknown ? '解説を読んで、次は解けるようにしましょう'
+    : c.ok ? (c.unsure ? '「自信なし」に振り分けました' : state.streak >= 3 ? `${state.streak}問連続で正解` : pick(['その調子です', 'よく覚えています', '正確です', 'いいペースです']))
+    : pick(['ここで覚えれば次は解けます', '選択肢の違いも確認しておきましょう', '間違えた問題ほど記憶に残ります']);
+  const verdict = c.unknown ? 'わからない' : c.ok ? (state.streak >= 3 ? `正解　${state.streak}連続` : '正解') : '不正解';
   document.getElementById('fb').innerHTML = `
-  <div class="verdict b-${vb}"><span class="vi">${I(c.ok ? 'check' : 'x')}</span><div><b>${c.ok ? '正解' : '不正解'}</b><span class="vs">${sub}</span></div></div>
-  <div class="ansrow"><p class="answer"><span>答え</span>${esc(q.answer)}</p>${editBtn('editQ', q.id)}</div>
+  <div class="verdict b-${vb}"><span class="vi">${I(c.unknown ? 'book' : c.ok ? 'check' : 'x')}</span><div><b>${verdict}</b><span class="vs">${sub}</span></div></div>
+  <div class="ansrow"><p class="answer"><span>答え</span>${rb(q.answer)}</p>${editBtn('editQ', q.id)}</div>
   ${memoBlock(memoOf(q))}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('q', q.id)}</section>
-  <section class="block"><h3>解説</h3><p class="prose">${esc(q.explanation)}</p></section>
-  ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${esc(q.point)}</p></section>` : ''}
-  <details class="block" ${c.ok ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
-  ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${esc(t.term)}</button>`).join('')}</div></section>` : ''}
+  <section class="block"><h3>解説</h3><p class="prose">${rb(q.explanation)}</p></section>
+  ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(q.point)}</p></section>` : ''}
+  <details class="block" ${c.ok && !c.unknown ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
+  ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${rb(t.term)}</button>`).join('')}</div></section>` : ''}
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   if (first) {
     document.getElementById('nextBtn').focus({ preventScroll: true });
@@ -886,7 +1023,8 @@ function renderSort(it){
   <h1 class="qtext" style="display:flex;align-items:center;gap:10px">古い順に並べ替え ${help('sort')}</h1>
   <div id="sortArea"></div>
   ${unsureToggle()}
-  <div id="fb">${'<div class="actionbar"><button class="btn primary block" data-act="submitSort">この順番で解答する</button></div>'}</div>`;
+  <div id="fb"><div class="actionbar"><button class="btn primary block" data-act="submitSort">この順番で解答する</button>
+    <button class="btn block" style="margin-top:8px" data-act="sortDontKnow">${I('question')}わからない（正しい順序を見る）</button></div></div>`;
   drawSortList();
 }
 function sortMarks(order){
@@ -898,10 +1036,10 @@ function drawSortList(){
   document.getElementById('sortArea').innerHTML = `
     <div class="axis">古い</div>
     <ol class="slist">${c.order.map((id, i) => {
-      const e = eById.get(id), cls = c.done ? (marks[i] ? 'ok' : 'ng') : (c.sel === i ? 'sel' : '');
+      const e = eById.get(id), cls = c.done ? (c.unknown ? 'reveal' : marks[i] ? 'ok' : 'ng') : (c.sel === i ? 'sel' : '');
       return `<li class="sitem ${cls}" ${c.done ? '' : `data-act="pick" data-v="${i}" tabindex="0" role="button" aria-label="${i + 1}番目：${esc(e.title)}"`}>
-        <span class="no">${c.done ? I(marks[i] ? 'check' : 'x') : i + 1}</span>
-        <span class="st">${c.done ? `<span class="yr">${yearLabel(e)}</span>` : ''}${esc(e.title)}</span>
+        <span class="no">${c.done ? (c.unknown ? i + 1 : I(marks[i] ? 'check' : 'x')) : i + 1}</span>
+        <span class="st">${c.done ? `<span class="yr">${yearLabel(e)}</span>` : ''}${rb(e.title)}</span>
         ${c.done ? '' : `<span class="mv"><button data-act="up" data-v="${i}" aria-label="上へ" ${i === 0 ? 'disabled' : ''}>${I('up')}</button><button data-act="down" data-v="${i}" aria-label="下へ" ${i === n - 1 ? 'disabled' : ''}>${I('down')}</button></span>`}
       </li>`;
     }).join('')}</ol>
@@ -932,7 +1070,19 @@ function submitSort(){
   c.order.forEach((id, i) => recordAnswer('e', id, marks[i], c.unsure));
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
-  saveP();
+  saveP(); saveSession();
+  if (!c.ok) SFX.wrong(); else if (state.streak >= 3 && (state.streak % 5 === 0 || state.streak === 3)) SFX.streak(state.streak); else SFX.correct();
+  drawSortList();
+  document.querySelector('.toggle').hidden = true;
+  renderSortFeedback(true);
+}
+function sortDontKnow(){
+  const c = state.round.cur;
+  if (c.done) return;
+  c.done = true; c.sel = null; c.unknown = true; c.ok = false;
+  c.order = [...c.order].sort((a, b) => eById.get(a).year - eById.get(b).year);
+  c.order.forEach(id => recordAnswer('e', id, false, false, true));
+  state.streak = 0; saveP(); saveSession(); SFX.unknown();
   drawSortList();
   document.querySelector('.toggle').hidden = true;
   renderSortFeedback(true);
@@ -941,8 +1091,8 @@ function renderSortFeedback(first){
   const c = state.round.cur, marks = sortMarks(c.order), okN = marks.filter(Boolean).length;
   const sorted = [...c.order].sort((a, b) => eById.get(a).year - eById.get(b).year);
   document.getElementById('fb').innerHTML = `
-  <div class="verdict b-${c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong'}"><span class="vi">${I(c.ok ? 'check' : 'x')}</span>
-    <div><b>${c.ok ? '正解' : `${marks.length}個中${okN}個が正しい位置`}</b><span class="vs">${c.ok ? '時代の流れがつかめています' : '正しい順序を確認しておきましょう'}</span></div></div>
+  <div class="verdict b-${c.unknown ? 'unknown' : c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong'}"><span class="vi">${I(c.unknown ? 'book' : c.ok ? 'check' : 'x')}</span>
+    <div><b>${c.unknown ? 'わからない' : c.ok ? '正解' : `${marks.length}個中${okN}個が正しい位置`}</b><span class="vs">${c.unknown ? '正しい順序と解説を読んで、次は並べられるようにしましょう' : c.ok ? '時代の流れがつかめています' : '正しい順序を確認しておきましょう'}</span></div></div>
   <section class="block"><h3 class="stitle">正しい順序と振り分け ${help('classify')}</h3>${timeline(sorted, true)}</section>
   ${nextBar(isLast() ? '結果を見る' : '次のセットへ')}`;
   if (first) document.getElementById('nextBtn').focus({ preventScroll: true });
@@ -950,7 +1100,7 @@ function renderSortFeedback(first){
 function timeline(ids, inRound){
   return `<ol class="tl">${ids.map(id => {
     const e = eById.get(id), memo = memoOfEvent(e);
-    return `<li><div class="y">${e.year}<small>${esc(e.era || '')}</small></div><div><p class="t">${esc(e.title)}</p><p class="x">${esc(e.explanation || '')}</p>
+    return `<li><div class="y">${e.year}<small>${esc(e.era || '')}</small></div><div><p class="t">${rb(e.title)}</p><p class="x">${rb(e.explanation || '')}</p>
       ${memo ? `<div class="memo" style="margin:0 0 10px"><p class="prose" style="margin:0;font-size:14px">${esc(memo)}</p></div>` : ''}
       ${inRound ? classifySeg('e', e.id) + `<div class="btnrow">${editBtn('editE', e.id)}</div>` : `<div class="btnrow">${editBtn('editE', e.id)}</div>`}</div></li>`;
   }).join('')}</ol>`;
@@ -960,8 +1110,8 @@ function next(){
   if (!c || (c.type === 'quiz' ? c.picked === null : !c.done)) return;
   r.results.push({ item: r.items[r.i], ok: c.ok });
   r.i++; r.cur = null;
-  if (r.i >= r.items.length) { state.open = null; go({ v: 'result' }, 'replace'); }
-  else { renderItem(); renderTop(); scrollTo(0, 0); }
+  if (r.i >= r.items.length) finishRound();
+  else { saveSession(); renderItem(); renderTop(); scrollTo(0, 0); }
 }
 
 /* =========================================================
@@ -970,22 +1120,22 @@ function next(){
 function unitBucket(x){
   if (x.item.type === 'quiz') return bucket('q', x.item.id);
   const bs = x.item.ids.map(id => bucket('e', id));
-  return bs.includes('wrong') ? 'wrong' : bs.includes('unsure') ? 'unsure' : 'correct';
+  return bs.includes('wrong') ? 'wrong' : bs.includes('unknown') ? 'unknown' : bs.includes('unsure') ? 'unsure' : 'correct';
 }
 function renderResult(){
   const r = state.round, res = r.results, total = res.length, ok = res.filter(x => x.ok).length;
-  const c = { correct: 0, unsure: 0, wrong: 0, new: 0 };
+  const c = { correct: 0, unsure: 0, wrong: 0, unknown: 0, new: 0 };
   res.forEach(x => c[unitBucket(x)]++);
-  const review = res.filter(x => ['wrong', 'unsure'].includes(unitBucket(x)));
+  const review = res.filter(x => isWeak(unitBucket(x)));
   const qIds = uniq(res.filter(x => x.item.type === 'quiz').map(x => x.item.id)).filter(id => qById.has(id));
   const eIds = uniq(res.filter(x => x.item.type === 'sort').flatMap(x => x.item.ids)).filter(id => eById.has(id));
   app.innerHTML = `
   <p class="psub" style="margin:0 0 4px">${esc(unitName(r.origin.unit))}</p>
   <h1 class="ptitle">おつかれさまでした</h1>
   <p class="score"><b>${ok}</b>/ ${total} ${eIds.length && !qIds.length ? 'セット' : '問'}正解</p>
-  <div class="panel" style="margin-top:18px">${stackBar(c)}${legend(c, ['correct', 'unsure', 'wrong'])}</div>
+  <div class="panel" style="margin-top:18px">${stackBar(c)}${legend(c, ['correct', 'unsure', 'wrong', 'unknown'])}</div>
   <div class="btns" style="margin-top:20px">
-    ${review.length ? `<button class="btn primary block" data-act="retryReview">不正解と自信なしをもう一度（${review.length}）</button>` : ''}
+    ${review.length ? `<button class="btn primary block" data-act="retryReview">苦手をもう一度（${review.length}）</button>` : ''}
     <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
     <button class="btn block" data-act="setupAgain">条件を変えて解く</button>
   </div>
@@ -998,7 +1148,7 @@ function renderResult(){
 }
 function retry(kind){
   const r = state.round;
-  const items = kind === 'review' ? r.results.filter(x => ['wrong', 'unsure'].includes(unitBucket(x))) : r.results;
+  const items = kind === 'review' ? r.results.filter(x => isWeak(unitBucket(x))) : r.results;
   startRound(items.map(x => ({ ...x.item })), r.origin, 'replace');
 }
 
@@ -1048,7 +1198,7 @@ function listStart(){
 function termBucket(t){
   const bs = QUESTIONS.filter(q => q.termKey === t.key).map(q => bucket('q', q.id));
   if (!bs.length) return null;
-  return ['wrong', 'unsure', 'new', 'correct'].find(b => bs.includes(b));
+  return ['wrong', 'unknown', 'unsure', 'new', 'correct'].find(b => bs.includes(b));
 }
 function renderDict(){
   const d = state.dict;
@@ -1074,7 +1224,7 @@ function drawDict(){
   if (d.tab === 'terms') {
     const list = TERMS.filter(t => (d.unit === 'all' || t.unit === d.unit) && (d.cat === 'all' || t.cat === d.cat) && hit(t.term, t.kana, t.summary, t.detail, U.memos['k:' + t.key]));
     box.innerHTML = list.length ? `<p class="hint">${list.length}件</p><ul class="rows">${list.map(t => { const b = termBucket(t); return `<li class="row">
-      <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${esc(t.term)}</span>${t.kana ? `<span class="dk">${esc(t.kana)}</span>` : ''}${d.unit === 'all' ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div><p class="ds">${esc(t.summary)}</p></button></li>`; }).join('')}</ul>`
+      <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${rb(t.term)}</span>${t.kana ? `<span class="dk">${esc(t.kana)}</span>` : ''}${d.unit === 'all' ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div><p class="ds">${rb(t.summary)}</p></button></li>`; }).join('')}</ul>`
       : `<p class="empty">当てはまる用語はありません</p>`;
   } else {
     const list = [...EVENTS].sort((a, b) => a.year - b.year).filter(e => hit(String(e.year), e.era, e.title, e.explanation, e.group, memoOfEvent(e)));
@@ -1089,17 +1239,17 @@ function openTerm(key){
   const evs = EVENTS.filter(e => t.term.length >= 3 && (e.title + (e.explanation || '')).includes(t.term));
   const links = linkedTerms(t.unit, [t.detail || '', t.summary], [t.term]);
   openModal(`
-    <h2>${esc(t.term)}</h2>
+    <h2>${rb(t.term)}</h2>
     <p class="kana">${t.kana ? esc(t.kana) + '　' : ''}${esc(unitName(t.unit))}／${esc(t.cat)}</p>
-    <p class="lead">${esc(t.summary)}</p>
+    <p class="lead">${rb(t.summary)}</p>
     <div class="btnrow">${editBtn('editT', t.key)}</div>
     ${memoBlock(U.memos['k:' + key])}
-    ${t.detail ? `<section class="block"><h3>くわしく</h3><p class="prose">${esc(t.detail)}</p></section>` : ''}
-    ${t.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${esc(t.point)}</p></section>` : ''}
-    ${others.length ? `<section class="block"><h3>他の単元での説明</h3>${others.map(o => `<button class="other" data-act="term" data-v="${esc(o.key)}"><b>${esc(unitName(o.unit))}</b><span>${esc(o.summary)}</span></button>`).join('')}</section>` : ''}
-    ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${esc(x.term)}</button>`).join('')}</div></section>` : ''}
-    ${asAns.length ? `<section class="block"><h3>問題</h3><div class="rel">${asAns.map(q => { const b = bucket('q', q.id); return `<div><span class="dot b-${b}" title="${BL[b]}"></span><span>${esc(q.question)}</span></div>`; }).join('')}</div></section>` : ''}
-    ${evs.length ? `<section class="block"><h3>関係する出来事</h3><div class="rel">${evs.map(e => `<div><strong>${e.year}</strong><span>${esc(e.title)}</span></div>`).join('')}</div></section>` : ''}`);
+    ${t.detail ? `<section class="block"><h3>くわしく</h3><p class="prose">${rb(t.detail)}</p></section>` : ''}
+    ${t.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(t.point)}</p></section>` : ''}
+    ${others.length ? `<section class="block"><h3>他の単元での説明</h3>${others.map(o => `<button class="other" data-act="term" data-v="${esc(o.key)}"><b>${esc(unitName(o.unit))}</b><span>${rb(o.summary)}</span></button>`).join('')}</section>` : ''}
+    ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${rb(x.term)}</button>`).join('')}</div></section>` : ''}
+    ${asAns.length ? `<section class="block"><h3>問題</h3><div class="rel">${asAns.map(q => { const b = bucket('q', q.id); return `<div><span class="dot b-${b}" title="${BL[b]}"></span><span>${rb(q.question)}</span></div>`; }).join('')}</div></section>` : ''}
+    ${evs.length ? `<section class="block"><h3>関係する出来事</h3><div class="rel">${evs.map(e => `<div><strong>${e.year}</strong><span>${rb(e.title)}</span></div>`).join('')}</div></section>` : ''}`);
 }
 
 /* =========================================================
@@ -1207,7 +1357,7 @@ function afterDataChange(){
   const v = cur().v;
   if (v === 'round' && state.round?.cur) {
     const c = state.round.cur;
-    if (c.type === 'quiz' && c.picked !== null) { const q = qById.get(c.id); if (q) { document.querySelector('.qtext').textContent = q.question; renderQuizFeedback(false); } }
+    if (c.type === 'quiz' && c.picked !== null) { const q = qById.get(c.id); if (q) { document.querySelector('.qtext').innerHTML = rb(q.question); renderQuizFeedback(false); } }
     else if (c.type === 'sort' && c.done) { drawSortList(); renderSortFeedback(false); }
   } else render(cur(), true);
 }
@@ -1230,6 +1380,14 @@ function renderData(){
   <section class="sect">
     <h2 class="stitle">自分の変更</h2>
     <div class="menu">${row('goMine', 'pen', '追加・編集・メモした問題', `追加 ${added}　編集 ${edited}　メモ ${memos}`)}</div>
+  </section>
+  <section class="sect">
+    <h2 class="stitle">設定</h2>
+    <div class="menu">
+      <button class="swrow" role="switch" aria-checked="${SET.sound}" data-act="toggleSound"><span class="mi">${I(SET.sound ? 'vol' : 'mute')}</span><span class="mtx"><span class="mt">効果音</span></span><span class="sw2"></span></button>
+      <button class="swrow" role="switch" aria-checked="${SET.ruby}" data-act="toggleRuby"><span class="mi">${I('ruby')}</span><span class="mtx"><span class="mt">ふりがな</span></span><span class="sw2"></span></button>
+      ${row('goRuby', 'book', 'ふりがなの辞書', `${Object.keys(RUBY_MAP).length}語`)}
+    </div>
   </section>
   <section class="sect">
     <h2 class="stitle">バックアップ</h2>
@@ -1258,6 +1416,7 @@ const TEMPLATE = `あなたは保育士試験の学習教材を作るアシス�
 ・「問題」は答えの名前を含めず、意味や特徴から答えを導ける文にする
 ・「要約」は1〜2文。ほかの問題で誤りの選択肢として表示されるので、それだけで意味が分かるように書く
 ・同じ「分野」の用語が4つ以上になるようにする（誤りの選択肢に使うため）
+・「読み」には用語のよみがなをひらがなで書く（アプリでふりがなとして表示される）
 ・事実に自信がない内容は書かない
 
 # 形式（用語・人物）
@@ -1485,6 +1644,21 @@ function renderMine(){
   app.innerHTML = `<h1 class="ptitle">追加・編集した問題</h1>${body || '<p class="empty">まだありません</p>'}`;
 }
 
+/* ---------- ふりがなの辞書 ---------- */
+function renderRuby(){
+  const lines = Object.entries(U.ruby || {}).map(([k, v]) => `${k}=${v}`).join('\n');
+  app.innerHTML = `
+  <h1 class="ptitle">ふりがなの辞書 ${help('ruby')}</h1>
+  <p class="psub">登録済み ${Object.keys(RUBY_MAP).length}語</p>
+  <form id="rubyForm">
+    <div class="fld"><label for="rubyText">自分で追加した読み</label><textarea class="ta big" id="rubyText" placeholder="恩物=おんぶつ">${esc(lines)}</textarea></div>
+    <div class="actionbar static"><button type="submit" class="btn primary block">保存する</button></div>
+  </form>
+  <section class="sect"><h2 class="stitle">確認</h2>
+    <label class="search" style="margin-top:0">${I('search')}<input id="rubyQ" type="search" placeholder="語を入力すると読みを表示" aria-label="読みを確認"></label>
+    <p class="prose" id="rubyOut" style="margin-top:10px"></p></section>`;
+}
+
 /* ---------- バックアップ ---------- */
 function exportBackup(){
   const data = { app: 'hoikushi-anki-note', version: 1, exportedAt: new Date().toISOString(), progress: P, user: U };
@@ -1515,6 +1689,7 @@ function importBackup(file){
  * 操作
  * ========================================================= */
 document.addEventListener('click', ev => {
+  SFX.unlock();
   const el = ev.target.closest('[data-act]');
   if (!el) return;
   const act = el.dataset.act, v = el.dataset.v, S = state.setup;
@@ -1535,7 +1710,7 @@ document.addEventListener('click', ev => {
     case 'quickReview': quickReview(); break;
     case 'sbucket': { const k = cur().a, B = S.buckets[k]; B.has(v) ? B.delete(v) : B.add(v); render(cur(), true); break; }
     case 'sall': S.buckets[cur().a] = new Set(ORDER); render(cur(), true); break;
-    case 'sreview': S.buckets[cur().a] = new Set(['wrong', 'unsure']); render(cur(), true); break;
+    case 'sreview': S.buckets[cur().a] = new Set(WEAK); render(cur(), true); break;
     case 'scat': { const s = selectedCats(cur().a, cur().u); s.has(v) ? s.delete(v) : s.add(v); render(cur(), true); break; }
     case 'scount': S.count = v === 'all' ? 'all' : +v; render(cur(), true); break;
     case 'ssets': S.sets = +v; render(cur(), true); break;
@@ -1607,6 +1782,13 @@ document.addEventListener('click', ev => {
     }
     case 'oneKind': state.one.kind = v; render(cur(), true); break;
     case 'exportBackup': exportBackup(); break;
+    case 'dontknow': choose(-1); break;
+    case 'sortDontKnow': sortDontKnow(); break;
+    case 'resume': resumeSession(); break;
+    case 'discardSession': if (confirm('中断中の問題を破棄しますか？（振り分けは残ります）')) { clearSession(); render(cur(), true); } break;
+    case 'toggleSound': SET.sound = !SET.sound; saveSet(); if (SET.sound) { SFX.unlock(); SFX.correct(); } if (cur().v === 'round') renderTop(); else render(cur(), true); toast(`効果音を${SET.sound ? 'オン' : 'オフ'}にしました`); break;
+    case 'toggleRuby': SET.ruby = !SET.ruby; saveSet(); render(cur(), true); break;
+    case 'goRuby': go({ v: 'ruby' }); break;
     case 'resetAll':
       if (confirm('すべての学習記録（振り分け）を消去します。編集・メモ・追加した問題は残ります。よろしいですか？')) { P = blankP(); saveP(); render(cur(), true); toast('リセットしました'); }
       break;
@@ -1616,11 +1798,20 @@ document.addEventListener('submit', ev => {
   ev.preventDefault();
   if (ev.target.id === 'editForm') { if (saveEdit(ev.target)) { afterDataChange(); toast('保存しました'); } }
   else if (ev.target.id === 'oneForm') submitOne();
+  else if (ev.target.id === 'rubyForm') {
+    const m = {};
+    for (const ln of document.getElementById('rubyText').value.split('\n')) {
+      const mm = ln.match(/^\s*([^=＝]+?)\s*[=＝]\s*(.*?)\s*$/);
+      if (mm) m[mm[1]] = mm[2];
+    }
+    U.ruby = m; saveU(); buildRuby(); render(cur(), true); toast('保存しました');
+  }
 });
 document.addEventListener('input', ev => {
   const t = ev.target;
   if (t.matches && t.matches('textarea.ta:not(.big)')) autoGrow(t);
   if (t.id === 'dictQ') { state.dict.q = t.value; drawDict(); }
+  else if (t.id === 'rubyQ') { const v = t.value.trim(); document.getElementById('rubyOut').innerHTML = v ? (RUBY_MAP[v] ? rb(v) + '　' + esc(RUBY_MAP[v]) : rb(v)) : ''; }
   else if (t.id === 'bulkText') { state.bulk.text = t.value; onBulkInput(); }
   else if (t.id === 'bulkNew') state.bulk.newName = t.value;
   else if (t.id === 'oneNew') state.one.newName = t.value;
@@ -1642,6 +1833,7 @@ document.addEventListener('keydown', ev => {
   const r = state.round;
   if (cur().v !== 'round' || !r || !r.cur || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName) || !document.getElementById('modal').hidden) return;
   if (r.cur.type === 'quiz' && r.cur.picked === null && /^[1-4]$/.test(ev.key)) { choose(+ev.key - 1); ev.preventDefault(); }
+  else if (r.cur.type === 'quiz' && r.cur.picked === null && (ev.key === '0' || ev.key === '?')) { choose(-1); ev.preventDefault(); }
   else if (ev.key === 'Enter' && ev.target.classList.contains('sitem')) { pickItem(+ev.target.dataset.v); ev.preventDefault(); }
 });
 
