@@ -644,6 +644,55 @@ ruby{ruby-align:center}
 .resume .mi{background:var(--primary);color:var(--on-primary)}
 .sitem.reveal{border-color:var(--b-unknown);cursor:default}
 .sitem.reveal .no{color:var(--b-unknown)}
+
+/* ---------- 施設の職員配置 ---------- */
+:root{--mark:#C8564B}
+.smk{display:inline-grid;place-items:center;width:1.3em;font-weight:700;color:var(--mark);line-height:1}
+.smk-none{color:var(--muted);font-weight:400}
+.slegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:var(--fs-label);color:var(--ink2);margin:10px 0 14px}
+.slegend span{display:inline-flex;align-items:center;gap:2px}
+.qscale{display:inline-block;font-size:var(--fs-body-sm);font-weight:600;color:var(--ink2);background:var(--surface2);border-radius:6px;padding:0 8px;margin:0 4px;vertical-align:.15em}
+.sscale{display:inline-block;margin-left:8px;font-size:var(--fs-caption);color:var(--muted);font-weight:500}
+.sgrid{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px 10px 14px}
+.srow+.srow{border-top:1px solid var(--line)}
+.srow.picked{background:var(--tint)}
+.sname{font-size:var(--fs-body-sm);line-height:1.45;font-weight:500}
+.spick{display:flex;gap:4px}
+.spick button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-subhead);font-weight:700;color:var(--mark);display:grid;place-items:center;padding:0;transition:background .12s,border-color .12s,color .12s}
+.spick button.smk-none{color:var(--muted);font-weight:400}
+.spick button[aria-checked="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.sres-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.sres{padding:12px 14px}
+.sres+.sres{border-top:1px solid var(--line)}
+.sres.ng{background:color-mix(in srgb,var(--b-wrong) 8%,var(--surface))}
+.sres-h{display:flex;align-items:center;gap:8px}
+.sres-ic{width:18px;flex:none;display:grid;place-items:center}
+.sres-ic .i{width:16px;height:16px;stroke-width:2.4}
+.sres.ok .sres-ic{color:var(--b-correct)}
+.sres.ng .sres-ic{color:var(--b-wrong)}
+.sres-n{flex:1;font-weight:600;font-size:var(--fs-body-sm);line-height:1.45}
+.sres-a{display:inline-flex;align-items:center;gap:2px;font-size:var(--fs-subhead);flex:none}
+.sres-a small{font-size:var(--fs-caption);color:var(--ink2);font-weight:500;margin-left:2px}
+.smine{margin:4px 0 0 26px;font-size:var(--fs-label);color:var(--b-wrong);font-weight:600;display:flex;align-items:center;gap:2px}
+.sres-w{margin:6px 0 0 26px;font-size:var(--fs-body-sm);color:var(--ink2);line-height:1.75}
+.sres.is-none .sres-w{color:var(--muted)}
+.sres-rest{font-size:var(--fs-label);color:var(--muted);margin:10px 2px 0;line-height:1.7}
+.stable-wrap{overflow-x:auto;margin:4px -4px 8px;padding:0 4px;-webkit-overflow-scrolling:touch}
+.stable{border-collapse:separate;border-spacing:0;font-size:var(--fs-caption);width:100%}
+.stable th,.stable td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 4px;text-align:center;line-height:1.35}
+.stable tr>:first-child{border-left:1px solid var(--line)}
+.stable thead th{border-top:1px solid var(--line)}
+.stable thead th{background:var(--surface2);font-weight:600;vertical-align:bottom}
+.stable thead th small{display:block;font-weight:400;color:var(--muted)}
+.stable thead th:not(:first-child){min-width:4.2em}
+.stable thead th:first-child{position:sticky;left:0;z-index:2}
+.stable tbody th{text-align:left;font-weight:500;background:var(--surface2);min-width:7.5em;max-width:8.5em;position:sticky;left:0;z-index:1}
+.stable td{font-size:var(--fs-body)}
+.stable td.merged{color:var(--muted);font-size:var(--fs-caption)}
+.stips{margin:0;padding-left:1.2em;font-size:var(--fs-body-sm);line-height:1.8}
+.stips li+li{margin-top:6px}
+@media (max-width:370px){ .spick button{width:36px;height:38px} .srow{padding-left:10px} }
 </style>
 </head>
 <body>
@@ -671,13 +720,14 @@ ruby{ruby-align:center}
 <script src="hoiku-genri.js"></script>
 <script src="hoiku-shinri.js"></script>
 <script src="seido-nengo.js"></script>
+<script src="shokuin-haichi.js"></script>
 <script src="ruby.js"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.0.6';
-const APP_BUILD = '2026-10-19';
+const APP_VERSION = '1.0.7';
+const APP_BUILD = '2026-10-20';
 
 /* =========================================================
  * ユーティリティ・アイコン
@@ -728,6 +778,7 @@ const ICONS = {
   sprout: '<path d="M7 20h10M12 20v-8"/><path d="M12 12c-3.5 0-6-2-6-6 3.5 0 6 2 6 6zM12 12c0-3.5 2.5-6 6-6 0 4-2.5 6-6 6z"/>',
   calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   trash: '<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/>',
+  building: '<path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01M12 10h.01"/>',
   refresh: '<path d="M21 12a9 9 0 1 1-9-9 9.8 9.8 0 0 1 6.7 2.7L21 8"/><path d="M21 3v5h-5"/>'
 };
 const I = (name, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ICONS.book}</svg>`;
@@ -756,6 +807,7 @@ const HELP = {
   dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。単元や分野で絞りたいときは「絞り込み」を使います。\n\n「用語・人物」と「年表」は、件数の左のプルダウンで切り替えます。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
+  staff: ['施設の職員配置', '施設ごとに、すべての職種について次の4つから選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n\nすべての職種が合っていれば正解です。答え合わせのあと、職種ごとの理由と、施設のポイントが出ます。'],
   one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
 };
 const help = key => `<button class="help" data-act="help" data-v="${key}" aria-label="説明を見る">?</button>`;
@@ -764,7 +816,7 @@ const help = key => `<button class="help" data-act="help" data-v="${key}" aria-l
  * 保存（学習記録 P と、ユーザーの編集・追加 U）
  * ========================================================= */
 const PKEY = 'hoikushi-anki-v2', UKEY = 'hoikushi-anki-user-v1';
-const blankP = () => ({ q: {}, e: {}, best: 0 });
+const blankP = () => ({ q: {}, e: {}, s: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP);
@@ -912,7 +964,7 @@ const saveU = () => { try { localStorage.setItem(DBKEY, JSON.stringify(U)); } ca
  * ========================================================= */
 let UNITS, unitById, TERMS, QUESTIONS, EVENTS, termByKey, termByName, qById, eById, WARNINGS;
 const yearLabel = e => `${e.year}年${e.era ? `（${e.era}）` : ''}`;
-const unitName = id => id === 'all' ? 'すべての単元' : (unitById.get(id)?.name || id);
+const unitName = id => id === 'all' ? 'すべての単元' : id === 'staff' ? '施設の職員配置' : (unitById.get(id)?.name || id);
 const termIn = (unit, name) => termByName.get(unit + '::' + name);
 function buildData(){
   UNITS = U.units.map((u, i) => ({ ...u, order: i }));
@@ -1028,7 +1080,7 @@ function linkedTerms(unit, texts, skip){
 /* =========================================================
  * 画面遷移（戻るボタン・端末の戻る操作に対応）
  * ========================================================= */
-const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ' };
+const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ', staff: '施設の職員配置' };
 const routeTitle = r => r.v === 'unit' ? unitName(r.a) : (TITLES[r.v] || '');
 const TAB_ROOTS = ['home', 'list', 'dict', 'data'];
 const stack = [];
@@ -1133,7 +1185,7 @@ function restoreNav(){
   let s = null;
   try { s = JSON.parse(localStorage.getItem(NAVKEY) || 'null'); } catch (_) {}
   if (!s || !Array.isArray(s.stack) || Date.now() - s.t > 12 * 3600e3) return false;
-  const known = ['home', 'unit', 'setup', 'round', 'result', 'list', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
+  const known = ['home', 'staff', 'unit', 'setup', 'round', 'result', 'list', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
   const ok = r => r && known.includes(r.v) && (r.v !== 'unit' || r.a === 'all' || unitById.has(r.a)) && (r.v !== 'setup' || r.u === 'all' || unitById.has(r.u));
   let st = s.stack.filter(ok);
   if (s.round && Array.isArray(s.round.items)) {
@@ -1159,6 +1211,7 @@ function render(r, keep){
   if (!keep) scrollTo(0, 0);
   switch (r.v) {
     case 'unit': renderUnit(r.a); break;
+    case 'staff': if (ST) renderStaffHome(); else renderHome(); break;
     case 'setup': renderSetup(r); break;
     case 'round': if (state.round) renderItem(); else renderHome(); break;
     case 'result': if (state.round) renderResult(); else renderHome(); break;
@@ -1359,7 +1412,15 @@ function renderHome(){
     <h2 class="stitle">単元</h2>
     <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
   </section>
-  <section class="sect"><div class="menu">${unitRow('all')}</div></section>`;
+  <section class="sect"><div class="menu">${unitRow('all')}</div></section>
+  ${ST ? (() => { const c = countB('s', ST.facilities); return `<section class="sect">
+    <h2 class="stitle">表で覚える</h2>
+    <div class="menu"><button class="mrow urow" data-act="goStaff">
+      <span class="mi">${I('building')}</span>
+      <span class="mtx"><span class="mt">${esc(ST.title)}</span>
+      <span class="ms">${ST.facilities.length}施設　正解 ${c.correct}／${c.total}</span>
+      <span class="mbar">${stackBar(c)}</span></span>${I('chev', 'mchev')}</button></div>
+  </section>`; })() : ''}`;
 
 }
 
@@ -1506,12 +1567,12 @@ function renderItem(){
   const r = state.round;
   while (r.i < r.items.length) {   // 削除された問題は飛ばす
     const it = r.items[r.i];
-    if (it.type === 'quiz' ? qById.has(it.id) : it.ids.every(id => eById.has(id))) break;
+    if (it.type === 'quiz' ? qById.has(it.id) : it.type === 'staff' ? !!sFac(it.id) : it.ids.every(id => eById.has(id))) break;
     r.i++;
   }
   if (r.i >= r.items.length) { finishRound(); return; }
   const it = r.items[r.i];
-  if (it.type === 'quiz') renderQuiz(it); else renderSort(it);
+  if (it.type === 'quiz') renderQuiz(it); else if (it.type === 'staff') renderStaff(it); else renderSort(it);
 }
 const prevTag = (k, id) => { const b = bucket(k, id); return b === 'new' ? '' : `<span class="prev"><span class="dot b-${b}"></span>前回 ${BL[b]}</span>`; };
 const unsureToggle = () => `<label class="toggle"><input type="checkbox" id="unsure"><span class="sw" aria-hidden="true"></span><span>自信がない</span></label>`;
@@ -1676,10 +1737,151 @@ function next(){
 }
 
 /* =========================================================
+ * 施設の職員配置（1施設＝1問。全職種に ●○△－ を付けて答え合わせ）
+ * ========================================================= */
+const ST = window.STAFFING || null;
+const SMARKS = ['must', 'cond', 'opt', 'none'];
+const sFac = id => ST && ST.facilities.find(f => f.id === id);
+const sFacName = f => f.scale ? `${f.name}（${f.scale}）` : f.name;
+function staffRows(f){
+  return ST.staff.filter(s => !(f.hide || []).includes(s.id)).map(s => {
+    const cell = f.cells[s.id];
+    return { id: s.id, label: (f.label || {})[s.id] || s.name, role: s.role, code: cell ? cell[0] : 'none', why: cell ? cell[1] : ((f.none || {})[s.id] || '') };
+  });
+}
+const sSym = code => `<span class="smk smk-${code}">${ST.marks[code].sym}</span>`;
+const sLegend = () => `<div class="slegend">${SMARKS.map(m => `<span>${sSym(m)}${ST.marks[m].label}</span>`).join('')}</div>`;
+const sWeakN = () => ST ? ST.facilities.filter(f => isWeak(bucket('s', f.id))).length : 0;
+
+function renderStaffHome(){
+  state.round = null;
+  const fs = ST.facilities, c = countB('s', fs), weak = sWeakN();
+  app.innerHTML = `
+  <span class="uicon">${I('building')}</span>
+  <h1 class="ptitle">${esc(ST.title)} ${help('staff')}</h1>
+  <p class="psub">「${esc(ST.source)}」による職員配置。施設ごとに、すべての職種が必置か・条件で置くかを答えます。</p>
+  <section class="sect">
+    <h2 class="stitle">学習する</h2>
+    <div class="menu">
+      <button class="mrow" data-act="staffAll"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">全施設を解く</span><span class="ms">${fs.length}問（1施設1問・順番はランダム）</span></span>${I('chev', 'mchev')}</button>
+      ${weak ? `<button class="mrow accent" data-act="staffWeak"><span class="mi">${I('retry')}</span><span class="mtx"><span class="mt">苦手を復習</span><span class="ms">不正解・わからない・自信なし ${weak}問</span></span>${I('chev', 'mchev')}</button>` : ''}
+      <button class="mrow" data-act="staffTable"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">早見表</span><span class="ms">全施設の一覧と覚えるコツ</span></span>${I('chev', 'mchev')}</button>
+    </div>
+  </section>
+  <section class="sect">
+    <h2 class="stitle">施設を選んで解く</h2>
+    <div class="menu">${fs.map(f => { const b = bucket('s', f.id); return `<button class="mrow" data-act="staffOne" data-v="${esc(f.id)}"><span class="mtx"><span class="mt">${rb(f.name)}${f.scale ? `<small class="sscale">${esc(f.scale)}</small>` : ''}</span><span class="ms"><span class="dot b-${b}"></span> ${BL[b]}</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>
+  </section>
+  <section class="sect"><div class="panel"><div class="ov"><div class="ovh"><span>振り返り</span><span class="muted">${c.total}問</span></div>${stackBar(c)}${legend(c)}</div></div></section>`;
+}
+function staffStart(ids){
+  startRound(ids.map(id => ({ type: 'staff', id })), { unit: 'staff', kind: 'staff' });
+}
+
+function renderStaff(it){
+  const f = sFac(it.id), rows = staffRows(f);
+  state.round.cur = { type: 'staff', id: f.id, ans: {}, done: false, ok: null, unsure: false };
+  app.innerHTML = `
+  <p class="meta"><span>${esc(ST.title)}</span>${prevTag('s', f.id)}</p>
+  <h1 class="qtext">${rb(f.name)}${f.scale ? `<span class="qscale">${esc(f.scale)}</span>` : ''}の職員配置は？</h1>
+  ${sLegend()}
+  <div class="sgrid" id="sgrid">${rows.map(r => `<div class="srow" data-row="${r.id}">
+    <span class="sname">${rb(r.label)}</span>
+    <span class="spick" role="radiogroup" aria-label="${esc(r.label)}">${SMARKS.map(m => `<button type="button" role="radio" aria-checked="false" data-act="spick" data-r="${r.id}" data-v="${m}" aria-label="${ST.marks[m].label}" class="smk-${m}">${ST.marks[m].sym}</button>`).join('')}</span>
+  </div>`).join('')}</div>
+  ${unsureToggle()}
+  <div id="fb"><div class="actionbar"><button class="btn primary block" data-act="submitStaff" id="sSubmit" disabled>${staffLeftLabel(rows.length)}</button>
+    <button class="btn block" style="margin-top:8px" data-act="staffDontKnow">${I('question')}わからない（答えを見る）</button></div></div>`;
+}
+const staffLeftLabel = n => n ? `あと${n}職種を選んでください` : '答え合わせ';
+function staffPick(el){
+  const c = state.round && state.round.cur;
+  if (!c || c.type !== 'staff' || c.done) return;
+  c.ans[el.dataset.r] = el.dataset.v;
+  el.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-checked', b === el ? 'true' : 'false'));
+  el.closest('.srow').classList.add('picked');
+  const left = staffRows(sFac(c.id)).filter(r => !c.ans[r.id]).length, btn = document.getElementById('sSubmit');
+  btn.disabled = left > 0; btn.textContent = staffLeftLabel(left);
+}
+function staffFinish(unknown){
+  const c = state.round.cur;
+  if (!c || c.type !== 'staff' || c.done) return;
+  const rows = staffRows(sFac(c.id));
+  if (!unknown && rows.some(r => !c.ans[r.id])) return;
+  c.done = true; c.unknown = !!unknown;
+  c.marks = rows.map(r => !unknown && c.ans[r.id] === r.code);
+  c.ok = !unknown && c.marks.every(Boolean);
+  c.unsure = !unknown && document.getElementById('unsure').checked;
+  recordAnswer('s', c.id, c.ok, c.unsure, c.unknown);
+  state.streak = c.ok ? state.streak + 1 : 0;
+  if (state.streak > P.best) P.best = state.streak;
+  saveP(); persistNav();
+  if (unknown) SFX.unknown(); else if (!c.ok) SFX.wrong(); else SFX.correct(state.streak);
+  document.querySelector('.toggle').hidden = true;
+  document.getElementById('sgrid').hidden = true;
+  document.querySelector('.slegend').hidden = true;
+  renderStaffFeedback(true);
+}
+function renderStaffFeedback(first){
+  const c = state.round.cur, f = sFac(c.id), rows = staffRows(f);
+  const okN = c.marks.filter(Boolean).length;
+  const vb = c.unknown ? 'unknown' : c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
+  const head = c.unknown ? 'わからない' : c.ok ? (state.streak >= 3 ? `全問正解　${state.streak}連続` : '全問正解') : `${rows.length}職種中${okN}職種が正解`;
+  const sub = c.unknown ? '答えと理由を読んで、次は答えられるようにしましょう' : c.ok ? (c.unsure ? '「自信なし」に振り分けました' : 'この施設の配置は完璧です') : 'まちがえた職種の理由を確認しておきましょう';
+  /* 規定のある職種を先に、まちがえた職種は目立たせる */
+  const item = (r, k) => {
+    const mine = c.ans[r.id], ng = !c.unknown && !c.marks[k];
+    return `<li class="sres ${ng ? 'ng' : c.unknown ? '' : 'ok'} ${r.code === 'none' ? 'is-none' : ''}">
+      <div class="sres-h"><span class="sres-ic">${c.unknown ? '' : I(ng ? 'x' : 'check')}</span><span class="sres-n">${rb(r.label)}</span>
+        <span class="sres-a">${sSym(r.code)}<small>${ST.marks[r.code].label}</small></span></div>
+      ${ng ? `<p class="smine">あなたの答え：${sSym(mine)}${ST.marks[mine].label}</p>` : ''}
+      ${r.why ? `<p class="sres-w">${rb(r.why)}</p>` : ''}
+    </li>`;
+  };
+  const withIdx = rows.map((r, k) => ({ r, k }));
+  const listed = withIdx.filter(x => x.r.code !== 'none' || x.r.why || (!c.unknown && !c.marks[x.k]));
+  const rest = withIdx.filter(x => !listed.includes(x));
+  document.getElementById('fb').innerHTML = `
+  <div class="verdict b-${vb}"><span class="vi">${I(c.unknown ? 'book' : c.ok ? 'check' : 'x')}</span><div><b>${head}</b><span class="vs">${sub}</span></div></div>
+  <section class="block"><h3>答えと理由</h3><ul class="sres-list">${listed.map(x => item(x.r, x.k)).join('')}</ul>
+    ${rest.length ? `<p class="sres-rest">${sSym('none')} 規定なし：${rest.map(x => rb(x.r.label)).join('、')}</p>` : ''}</section>
+  <section class="block note"><h3>この施設のポイント</h3><p class="prose">${rb(f.point)}</p></section>
+  ${f.scaleNote ? `<section class="block"><h3>人数規模による違い</h3><p class="prose">${rb(f.scaleNote)}</p></section>` : ''}
+  ${f.memo ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(f.memo)}</p></section>` : ''}
+  <details class="block"><summary>どんな施設？${I('chevD')}</summary><p class="prose">${rb(f.purpose)}</p></details>
+  <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('s', f.id)}</section>
+  <div class="btnrow"><button class="textbtn" data-act="staffTable">${I('book')}早見表で全施設と比べる</button></div>
+  ${nextBar(isLast() ? '結果を見る' : '次の施設へ')}`;
+  if (first) {
+    document.getElementById('nextBtn').focus({ preventScroll: true });
+    setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }), 120);
+  }
+}
+
+function openStaffTable(){
+  const fs = ST.facilities;
+  const head = fs.map(f => `<th scope="col">${rb(f.name)}${f.scale ? `<small>${esc(f.scale.replace('乳幼児', ''))}</small>` : ''}</th>`).join('');
+  const body = ST.staff.map(s => `<tr><th scope="row">${rb(s.name)}</th>${fs.map(f => {
+    if ((f.hide || []).includes(s.id)) return `<td class="merged">↑</td>`;
+    const cell = f.cells[s.id], code = cell ? cell[0] : 'none';
+    return `<td>${code === 'none' ? '' : sSym(code)}</td>`;
+  }).join('')}</tr>`).join('');
+  openModal(`
+    <h2>${esc(ST.title)}の早見表</h2>
+    <p class="kana">${esc(ST.source)}</p>
+    ${sLegend()}
+    <div class="stable-wrap"><table class="stable"><thead><tr><th scope="col">職種</th>${head}</tr></thead><tbody>${body}</tbody></table></div>
+    <p class="hint">乳児院（10人以上）は「医師または嘱託医」で1つの欄（↑）。表は横にスクロールできます。</p>
+    <section class="block note"><h3>覚えるコツ</h3><ul class="stips">${ST.tips.map(t => `<li>${rb(t)}</li>`).join('')}</ul></section>
+    <section class="block"><h3>職種の役割</h3><div class="rel">${ST.staff.map(s => `<div><strong style="flex:none;min-width:8.5em">${rb(s.name)}</strong><span>${rb(s.role)}</span></div>`).join('')}</div></section>`);
+}
+
+/* =========================================================
  * 結果
  * ========================================================= */
 function unitBucket(x){
   if (x.item.type === 'quiz') return bucket('q', x.item.id);
+  if (x.item.type === 'staff') return bucket('s', x.item.id);
   const bs = x.item.ids.map(id => bucket('e', id));
   return bs.includes('wrong') ? 'wrong' : bs.includes('unknown') ? 'unknown' : bs.includes('unsure') ? 'unsure' : 'correct';
 }
@@ -1690,6 +1892,7 @@ function renderResult(){
   const review = res.filter(x => isWeak(unitBucket(x)));
   const qIds = uniq(res.filter(x => x.item.type === 'quiz').map(x => x.item.id)).filter(id => qById.has(id));
   const eIds = uniq(res.filter(x => x.item.type === 'sort').flatMap(x => x.item.ids)).filter(id => eById.has(id));
+  const sIds = uniq(res.filter(x => x.item.type === 'staff').map(x => x.item.id)).filter(id => sFac(id));
   app.innerHTML = `
   <p class="psub" style="margin:0 0 4px">${esc(unitName(r.origin.unit))}</p>
   <h1 class="ptitle">おつかれさまでした</h1>
@@ -1698,13 +1901,14 @@ function renderResult(){
   <div class="btns" style="margin-top:20px">
     ${review.length ? `<button class="btn primary block" data-act="retryReview">苦手をもう一度（${review.length}）</button>` : ''}
     <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
-    <button class="btn block" data-act="setupAgain">条件を変えて解く</button>
+    <button class="btn block" data-act="setupAgain">${r.origin.kind === 'staff' ? '施設を選び直す' : '条件を変えて解く'}</button>
   </div>
   <div class="foot"><button class="textbtn" data-act="back">終了する</button></div>
   <section class="sect">
     <h2 class="stitle">今回の問題</h2>
     ${qIds.length ? `<ul class="rows">${qIds.map(id => qRow(qById.get(id), r.origin.unit === 'all')).join('')}</ul>` : ''}
     ${eIds.length ? `<ul class="rows" style="margin-top:12px">${eIds.map(id => eRow(eById.get(id))).join('')}</ul>` : ''}
+    ${sIds.length ? `<div class="menu">${sIds.map(id => { const f = sFac(id), b = bucket('s', id); return `<button class="mrow" data-act="staffOne" data-v="${esc(id)}"><span class="dot b-${b}"></span><span class="mtx"><span class="mt">${rb(sFacName(f))}</span><span class="ms">${BL[b]}　もう一度解く</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>` : ''}
   </section>`;
 }
 function retry(kind){
@@ -2762,6 +2966,14 @@ async function onAction(el, ev){
     case 'back': uiBack(); break;
     case 'help': showTip(el, v); break;
     case 'goUnit': go({ v: 'unit', a: v }); break;
+    case 'goStaff': go({ v: 'staff' }); break;
+    case 'staffAll': staffStart(ST.facilities.map(f => f.id)); break;
+    case 'staffWeak': staffStart(ST.facilities.filter(f => isWeak(bucket('s', f.id))).map(f => f.id)); break;
+    case 'staffOne': staffStart([v]); break;
+    case 'staffTable': openStaffTable(); break;
+    case 'spick': staffPick(el); break;
+    case 'submitStaff': staffFinish(false); break;
+    case 'staffDontKnow': staffFinish(true); break;
     case 'unitList':
       state.list.kind = QUESTIONS.some(q => q.unit === state.unit) ? 'quiz' : 'sort';
       state.search.list = { ...blankSearchState(), unit: state.unit !== 'all' ? state.unit : '' };
@@ -2802,6 +3014,7 @@ async function onAction(el, ev){
     case 'retryAll': retry('all'); break;
     case 'setupAgain': {
       const o = state.round.origin, prev = stack[stack.length - 2];
+      if (o.kind === 'staff') { if (prev && prev.v === 'staff') uiBack(); else go({ v: 'staff' }, 'replace'); break; }
       if (prev && prev.v === 'setup') uiBack(); else go({ v: 'setup', a: o.kind === 'sort' ? 'sort' : 'quiz', u: o.unit }, 'replace');
       break;
     }
