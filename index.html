@@ -744,6 +744,56 @@ ruby{ruby-align:center}
 .gseg button{min-height:34px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:600;color:var(--ink2)}
 .gseg button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
 .dback{margin:-4px 0 10px}
+/* 進み具合 */
+.prog .ptop{display:flex;align-items:center;gap:20px}
+.pring{position:relative;flex:none;width:112px;height:112px}
+.ring{transform:rotate(-90deg);display:block}
+.ring circle{fill:none;stroke-width:12}
+.ring .rg-bg{stroke:var(--surface2)}
+.ring .rg-ok{stroke:var(--b-correct);stroke-linecap:butt}
+.ring .rg-weak{stroke:var(--b-wrong);opacity:.75}
+.pring-t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pring-t b{font-size:30px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.pring-t b small{font-size:14px;margin-left:1px}
+.pring-t span{font-size:var(--fs-micro);color:var(--muted);margin-top:4px}
+.pnums{flex:1;display:grid;gap:8px;min-width:0}
+.pnums div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.pnums div:last-child{border-bottom:0;padding-bottom:0}
+.pnums span{font-size:var(--fs-caption);color:var(--muted)}
+.pnums b{font-size:var(--fs-title);font-weight:700;font-variant-numeric:tabular-nums}
+.pnums b small{font-size:var(--fs-caption);color:var(--muted);font-weight:500}
+.pnums .hot b{color:var(--b-wrong)}
+.pgoal{margin:14px 0 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--b-correct) 9%,var(--surface));font-size:var(--fs-body-sm);line-height:1.6}
+.pgoal b{color:var(--b-correct);font-size:var(--fs-body)}
+.prows{margin-top:16px;display:grid;gap:14px}
+.prh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.prl{font-weight:700;font-size:var(--fs-body-sm)}
+.prn{font-size:var(--fs-body-sm);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prn small{color:var(--muted);font-weight:500;font-size:var(--fs-caption)}
+.prn em{font-style:normal;margin-left:8px;color:var(--b-correct)}
+.prs{margin:5px 0 0;font-size:var(--fs-micro);color:var(--muted)}
+.pbar{display:flex;gap:2px;height:10px;border-radius:5px;overflow:hidden;background:var(--surface2)}
+.pbar.sm{height:6px;border-radius:3px}
+.pbar i{display:block;min-width:3px}
+.p-ok{background:var(--b-correct)} .p-weak{background:var(--b-wrong);opacity:.75} .p-new{background:var(--surface2)}
+.plegend{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 0;font-size:var(--fs-micro);color:var(--muted)}
+.plegend span{display:inline-flex;align-items:center;gap:5px}
+.plegend i{display:inline-block;width:10px;height:10px;border-radius:3px}
+.plegend .p-new{background:var(--line)}
+.upct{float:right;font-size:var(--fs-label);color:var(--b-correct);font-variant-numeric:tabular-nums;margin-left:8px}
+.act .acth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.act .acth div{display:flex;flex-direction:column;gap:2px}
+.act .acth span{font-size:var(--fs-caption);color:var(--muted)}
+.act .acth b{font-size:26px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.act .acth b small{font-size:var(--fs-caption);color:var(--muted);font-weight:500;margin-left:2px}
+.aweek{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px;align-items:end}
+.ad{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ab{display:flex;align-items:flex-end;width:100%;max-width:28px;height:44px;background:var(--surface2);border-radius:6px;overflow:hidden}
+.ab i{display:block;width:100%;background:var(--primary);opacity:.55;border-radius:6px 6px 0 0}
+.ad.today .ab i{opacity:1}
+.al{font-size:var(--fs-micro);color:var(--muted)}
+.ad.today .al{color:var(--ink);font-weight:700}
+.amsg{margin:12px 0 0;font-size:var(--fs-caption);color:var(--muted)}
 /* 早見表 */
 .msheet.wide{max-width:min(1100px,100%)}
 @media (min-width:700px){.msheet.wide{max-width:min(1100px,94vw);max-height:92vh}}
@@ -901,19 +951,19 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.11.0"></script>
-<script src="hoiku-genri.js?v=1.11.0"></script>
-<script src="hoiku-shinri.js?v=1.11.0"></script>
-<script src="seido-nengo.js?v=1.11.0"></script>
-<script src="shokuin-haichi.js?v=1.11.0"></script>
-<script src="kodomo-hoken.js?v=1.11.0"></script>
-<script src="kodomo-hattatsu.js?v=1.11.0"></script>
-<script src="ruby.js?v=1.11.0"></script>
+<script src="kyoiku-genri.js?v=1.12.0"></script>
+<script src="hoiku-genri.js?v=1.12.0"></script>
+<script src="hoiku-shinri.js?v=1.12.0"></script>
+<script src="seido-nengo.js?v=1.12.0"></script>
+<script src="shokuin-haichi.js?v=1.12.0"></script>
+<script src="kodomo-hoken.js?v=1.12.0"></script>
+<script src="kodomo-hattatsu.js?v=1.12.0"></script>
+<script src="ruby.js?v=1.12.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.11.0';
+const APP_VERSION = '1.12.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -984,6 +1034,7 @@ function toast(text){
 const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・不正解・わからない」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
   buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかをチェックで選びます。いくつでも組み合わせられます。右上の「すべて」「苦手」を押すと、まとめて切り替わります。「苦手」は不正解・わからないをまとめたものです。'],
+  progress: ['進み具合', '覚えることを1件ずつ数えています。\n\n4択は語句ごと（「説明→答え」と「答え→説明」の両方があっても1件）。解いた向きが全部正解なら「正解」、1つでも不正解・わからないなら「苦手」です。○×は1セット（5つの記述）で1件、並べ替えは1問で1件、年号は出来事ごと、職員配置は1施設で1件です。\n\n円の%は、全体のうち正解している割合です。「解いた」は一度でも答えたもの、「苦手」は不正解・わからないの数です。'],
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n答えがわからないときは「わからない」を選ぶと「わからない」に振り分けられます。'],
   resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
@@ -1009,6 +1060,9 @@ const blankP = () => ({ q: {}, e: {}, s: {}, d: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP);
+/* 1.12.0：日ごとの記録がまだないときは、これまでの最後に解いた日から作る */
+if (!P.days) { P.days = {}; for (const k of ['q', 'e', 's', 'd']) for (const r of Object.values(P[k] || {})) if (r && r.t) { const d = dayKeyEarly(r.t); P.days[d] = (P.days[d] || 0) + 1; } }
+function dayKeyEarly(t){ const x = new Date(t); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; }
 /* 1.11.0：「自信なし」をやめた。以前「自信なし」に振り分けたものは「わからない」に移す */
 (() => { let ch = false; for (const k of Object.keys(P)) { const m = P[k]; if (m && typeof m === 'object') for (const r of Object.values(m)) if (r && r.b === 'unsure') { r.b = 'unknown'; ch = true; } } if (ch) try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) {} })();
 /* ---------- 問題の置き場（ひとつだけ） ----------
@@ -1274,7 +1328,10 @@ function recordAnswer(k, id, ok, unsure, unknown){
   const r = P[k][id] || { n: 0, ok: 0 };
   r.n++; if (ok) r.ok++;
   r.b = unknown ? 'unknown' : ok ? (unsure ? 'unsure' : 'correct') : 'wrong'; r.t = Date.now(); P[k][id] = r;
+  const d = dayKey(); P.days = P.days || {}; P.days[d] = (P.days[d] || 0) + 1;
 }
+/* 学習した日の記録（日付ごとの解いた数）。日付は端末の時刻で数える */
+function dayKey(t = Date.now()){ const x = new Date(t); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; }
 function countB(k, list){ const c = { new: 0, unknown: 0, wrong: 0, unsure: 0, correct: 0, total: list.length }; list.forEach(x => c[bucket(k, x.id)]++); return c; }
 const inUnit = (list, unit) => unit === 'all' ? list : list.filter(x => x.unit === unit);
 
@@ -1632,6 +1689,84 @@ function selectedCats(kind, unit){
 }
 
 /* ---------- 共通パーツ ---------- */
+/* =========================================================
+ * 進み具合
+ *   「1つ覚えること」を1件として数える：
+ *   ・4択 … 語句ごと（説明→答え・答え→説明の両方があっても1件。解いた向きのうち1つでも不正解・わからないなら苦手、全部正解なら正解）
+ *   ・○× … 1セット（5つの記述）で1件　・並べ替え … 1問で1件
+ *   ・年号 … 出来事ごと　・職員配置 … 1施設で1件
+ * ========================================================= */
+function termStatus(qs){
+  const bs = qs.map(q => bucket('q', q.id)).filter(b => b !== 'new');
+  if (!bs.length) return 'new';
+  return bs.includes('wrong') ? 'wrong' : bs.includes('unknown') ? 'unknown' : 'correct';
+}
+/* 単元（または子どもの保健の分野）の項目。kind ごとに件数を出せるよう { kind, b } の列で返す */
+function progressItems(unit, genre){
+  const out = [], byTerm = new Map();
+  for (const q of inUnit(QUESTIONS, unit)) {
+    if (genre && genreOf(q.cat) !== genre) continue;
+    const k = q.termKey || q.id; if (!byTerm.has(k)) byTerm.set(k, []); byTerm.get(k).push(q);
+  }
+  for (const qs of byTerm.values()) out.push({ kind: '語句', b: termStatus(qs), u: qs[0].unit });
+  for (const x of devIn(unit)) if (!genre || devGenre(x) === genre) out.push({ kind: Array.isArray(x.items && x.items[0]) ? '並べ替え' : '○×', b: bucket('d', x.id), u: window.DEVCHECK.unit });
+  if (!genre) {
+    for (const e of inUnit(EVENTS, unit)) out.push({ kind: '年号', b: bucket('e', e.id), u: e.unit });
+    for (const f of staffOf(unit)) out.push({ kind: '職員配置', b: bucket('s', f.id), u: f.unit || unit });
+  }
+  return out;
+}
+function progC(items){ const c = { new: 0, unknown: 0, wrong: 0, correct: 0, total: items.length }; for (const x of items) c[x.b === 'unsure' ? 'unknown' : x.b]++; c.done = c.total - c.new; c.weak = c.wrong + c.unknown; c.pct = c.total ? Math.floor(c.correct / c.total * 100) : 0; return c; }
+const UNIT_KIND = { '語句': '語', '○×': 'セット', '並べ替え': '問', '年号': '件', '職員配置': '施設' };
+function ring(c, size = 112){
+  const seg = (n, off, cls) => n ? `<circle class="${cls}" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="${(n / c.total * 100).toFixed(2)} 100" stroke-dashoffset="${(-off / c.total * 100).toFixed(2)}"/>` : '';
+  return `<svg class="ring" viewBox="0 0 120 120" width="${size}" height="${size}" aria-hidden="true"><circle class="rg-bg" cx="60" cy="60" r="50"/>${c.total ? seg(c.correct, 0, 'rg-ok') + seg(c.weak, c.correct, 'rg-weak') : ''}</svg>`;
+}
+function nextGoal(c){
+  if (!c.total) return '';
+  if (c.correct >= c.total) return 'すべて正解しています。この調子で忘れないうちに見直しを';
+  const th = [10, 25, 50, 75, 90, 100].find(t => c.correct < Math.ceil(c.total * t / 100));
+  const need = Math.ceil(c.total * th / 100) - c.correct;
+  return `あと <b>${need}</b> 件正解で ${th}%${c.weak ? `　苦手 ${c.weak}件を解き直すのが近道です` : ''}`;
+}
+/* 進み具合のカード。rows = [{ label, items }] */
+function progressPanel(items, rows){
+  const c = progC(items);
+  const bar = x => `<div class="pbar" role="img" aria-label="正解${x.correct}、苦手${x.weak}、未回答${x.new}">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</div>`;
+  return `<div class="panel prog">
+    <div class="ptop">
+      <div class="pring">${ring(c)}<div class="pring-t"><b>${c.pct}<small>%</small></b><span>正解</span></div></div>
+      <div class="pnums">
+        <div><span>正解</span><b>${c.correct}<small> / ${c.total}</small></b></div>
+        <div><span>解いた</span><b>${c.done}<small> / ${c.total}</small></b></div>
+        <div class="${c.weak ? 'hot' : ''}"><span>苦手</span><b>${c.weak}</b></div>
+      </div>
+    </div>
+    <p class="pgoal">${nextGoal(c)}</p>
+    ${rows.length > 1 || (rows[0] && rows[0].label) ? `<div class="prows">${rows.map(r => { const x = progC(r.items); return `<div class="prow"><div class="prh"><span class="prl">${esc(r.label)}</span><span class="prn">${x.correct}<small> / ${x.total}${esc(r.unitWord || '')}</small><em>${x.pct}%</em></span></div>${bar(x)}${r.sub ? `<p class="prs">${r.sub}</p>` : ''}</div>`; }).join('')}</div>` : ''}
+    <p class="plegend"><span><i class="p-ok"></i>正解</span><span><i class="p-weak"></i>不正解・わからない</span><span><i class="p-new"></i>未回答</span></p>
+  </div>`;
+}
+const kindRows = items => uniq(items.map(x => x.kind)).map(k => { const its = items.filter(x => x.kind === k); return { label: k === '語句' ? '4択（語句）' : k, items: its, unitWord: UNIT_KIND[k] }; });
+/* 学習の記録（今日・連続日数・この7日） */
+function streakDays(){
+  const days = P.days || {}; let n = 0, t = new Date();
+  if (!days[dayKey(t)]) t.setDate(t.getDate() - 1);
+  while (days[dayKey(t)]) { n++; t.setDate(t.getDate() - 1); }
+  return n;
+}
+function activityCard(){
+  const days = P.days || {}; if (!Object.keys(days).length) return '';
+  const today = days[dayKey()] || 0, st = streakDays();
+  const w = [...Array(7)].map((_, i) => { const t = new Date(); t.setDate(t.getDate() - 6 + i); return { d: t, n: days[dayKey(t)] || 0 }; });
+  const max = Math.max(1, ...w.map(x => x.n)), WD = '日月火水木金土';
+  const total7 = w.reduce((a, x) => a + x.n, 0);
+  return `<section class="sect"><div class="panel act">
+    <div class="acth"><div><span>今日</span><b>${today}<small>問</small></b></div><div><span>連続</span><b>${st}<small>日</small></b></div><div><span>この7日</span><b>${total7}<small>問</small></b></div></div>
+    <div class="aweek">${w.map((x, i) => `<div class="ad ${i === 6 ? 'today' : ''}"><span class="ab"><i style="height:${x.n ? Math.max(8, Math.round(x.n / max * 100)) : 0}%"></i></span><span class="al">${WD[x.d.getDay()]}</span></div>`).join('')}</div>
+    <p class="amsg">${today ? (st >= 3 ? `${st}日続けて学習しています。` : '今日も学習しました。') + 'この調子で続けましょう' : st ? `今日はまだです。解くと ${st + 1}日連続になります` : '今日の1問から始めましょう'}</p>
+  </div></section>`;
+}
 function stackBar(c){
   const segs = ['correct', 'unsure', 'wrong', 'unknown', 'new'].filter(b => c[b]).map(b => `<i class="b-${b}" style="flex:${c[b]}"></i>`).join('');
   return `<div class="sbar" role="img" aria-label="${ORDER.map(b => BL[b] + c[b]).join('、')}">${segs}</div>`;
@@ -1654,17 +1789,18 @@ function renderHome(){
   state.round = null; state.opened.clear();
   const unitRow = id => {
     const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
-    const c = sumC(sumC(sumC(countB('q', qs), countB('e', evs)), countB('s', sf)), countB('d', dv));
-    const parts = [qs.length ? `4択 ${qs.length}問` : '', evs.length ? `年号 ${evs.length}件` : '', sf.length ? `職員配置 ${sf.length}施設` : '', dv.length ? `発達チェック ${dv.length}問` : ''].filter(Boolean).join('　');
+    const items = progressItems(id), c = progC(items);
+    const parts = uniq(items.map(x => x.kind)).map(k => `${k} ${items.filter(x => x.kind === k).length}${UNIT_KIND[k]}`).join('・');
     return `<button class="mrow urow" data-act="goUnit" data-v="${esc(id)}">
       <span class="mi">${I(unitIcon(id))}</span>
-      <span class="mtx"><span class="mt">${esc(unitName(id))}</span>
-      <span class="ms">${parts}${c.total ? `　正解 ${c.correct}／${c.total}` : ''}</span>
-      <span class="mbar">${stackBar(c)}</span></span>${I('chev', 'mchev')}</button>`;
+      <span class="mtx"><span class="mt">${esc(unitName(id))}<span class="upct">${c.total ? `${c.pct}%` : ''}</span></span>
+      <span class="ms">${parts}${c.total ? `　正解 ${c.correct}／${c.total}` : ''}${c.weak ? `　苦手 ${c.weak}` : ''}</span>
+      <span class="mbar"><span class="pbar sm">${c.correct ? `<i class="p-ok" style="flex:${c.correct}"></i>` : ''}${c.weak ? `<i class="p-weak" style="flex:${c.weak}"></i>` : ''}${c.new ? `<i class="p-new" style="flex:${c.new}"></i>` : ''}</span></span></span>${I('chev', 'mchev')}</button>`;
   };
   app.innerHTML = `
   <div class="brandrow"><img class="applogo" src="icon.svg" alt="" width="44" height="44">
     <div><h1 class="ptitle">暗記ノート ${help('home')}</h1><p class="psub">保育士試験の人物・用語・年号</p></div></div>
+  ${activityCard()}
   <section class="sect">
     <h2 class="stitle">単元</h2>
     <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
@@ -1690,8 +1826,8 @@ function renderUnit(id){
   <section class="sect">
     <h2 class="stitle">学習する</h2>
     <div class="menu">
-      ${qs.length ? (dv.length ? DEV_GENRES().map(g => { const nq = qs.filter(q => q.type !== 'rev' && genreOf(q.cat) === g).length, nd = dv.filter(x => devGenre(x) === g).length, wk = [...qs.filter(q => genreOf(q.cat) === g).map(q => bucket('q', q.id)), ...dv.filter(x => devGenre(x) === g).map(x => bucket('d', x.id))].filter(isWeak).length;
-          return `<button class="mrow" data-act="setupG" data-v="${esc(g)}"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">${esc(g)}</span><span class="ms">4択 ${nq}問・○× ${nd}問${wk ? `　苦手 ${wk}` : ''}</span></span>${I('chev', 'mchev')}</button>`; }).join('')
+      ${qs.length ? (dv.length ? DEV_GENRES().map(g => { const its = progressItems(id, g), x = progC(its), parts = uniq(its.map(i => i.kind)).map(k => `${k === '語句' ? '4択' : k} ${its.filter(i => i.kind === k).length}`).join('・');
+          return `<button class="mrow urow" data-act="setupG" data-v="${esc(g)}"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">${esc(g)}<span class="upct">${x.pct}%</span></span><span class="ms">${parts}　正解 ${x.correct}／${x.total}${x.weak ? `　苦手 ${x.weak}` : ''}</span><span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span></span>${I('chev', 'mchev')}</button>`; }).join('')
         : row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`)) : ''}
       ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
       ${sf.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
@@ -1703,13 +1839,13 @@ function renderUnit(id){
     </div>
   </section>
   ${qs.length || evs.length || sf.length || dv.length ? `<section class="sect">
-    <div class="shead"><h2 class="stitle">振り返り</h2>${qs.length || evs.length ? `<button class="textbtn" data-act="unitList">振り分けを見る${I('chev')}</button>` : ''}</div>
-    <div class="panel">
-      ${qs.length ? `<div class="ov"><div class="ovh"><span>4択問題</span><span class="muted">${cq.total}問</span></div>${stackBar(cq)}${legend(cq)}</div>` : ''}
-      ${evs.length ? `<div class="ov"><div class="ovh"><span>年号</span><span class="muted">${ce.total}件</span></div>${stackBar(ce)}${legend(ce)}</div>` : ''}
-      ${sf.length ? `<div class="ov"><div class="ovh"><span>施設の職員配置</span><span class="muted">${cs.total}施設</span></div>${stackBar(cs)}${legend(cs)}</div>` : ''}
-      ${dv.length ? `<div class="ov"><div class="ovh"><span>発達チェック</span><span class="muted">${cd.total}問</span></div>${stackBar(cd)}${legend(cd)}</div>` : ''}
-    </div>
+    <div class="shead"><h2 class="stitle">進み具合 ${help('progress')}</h2>${qs.length || evs.length || dv.length ? `<button class="textbtn" data-act="unitList">振り分けを見る${I('chev')}</button>` : ''}</div>
+    ${(() => {
+      const items = progressItems(id);
+      if (id === 'all') return progressPanel(items, UNITS.map(u => ({ label: u.name, items: progressItems(u.id), unitWord: '件' })).filter(r => r.items.length));
+      if (dv.length) return progressPanel(items, DEV_GENRES().map(g => { const its = progressItems(id, g); const sub = uniq(its.map(x => x.kind)).map(k => { const x = progC(its.filter(i => i.kind === k)); return `${k === '語句' ? '4択' : k} ${x.correct}/${x.total}`; }).join('・'); return { label: g, items: its, unitWord: '件', sub }; }));
+      return progressPanel(items, kindRows(items));
+    })()}
   </section>` : ''}
   <div class="foot btnrow" style="justify-content:center">
     <button class="textbtn" data-act="unitDict">${I('book')}図鑑</button>
