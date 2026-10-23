@@ -738,6 +738,26 @@ ruby{ruby-align:center}
 .sroles div+div{border-top:1px solid var(--line)}
 .sroles dt{font-weight:600;font-size:var(--fs-body-sm);margin:0 0 2px}
 .sroles dd{margin:0;font-size:var(--fs-caption);color:var(--ink2);line-height:1.7}
+/* 分野の帯・見出し */
+.gbar{display:flex;gap:6px;overflow-x:auto;margin:2px -18px 12px;padding:2px 18px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gbar::-webkit-scrollbar{display:none}
+.gbar button{flex:none;display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);font-size:var(--fs-label);font-weight:600;white-space:nowrap}
+.gbar button .i{width:15px;height:15px}
+.gbar button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.rows .ghead{list-style:none;margin:14px 0 6px;padding:0 2px;font-size:var(--fs-label);font-weight:700;color:var(--primary)}
+.rows .ghead:first-child{margin-top:4px}
+.gpick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gpick button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:58px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);text-align:left;color:var(--ink)}
+.gpick button b{font-size:var(--fs-body-sm);line-height:1.35}
+.gpick button small{font-size:var(--fs-micro);color:var(--muted)}
+.gpick button[aria-checked="true"]{border:2px solid var(--primary);background:color-mix(in srgb,var(--primary) 8%,var(--surface))}
+.gpick button:first-child{grid-column:1 / -1;min-height:44px}
+.dlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.dlist li{display:grid;grid-template-columns:3.2em 1fr;gap:8px;font-size:var(--fs-body-sm);line-height:1.7}
+.dlist li p{margin:0}
+.dlist .dfix{margin-top:4px}
+.dlm{font-weight:700;font-size:var(--fs-caption);padding-top:2px}
+.dlm.ok{color:var(--b-correct)} .dlm.ng{color:var(--b-wrong)}
 /* 比較の表（月齢・年齢などを1列目に。列が多い表は横に動かせる） */
 .ctw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .ctbl{border-collapse:separate;border-spacing:0;width:100%;font-size:var(--fs-caption);line-height:1.6}
@@ -881,7 +901,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.6.0';
+const APP_VERSION = '1.7.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -959,8 +979,12 @@ const HELP = {
   units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
   import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
   sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
-  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。単元や振り分けで絞りたいときは「絞り込み」を使います。\n\n種類は件数の左のプルダウンで切り替えます。項目を押すと解説と振り分けを確認・変更できます。'],
-  dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。単元や分野で絞りたいときは「絞り込み」を使います。\n\n「用語・人物」と「年表」は、件数の左のプルダウンで切り替えます。'],
+  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。検索欄の下の帯で、単元や分野（例：病気・医療）をタップすると絞り込めます。細かい分野や振り分けで絞りたいときは「絞り込み」を使います。
+
+種類は件数の左のプルダウンで切り替えます（4択／○×・並べ替え／年号並べ替え）。項目を押すと解説と振り分けを確認・変更でき、○×はその場で記述と正解・表を見られます。「解く」で表示中の問題をまとめて解けます。'],
+  dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。検索欄の下の帯で、単元や分野をタップすると絞り込めます。
+
+件数の左のプルダウンで「用語・人物」「まとめ表」「年表」を切り替えます。まとめ表には、子どもの保健の比較の表（時期で見る・身長体重・感染症の潜伏期間や登園の目安・ワクチンなど）があり、表の中の言葉でも探せます。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
@@ -1026,7 +1050,9 @@ function ensureStaffUnit(db){
 }
 /* あとから足した付属の単元（子どもの保健など）を、すでにある置き場へ一度だけ入れる（あとで消した場合は足し直さない） */
 /*   「単元#番号」は、あとから付属ファイルに足した用語を一度だけ補う（単元を消していたら補わない） */
-const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4'];
+const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4', 'kodomo-hoken#5'];
+/* 1.7.0：分野を「発育・発達／病気・医療／発達障害・心の健康」の3つの大分類にまとめる */
+const CAT_RENAME5 = {"心の健康：発達障害（DSM-5-TR）": "発達障害・心の健康：発達障害（DSM-5-TR）", "心の健康：発達障害（法律上の分類）": "発達障害・心の健康：発達障害（法律上の分類）", "心の健康：知的障害": "発達障害・心の健康：知的障害", "心の健康：神経症性障害と不適応": "発達障害・心の健康：神経症性障害と不適応", "発達：原始反射の種類": "発育・発達：原始反射の種類", "発達：反射と運動のしくみ": "発育・発達：反射と運動のしくみ", "発達：学童期以降": "発育・発達：学童期以降", "発達：成長の時期と体の変化": "発育・発達：成長の時期と体の変化", "発達：母親のメンタルヘルス": "発育・発達：母親のメンタルヘルス", "発達：生まれたときの状態": "発育・発達：生まれたときの状態", "発達：発達の原則": "発育・発達：発達の原則", "発達：社会性・愛着": "発育・発達：社会性・愛着", "発達：言葉": "発育・発達：言葉", "発達：認知": "発育・発達：認知", "病気：新生児": "病気・医療：新生児の病気", "病気：おなか・心臓・血液・腎臓": "病気・医療：病気（おなか・心臓・血液・腎臓）", "病気：脳・代謝・がん・その他": "病気・医療：病気（脳・代謝・がん・その他）", "アレルギー": "病気・医療：アレルギー", "感染症：感染経路": "病気・医療：感染経路", "感染症：主な感染症": "病気・医療：感染症", "予防接種": "病気・医療：予防接種", "看護・救急": "病気・医療：看護・救急", "衛生：消毒薬": "病気・医療：消毒薬"};
 /* 1.6.0：○×に移した「発達の時期」の4択と、分野名の変更 */
 const MOVED_TERMS4 = ["新生児期", "乳児期", "幼児期", "学童期", "青年期", "成人期", "老年期"];
 const CAT_RENAME4 = {"発達の原則": "発達：発達の原則", "生まれたときの状態": "発達：生まれたときの状態", "反射と運動のしくみ": "発達：反射と運動のしくみ", "原始反射の種類": "発達：原始反射の種類", "成長の時期と体の変化": "発達：成長の時期と体の変化", "言葉の発達（用語）": "発達：言葉", "社会性・愛着（用語）": "発達：社会性・愛着", "認知の発達（用語）": "発達：認知", "学童期以降（用語）": "発達：学童期以降", "母親のメンタルヘルス": "発達：母親のメンタルヘルス"};
@@ -1051,6 +1077,7 @@ function ensureAddedUnits(db){
         const du = db.units.find(x => x.id === id); if (du && /^発達の時期と/.test(du.desc || '')) du.desc = u.desc;
         if (!db.media) db.media = {};
       }
+      if (token === id + '#5') for (const x of db.terms) if (x.unit === id && CAT_RENAME5[x.cat]) x.cat = CAT_RENAME5[x.cat];
     } else if (!db.units.some(x => x.id === id)) db.units.push(u);
     for (const t of b.terms.filter(x => x.unit === id)) {
       if (db.terms.some(x => x.key === t.key || (x.unit === id && x.term === t.term))) continue;
@@ -1389,7 +1416,7 @@ function persistNav(){
       t: Date.now(), stack: stack.map(({ y, ...x }) => x), y: scrollY,
       round: r ? { items: r.items, i: r.i, results: r.results, origin: r.origin, answered: answered ? { ok: c.ok } : null } : null,
       search: state.search, list: state.list, dict: state.dict, unit: state.unit, imp: state.imp, bulkText: state.bulk.text,
-      setup: { dir: state.setup.dir, count: state.setup.count, sets: state.setup.sets, size: state.setup.size }
+      setup: { dir: state.setup.dir, form: state.setup.form, count: state.setup.count, sets: state.setup.sets, size: state.setup.size }
     }));
   } catch (_) {}
 }
@@ -1580,7 +1607,15 @@ const state = {
   one: { kind: 'term', unit: null, newName: '', f: {} },
   opened: new Set(), round: null, streak: 0
 };
-const catsFor = (kind, unit) => kind === 'quiz' ? uniq(inUnit(QUESTIONS, unit).map(q => q.cat)) : uniq(inUnit(EVENTS, unit).map(e => e.group || 'その他'));
+/* 分野は「大分類：小分類」と書ける（例：病気・医療：感染症）。出題の設定では大分類でまとめて出す */
+const genreOf = cat => String(cat || 'その他').split('：')[0];
+const subOf = cat => { const c = String(cat || ''), i = c.indexOf('：'); return i >= 0 ? c.slice(i + 1) : ''; };
+const catMatch = (cat, sel) => !sel || sel === cat || (sel.startsWith('g:') && genreOf(cat) === sel.slice(2));
+const devGenre = x => ((window.DEVCHECK && window.DEVCHECK.areas) || []).find(a => a.id === x.area)?.genre || '○×';
+const devAreaTitle = x => ((window.DEVCHECK && window.DEVCHECK.areas) || []).find(a => a.id === x.area)?.title || '';
+const devIn = unit => unit === 'all' ? (window.DEVCHECK ? devOf(window.DEVCHECK.unit) : []) : devOf(unit);
+const FORMS = [['mix', '4択と○×をまぜる'], ['quiz', '4択だけ'], ['ox', '○×・並べ替えだけ']];
+const catsFor = (kind, unit) => kind === 'quiz' ? uniq([...inUnit(QUESTIONS, unit).map(q => genreOf(q.cat)), ...devIn(unit).map(devGenre)]) : uniq(inUnit(EVENTS, unit).map(e => e.group || 'その他'));
 function selectedCats(kind, unit){
   const k = `${unit}|${kind}`, all = catsFor(kind, unit);
   if (!state.setup.cats[k]) state.setup.cats[k] = new Set(all);
@@ -1646,13 +1681,13 @@ function renderUnit(id){
   <section class="sect">
     <h2 class="stitle">学習する</h2>
     <div class="menu">
-      ${qs.length ? row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`) : ''}
+      ${qs.length ? (dv.length ? row('setupQuiz', 'list', '問題を解く', `4択 ${qs.filter(q => q.type !== 'rev').length}問・○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問　分野を選んでまとめて出題`)
+        : row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`)) : ''}
       ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
       ${sf.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
       ${sf.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
       ${sf.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
-      ${dv.length ? row('goDev', 'layers', '○×チェック（試験形式）', `○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問　答えると比較の表が出る`) : ''}
-      ${dv.length ? row('devTable', 'book', '子どもの保健の早見表', '時期で見る・比較の表・まちがえやすいポイント') : ''}
+      ${dv.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：時期で見る・比較の表・まちがえやすいポイント</span></span>${I('chev', 'mchev')}</button>` : ''}
       ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
@@ -1679,10 +1714,18 @@ function renderUnit(id){
 const DIRS = [['fwd', '説明 → 答え'], ['rev', '答え → 説明'], ['mix', 'まぜる']];
 const dirOk = (q, dir) => dir === 'mix' || (dir === 'rev' ? q.type === 'rev' : q.type !== 'rev');
 function setupPool(kind, unit){
-  const k = kind === 'quiz' ? 'q' : 'e', B = state.setup.buckets[kind], cats = selectedCats(kind, unit);
+  const B = state.setup.buckets[kind], cats = selectedCats(kind, unit);
+  if (kind !== 'quiz') {
+    const inScope = inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
+    return { pool: inScope.filter(x => B.has(bucket('e', x.id))), c: countB('e', inScope) };
+  }
   const hasRev = inUnit(QUESTIONS, unit).some(q => q.type === 'rev'), dir = hasRev ? state.setup.dir : 'fwd';
-  const inScope = kind === 'quiz' ? inUnit(QUESTIONS, unit).filter(q => cats.has(q.cat) && dirOk(q, dir)) : inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
-  return { pool: inScope.filter(x => B.has(bucket(k, x.id))), c: countB(k, inScope) };
+  const hasDev = devIn(unit).length > 0, form = hasDev ? (state.setup.form || 'mix') : 'quiz';
+  const qs = form === 'ox' ? [] : inUnit(QUESTIONS, unit).filter(q => cats.has(genreOf(q.cat)) && dirOk(q, dir));
+  const ds = form === 'quiz' ? [] : devIn(unit).filter(x => cats.has(devGenre(x)));
+  const pool = [...qs.filter(q => B.has(bucket('q', q.id))).map(q => ({ type: 'quiz', id: q.id })),
+    ...ds.filter(x => B.has(bucket('d', x.id))).map(x => ({ type: dType(x.id), id: x.id }))];
+  return { pool, c: sumC(countB('q', qs), countB('d', ds)), qn: qs.length, dn: ds.length };
 }
 /* 出題の設定：項目名とプルダウンを1行ずつ並べる。出題する問題だけは、振り分けをチェックで組み合わせる */
 const sameSet = (B, bs) => bs.length === B.size && bs.every(b => B.has(b));
@@ -1690,7 +1733,9 @@ function renderSetup(r){
   const kind = r.a, unit = r.u; state.unit = unit;
   const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
   const { pool, c } = setupPool(kind, unit);
-  const hasRev = kind === 'quiz' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
+  const hasDev = kind === 'quiz' && devIn(unit).length > 0, form = hasDev ? (S.form || 'mix') : 'quiz';
+  const hasRev = kind === 'quiz' && form !== 'ox' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
+  const gCount = g => inUnit(QUESTIONS, unit).filter(q => genreOf(q.cat) === g && q.type !== 'rev').length + devIn(unit).filter(x => devGenre(x) === g).length;
   const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
   const catVal = sel.size === cats.length ? '' : [...sel][0];
   let n, can, label;
@@ -1702,8 +1747,11 @@ function renderSetup(r){
     label = can ? `${S.sets}セットをはじめる` : B.size ? '該当する出来事がありません' : '出題する問題を選んでください';
   }
   app.innerHTML = `
-  <h1 class="ptitle">${kind === 'quiz' ? '4択問題' : '年号並べ替え'} ${help('buckets')}</h1>
-  <div class="flist" style="margin-top:20px">
+  <h1 class="ptitle">${kind === 'quiz' ? (hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'} ${help('buckets')}</h1>
+  ${hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
+  ${cats.length > 1 && hasDev ? `<h2 class="stitle" style="margin:20px 0 8px">分野</h2><div class="gpick" role="radiogroup" aria-label="分野">${['', ...cats].map(g => `<button type="button" role="radio" aria-checked="${catVal === g}" data-act="sgenre" data-v="${esc(g)}"><b>${esc(g || 'すべての分野')}</b>${g ? `<small>${gCount(g)}問</small>` : ''}</button>`).join('')}</div>` : ''}
+  <div class="flist" style="margin-top:16px">
+    ${hasDev ? `<label class="frow"><span>問題の形式</span><select class="sel" id="sForm">${FORMS.map(([v, l]) => opt(v, l, form)).join('')}</select></label>` : ''}
     ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
     <div class="bpick" role="group" aria-labelledby="bpickL">
       <div class="bpick-h"><span id="bpickL">出題する問題</span>
@@ -1714,7 +1762,7 @@ function renderSetup(r){
       </div>
       <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c[b]}</span></button>`).join('')}</div>
     </div>
-    ${cats.length > 1 ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
+    ${cats.length > 1 && !hasDev ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
     ${kind === 'quiz'
       ? `<label class="frow"><span>問題数</span><select class="sel" id="sCount">${[10, 20, 30, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select></label>`
       : `<label class="frow"><span>セット数</span><select class="sel" id="sSets">${[3, 5, 10].map(v => opt(v, `${v}セット`, S.sets)).join('')}</select></label>
@@ -1747,7 +1795,12 @@ function startFromSetup(){
   const r = cur(), kind = r.a, unit = r.u, { pool } = setupPool(kind, unit);
   if (kind === 'quiz') {
     const n = state.setup.count === 'all' ? pool.length : Math.min(state.setup.count, pool.length);
-    startRound(shuffle(pool).slice(0, n).map(q => ({ type: 'quiz', id: q.id })), { unit, kind });
+    /* 4択と○×をまぜるときは、○×（1問に5つの記述）が全体の3割ほどになるように選ぶ */
+    const qs = shuffle(pool.filter(x => x.type === 'quiz')), ds = shuffle(pool.filter(x => x.type !== 'quiz'));
+    let pick;
+    if (qs.length && ds.length && n < pool.length) { const nd = Math.min(ds.length, Math.max(1, Math.round(n * 0.3))), nq = Math.min(qs.length, n - nd); pick = [...qs.slice(0, nq), ...ds.slice(0, n - nq)]; }
+    else pick = shuffle(pool).slice(0, n);
+    startRound(pick, { unit, kind });
   } else startRound(makeSortSets(pool, state.setup.sets, unit), { unit, kind });
 }
 function quickReview(){
@@ -2308,7 +2361,7 @@ function tblOfTerm(t){
 }
 function devStart(ids){
   if (!DV) return;
-  startRound(ids.filter(dItem).map(id => ({ type: dType(id), id })), { unit: DV.unit, kind: 'dev' });
+  startRound(ids.filter(dItem).map(id => ({ type: dType(id), id })), { unit: DV.unit, kind: 'quiz' });
 }
 
 /* ---------- 選ぶ画面（分野ごと） ---------- */
@@ -3325,7 +3378,39 @@ function hitBox(hits, words, skip = []){
 
 
 /* ---------- 検索欄（まずキーワード。足りないときだけ「絞り込み」） ---------- */
-function filterLabel(k, v){ return k === 'unit' ? unitName(v) : k === 'bucket' ? BL[v] : v; }
+function filterLabel(k, v){ return k === 'unit' ? unitName(v) : k === 'bucket' ? BL[v] : k === 'cat' ? (v.startsWith('g:') ? v.slice(2) : (subOf(v) || v)) : v; }
+/* 今の画面で選べる単元・分野（図鑑の種類／振り分けの種類によって変わる） */
+function scopeOf(ctx){
+  if (ctx === 'dict') {
+    const tab = state.dict.tab;
+    if (tab === 'years') return { list: EVENTS, catOf: e => e.group || 'その他' };
+    if (tab === 'tables') return { list: sheetItems(), catOf: x => x.genre + '：' };
+    return { list: TERMS, catOf: t => t.cat };
+  }
+  const kind = state.list.kind;
+  if (kind === 'sort') return { list: EVENTS, catOf: e => e.group || 'その他' };
+  if (kind === 'dev') return { list: devIn('all').map(x => ({ ...x, unit: window.DEVCHECK.unit })), catOf: x => devGenre(x) + '：' };
+  return { list: QUESTIONS.filter(q => kind === 'rev' ? q.type === 'rev' : q.type !== 'rev'), catOf: q => q.cat };
+}
+/* 分野の選択肢：「大分類（すべて）」と、その下の小分類 */
+function catOptions(cats, cur){
+  const opt = (v, l) => `<option value="${esc(v)}" ${cur === v ? 'selected' : ''}>${esc(l)}</option>`;
+  const groups = [];
+  for (const c of cats) { const g = genreOf(c); let gr = groups.find(x => x.g === g); if (!gr) groups.push(gr = { g, subs: [] }); if (subOf(c)) gr.subs.push(c); }
+  return groups.map(gr => gr.subs.length
+    ? `<optgroup label="${esc(gr.g)}">${opt('g:' + gr.g, `${gr.g}（すべて）`)}${uniq(gr.subs).map(c => opt(c, subOf(c))).join('')}</optgroup>`
+    : opt('g:' + gr.g, gr.g)).join('');
+}
+/* 検索欄の下の帯：単元→分野をタップで選ぶ */
+function genreBar(ctx){
+  const S = state.search[ctx], { list, catOf } = scopeOf(ctx);
+  const units = uniq(list.map(x => x.unit)).filter(u => unitById.has(u)), unit = S.unit || (units.length === 1 ? units[0] : '');
+  if (!unit) return units.length > 1 ? `<div class="gbar" role="group" aria-label="単元で絞る">${units.map(u => `<button type="button" data-act="gpick" data-c="${ctx}" data-k="unit" data-v="${esc(u)}">${I(unitIcon(u))}${esc(unitName(u))}</button>`).join('')}</div>` : '';
+  const gs = uniq(list.filter(x => x.unit === unit).map(x => genreOf(catOf(x))));
+  if (gs.length < 2) return '';
+  const curG = S.cat ? (S.cat.startsWith('g:') ? S.cat.slice(2) : genreOf(S.cat)) : '';
+  return `<div class="gbar on" role="group" aria-label="分野で絞る"><button type="button" data-act="gpick" data-c="${ctx}" data-k="cat" data-v="" aria-pressed="${!curG}">すべて</button>${gs.map(g => `<button type="button" data-act="gpick" data-c="${ctx}" data-k="cat" data-v="g:${esc(g)}" aria-pressed="${curG === g}">${esc(g)}</button>`).join('')}</div>`;
+}
 function searchField(ctx){
   const S = state.search[ctx], n = filterCount(S);
   return `<div class="sfield">
@@ -3335,21 +3420,21 @@ function searchField(ctx){
   ${n ? `<div class="fchips">${FILTER_KEYS.filter(k => S[k]).map(k => `<button type="button" class="fchip" data-act="sDrop" data-c="${ctx}" data-k="${k}" aria-label="${esc(filterLabel(k, S[k]))}の条件を外す">${esc(filterLabel(k, S[k]))}${I('x')}</button>`).join('')}</div>` : ''}`;
 }
 function openFilterSheet(ctx){
-  const S = state.search[ctx];
+  const S = state.search[ctx], { list, catOf } = scopeOf(ctx);
   const opt = (v, l, sel) => `<option value="${esc(v)}" ${sel === v ? 'selected' : ''}>${esc(l)}</option>`;
-  const yr = ctx === 'dict' && state.dict.tab === 'years', isQ = ctx === 'list' && state.list.kind !== 'sort';
-  const units = uniq((ctx === 'dict' ? (yr ? EVENTS : TERMS) : (isQ ? QUESTIONS : EVENTS)).map(x => x.unit));
-  const catList = u => ctx !== 'dict' ? [] : uniq((yr ? EVENTS : TERMS).filter(x => !u || x.unit === u).map(x => yr ? x.group : x.cat)).filter(Boolean);
+  const units = uniq(list.map(x => x.unit)).filter(u => unitById.has(u));
+  const cats = uniq(list.filter(x => !S.unit || x.unit === S.unit).map(catOf)).filter(Boolean);
+  const catName = ctx === 'dict' && state.dict.tab === 'years' || state.list.kind === 'sort' && ctx === 'list' ? '時代' : '分野';
   let rows = `<label class="frow"><span>単元</span><select class="sel" id="fUnit">${opt('', 'すべての単元', S.unit)}${units.map(u => opt(u, unitName(u), S.unit)).join('')}</select></label>`;
-  if (ctx === 'dict') rows += `<label class="frow"><span>${yr ? '時代' : '分野'}</span><select class="sel" id="fCat">${opt('', yr ? 'すべての時代' : 'すべての分野', S.cat)}${catList(S.unit).map(c => opt(c, c, S.cat)).join('')}</select></label>`;
-  else {
-    const k = isQ ? 'q' : 'e', scope = (isQ ? QUESTIONS.filter(q => state.list.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !S.unit || x.unit === S.unit), c = countB(k, scope);
+  if (cats.length > 1) rows += `<label class="frow"><span>${catName}</span><select class="sel" id="fCat">${opt('', `すべての${catName}`, S.cat)}${catOptions(cats, S.cat)}</select></label>`;
+  if (ctx === 'list') {
+    const k = state.list.kind === 'sort' ? 'e' : state.list.kind === 'dev' ? 'd' : 'q';
+    const scope = list.filter(x => (!S.unit || x.unit === S.unit) && catMatch(catOf(x), S.cat)), c = countB(k, scope);
     rows += `<label class="frow"><span>振り分け</span><select class="sel" id="fBucket">${opt('', `すべて（${c.total}）`, S.bucket)}${ORDER.map(b => opt(b, `${BL[b]}（${c[b]}）`, S.bucket)).join('')}</select></label>`;
   }
   openModal(`<h2 class="sheet-t">絞り込み</h2>
     <form id="filterForm" data-ctx="${ctx}"><div class="flist">${rows}</div>
       <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="fClear" data-v="${ctx}">条件をクリア</button><button type="submit" class="btn primary">この条件で表示</button></div></div></form>`, { noFocus: true });
-  openFilterSheet.catList = catList;
 }
 
 /* ---------- 一覧の行 ---------- */
@@ -3362,6 +3447,21 @@ function qRow(q, showUnit, hits, words){
       ${memo ? `<div class="memo" style="margin-bottom:14px"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(memo)}</p></div>` : ''}
       ${classifySeg('q', q.id, true)}
       <div class="btnrow">${q.termKey ? `<button class="textbtn" data-act="term" data-v="${esc(q.termKey)}">${I('book')}図鑑で見る</button>` : ''}${editBtn('editQ', q.id)}</div></div>` : ''}
+  </li>`;
+}
+const fieldsOfDev = x => [['問題', x.title], ['記述', x.rows ? x.rows.map(r => r[0] + ' ' + r[1]).join('\n') : x.items.map(i => Array.isArray(i) ? i.join(' ') : [i.s, i.fix || ''].join(' ')).join('\n')], ['整理', x.point], ['分野', devAreaTitle(x)]];
+function dRow(x, hits, words){
+  const b = bucket('d', x.id), open = state.opened.has('d:' + x.id), isOrd = Array.isArray(x.items && x.items[0]);
+  return `<li class="row ${open ? 'open' : ''}">
+    <button class="row-h" data-act="open" data-v="d:${esc(x.id)}" aria-expanded="${open}"><span class="dot b-${b}"></span><span class="row-t"><span class="row-u">${isOrd ? '並べ替え' : '○×'}・${esc(devAreaTitle(x))}</span>${markHTML(x.title, words)}</span><span class="row-b">${BL[b]}</span>${I('chevD')}</button>
+    ${!open && hitBox(hits, words, ['問題']) ? `<div class="row-hits">${hitBox(hits, words, ['問題'])}</div>` : ''}
+    ${open ? `<div class="row-d">
+      ${isOrd ? `<ol class="oans">${x.items.map(([t, w], i) => `<li><span class="onum">${i + 1}</span><span class="otx"><span>${rb(t)}</span><small>${esc(w)}</small></span></li>`).join('')}</ol>`
+        : `<ol class="dlist">${x.items.map((it, k) => `<li><span class="dlm ${it.ok ? 'ok' : 'ng'}">${ABC[k]} ${it.ok ? '○' : '×'}</span><div><p>${markHTML(it.s, words)}</p>${it.ok ? '' : `<p class="dfix"><b>正しくは</b>${rb(it.fix || '')}</p>`}</div></li>`).join('')}</ol>`}
+      ${x.point ? `<div class="memo" style="margin:12px 0"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(x.point)}</p></div>` : ''}
+      ${tblBlocks(x.tbl, false)}
+      <div style="margin-top:12px">${classifySeg('d', x.id, true)}</div>
+      <div class="btnrow"><button class="textbtn" data-act="devOne" data-v="${esc(x.id)}">${I('play')}このセットを解く</button></div></div>` : ''}
   </li>`;
 }
 function eRow(e, hits, words){
@@ -3385,12 +3485,12 @@ function redrawRow(el, key){
   let html = '';
   if (cur().v === 'list') {
     const { items, words } = listItems(), multi = !state.search.list.unit;
-    const it = items.find(({ x }) => x.id === id) || { x: kind === 'q' ? qById.get(id) : eById.get(id), hits: null };
+    const it = items.find(({ x }) => x.id === id) || { x: kind === 'q' ? qById.get(id) : kind === 'd' ? dItem(id) : eById.get(id), hits: null };
     if (!it.x) return;
-    html = kind === 'q' ? qRow(it.x, multi, it.hits, words) : eRow(it.x, it.hits, words);
+    html = kind === 'q' ? qRow(it.x, multi, it.hits, words) : kind === 'd' ? dRow(it.x, it.hits, words) : eRow(it.x, it.hits, words);
   } else {
-    const x = kind === 'q' ? qById.get(id) : eById.get(id); if (!x) return;
-    html = kind === 'q' ? qRow(x, state.round?.origin?.unit === 'all') : eRow(x);
+    const x = kind === 'q' ? qById.get(id) : kind === 'd' ? dItem(id) : eById.get(id); if (!x) return;
+    html = kind === 'q' ? qRow(x, state.round?.origin?.unit === 'all') : kind === 'd' ? dRow(x) : eRow(x);
   }
   const top = li.getBoundingClientRect().top;
   li.outerHTML = html;
@@ -3399,14 +3499,15 @@ function redrawRow(el, key){
   nli?.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
 }
 function listItems(){
-  const L = state.list, S = state.search.list, isQ = L.kind !== 'sort', k = isQ ? 'q' : 'e';
-  const words = searchWords(S.q);
-  const scoped = (isQ ? QUESTIONS.filter(q => L.kind === 'rev' ? q.type === 'rev' : q.type !== 'rev') : EVENTS).filter(x => !S.unit || x.unit === S.unit);
+  const L = state.list, S = state.search.list, isQ = L.kind !== 'sort', k = L.kind === 'dev' ? 'd' : isQ ? 'q' : 'e';
+  const words = searchWords(S.q), { list, catOf } = scopeOf('list');
   const items = [];
-  for (const x of scoped) {
+  for (const x of list) {
+    if (S.unit && x.unit !== S.unit) continue;
+    if (!catMatch(catOf(x), S.cat)) continue;
     if (S.bucket && bucket(k, x.id) !== S.bucket) continue;
     let hits = null;
-    if (words.length) { hits = hitsOf(isQ ? fieldsOfQ(x) : fieldsOfE(x), words); if (hits === false) continue; }
+    if (words.length) { hits = hitsOf(k === 'd' ? fieldsOfDev(x) : isQ ? fieldsOfQ(x) : fieldsOfE(x), words); if (hits === false) continue; }
     items.push({ x, hits });
   }
   return { isQ, k, items, words, on: searchOn(S) };
@@ -3420,16 +3521,18 @@ function renderList(){
   drawList();
 }
 function drawList(){
-  const L = state.list, S = state.search.list, { isQ, items, words, on } = listItems();
+  const L = state.list, S = state.search.list, { isQ, k, items, words, on } = listItems();
   const box = document.getElementById('res-list'); if (!box) return;
   box.innerHTML = `
+  ${genreBar('list')}
   <div class="reshead"><select class="isel" id="lkind" aria-label="問題の種類">
-      <option value="quiz" ${L.kind === 'quiz' ? 'selected' : ''}>説明 → 答え</option>
-      <option value="rev" ${L.kind === 'rev' ? 'selected' : ''}>答え → 説明</option>
+      <option value="quiz" ${L.kind === 'quiz' ? 'selected' : ''}>4択：説明 → 答え</option>
+      <option value="rev" ${L.kind === 'rev' ? 'selected' : ''}>4択：答え → 説明</option>
+      ${window.DEVCHECK && unitById.has(window.DEVCHECK.unit) ? `<option value="dev" ${L.kind === 'dev' ? 'selected' : ''}>○×・並べ替え</option>` : ''}
       <option value="sort" ${L.kind === 'sort' ? 'selected' : ''}>年号並べ替え</option></select>
     <span class="cnt">${items.length}件</span>
     ${items.length ? `<button class="btn primary sm" data-act="listStart">${I('play')}解く</button>` : ''}</div>
-  ${items.length ? `<ul class="rows">${items.map(({ x, hits }) => isQ ? qRow(x, !S.unit, hits, words) : eRow(x, hits, words)).join('')}</ul>`
+  ${items.length ? `<ul class="rows">${items.map(({ x, hits }) => k === 'd' ? dRow(x, hits, words) : isQ ? qRow(x, !S.unit, hits, words) : eRow(x, hits, words)).join('')}</ul>`
     : `<p class="empty">${on ? '見つかりません' : `まだ${isQ ? '問題' : '出来事'}がありません`}</p>`}
   ${items.length ? `<div class="foot"><button class="textbtn danger" data-act="resetList">表示中の${items.length}件を未回答に戻す</button></div>` : ''}`;
 }
@@ -3437,25 +3540,51 @@ function listStart(){
   const L = state.list, { isQ, items } = listItems(), xs = items.map(i => i.x);
   const unit = state.search.list.unit || 'all';
   const origin = { unit, kind: L.kind === 'sort' ? 'sort' : 'quiz' };
-  if (isQ) startRound(xs.map(q => ({ type: 'quiz', id: q.id })), origin);
+  if (L.kind === 'dev') startRound(xs.map(x => ({ type: dType(x.id), id: x.id })), origin);
+  else if (isQ) startRound(xs.map(q => ({ type: 'quiz', id: q.id })), origin);
   else startRound(makeSortSets(xs, Math.min(10, Math.max(1, Math.ceil(xs.length / state.setup.size))), unit), origin);
 }
 
 /* =========================================================
  * 図鑑
  * ========================================================= */
+/* まとめ表：比較の表・時期で見る・まちがえやすいポイント（○×のデータにある表） */
+function sheetItems(){
+  const D = window.DEVCHECK; if (!D || !unitById.has(D.unit)) return [];
+  const areaOf = {};
+  for (const x of [...D.checks, ...D.orders]) for (const sp of (x.tbl || [])) { const k = Array.isArray(sp) ? sp[0] : sp; if (!areaOf[k]) areaOf[k] = x.area; }
+  const g = a => (D.areas.find(x => x.id === a) || {}).genre || 'その他';
+  const out = [
+    { id: '@period', unit: D.unit, genre: '早見表', title: '時期で見る（月齢・年齢ごとのまとめ）', text: D.periods.map(p => p.name + p.lines.map(l => l.join(' ')).join(' ')).join('\n'), sub: '早見表' },
+    { id: '@tips', unit: D.unit, genre: '早見表', title: 'まちがえやすいポイント', text: D.tips.join('\n'), sub: '早見表' }];
+  const tabs = Object.entries(D.tables).map(([k, t]) => ({ id: k, unit: D.unit, genre: g(areaOf[k] || 'dev'), title: t.title, text: [t.cols.join(' '), ...t.rows.map(r => r.join(' ')), t.note || ''].join('\n'), sub: t.cols.filter(Boolean).slice(1).join('・') }));
+  const order = uniq(D.areas.map(a => a.genre));
+  tabs.sort((a, b) => order.indexOf(a.genre) - order.indexOf(b.genre));
+  return [...out, ...tabs];
+}
+function openSheet(id){
+  if (id === '@period') { openDevTable('period'); return; }
+  if (id === '@tips') { openDevTable('tips'); return; }
+  const D = window.DEVCHECK, t = dTbl(id); if (!t) return;
+  const sets = [...D.checks, ...D.orders].filter(x => (x.tbl || []).some(sp => (Array.isArray(sp) ? sp[0] : sp) === id));
+  const terms = TERMS.filter(x => tblOfTerm(x) === id);
+  openModal(`<h2>${esc(t.title)}</h2><p class="kana">${esc(unitName(D.unit))}・まとめ表</p>
+    ${tblHTML([id])}
+    ${sets.length ? `<section class="block"><h3>この表を使う○×・並べ替え</h3><div class="menu">${sets.map(x => { const b = bucket('d', x.id); return `<button class="mrow" data-act="devOne" data-v="${esc(x.id)}"><span class="dot b-${b}"></span><span class="mtx"><span class="mt">${rb(x.title)}</span><span class="ms">${BL[b]}　解く</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div></section>` : ''}
+    ${terms.length ? `<section class="block"><h3>関係する語句</h3><div class="tchips">${terms.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${rb(x.term)}</button>`).join('')}</div></section>` : ''}`);
+}
 function dictItems(){
-  const S = state.search.dict, words = searchWords(S.q), yr = state.dict.tab === 'years';
-  const out = [];
-  const src = yr ? [...EVENTS].sort((x, y) => x.year - y.year) : TERMS;
+  const S = state.search.dict, words = searchWords(S.q), tab = state.dict.tab, yr = tab === 'years';
+  const out = [], { list, catOf } = scopeOf('dict');
+  const src = yr ? [...list].sort((x, y) => x.year - y.year) : list;
   for (const x of src) {
     if (S.unit && x.unit !== S.unit) continue;
-    if (S.cat && (yr ? x.group : x.cat) !== S.cat) continue;
+    if (!catMatch(catOf(x), S.cat)) continue;
     let hits = null;
-    if (words.length) { hits = hitsOf(yr ? fieldsOfE(x) : fieldsOfTerm(x), words); if (hits === false) continue; }
+    if (words.length) { hits = hitsOf(tab === 'tables' ? [['表', x.title], ['内容', x.text]] : yr ? fieldsOfE(x) : fieldsOfTerm(x), words); if (hits === false) continue; }
     out.push({ x, hits });
   }
-  return { yr, items: out, words, on: searchOn(S) };
+  return { yr, tab, items: out, words, on: searchOn(S) };
 }
 function renderDict(){
   app.innerHTML = `
@@ -3465,21 +3594,28 @@ function renderDict(){
   drawDict();
 }
 function drawDict(){
-  const { yr, items, words, on } = dictItems(), showUnit = !state.search.dict.unit;
+  const { yr, tab, items, words, on } = dictItems(), S = state.search.dict, showUnit = !S.unit;
   const box = document.getElementById('res-dict'); if (!box) return;
   const termRow = ({ x: t, hits }) => { const b = termBucket(t); return `<li class="row">
-    <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${markHTML(t.term, words)}</span>${showUnit ? `<span class="dk">${esc(unitName(t.unit))}</span>` : ''}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}</div>
+    <button class="drow" data-act="term" data-v="${esc(t.key)}"><div class="dh">${b ? `<span class="dot b-${b}" title="${BL[b]}"></span>` : ''}<span class="dn">${markHTML(t.term, words)}</span>${showUnit ? `<span class="dk">${esc(unitName(t.unit))}</span>` : `<span class="dk">${esc(subOf(t.cat) || t.cat)}</span>`}${U.memos['k:' + t.key] ? I('note', 'mini-i') : ''}${mediaOf('k:' + t.key).length ? I('file', 'mini-i') : ''}</div>
     ${lifeText(t) ? `<p class="lifeln sm">${I('clock')}${esc(lifeText(t))}</p>` : ''}
     <p class="ds">${markHTML(t.summary, words)}</p>${hitBox(hits, words, ['用語', '要約', '国・時代'])}</button></li>`; };
   const yearRow = ({ x: e, hits }) => { const memo = memoOfEvent(e); return `<li><div class="y">${e.year}<small>${esc(e.era || '')}</small></div><div><p class="t">${markHTML(e.title, words)}</p><p class="x">${markHTML(e.explanation || '', words)}</p>
     ${hitBox(hits, words, ['出来事', '解説', '年'])}
     ${memo ? `<div class="memo" style="margin:0 0 10px"><p class="prose" style="margin:0;font-size:var(--fs-body-sm)">${rb(memo)}</p></div>` : ''}
     <div class="btnrow">${editBtn('editE', e.id)}</div></div></li>`; };
+  const sheetRow = ({ x, hits }) => `<li class="row"><button class="drow" data-act="sheet" data-v="${esc(x.id)}"><div class="dh"><span class="dn">${I('book', 'mini-i')}${markHTML(x.title, words)}</span></div><p class="ds">${esc(x.sub)}</p>${hitBox(hits, words, ['表'])}</button></li>`;
+  /* 大分類が変わるところに見出しを入れる（単元を選んでいて、検索していないとき） */
+  const withHeads = (arr, rowFn, gOf) => { let last = null; return arr.map(it => { const g = gOf(it.x); const h = !showUnit && !words.length && g !== last ? `<li class="ghead">${esc(g)}</li>` : ''; last = g; return h + rowFn(it); }).join(''); };
+  const hasSheets = sheetItems().length > 0;
   box.innerHTML = `
+  ${genreBar('dict')}
   <div class="reshead"><select class="isel" id="dtab" aria-label="表示するもの">
-      <option value="terms" ${!yr ? 'selected' : ''}>用語・人物</option><option value="years" ${yr ? 'selected' : ''}>年表</option></select>
+      <option value="terms" ${tab !== 'years' && tab !== 'tables' ? 'selected' : ''}>用語・人物</option>${hasSheets ? `<option value="tables" ${tab === 'tables' ? 'selected' : ''}>まとめ表</option>` : ''}<option value="years" ${yr ? 'selected' : ''}>年表</option></select>
     <span class="cnt">${items.length}件</span></div>
-  ${items.length ? (yr ? `<ol class="tl">${items.map(yearRow).join('')}</ol>` : `<ul class="rows">${items.map(termRow).join('')}</ul>`)
+  ${items.length ? (yr ? `<ol class="tl">${items.map(yearRow).join('')}</ol>`
+      : tab === 'tables' ? `<ul class="rows">${withHeads(items, sheetRow, x => x.genre)}</ul>`
+      : `<ul class="rows">${withHeads(items, termRow, t => genreOf(t.cat))}</ul>`)
     : `<p class="empty">${on ? '見つかりません' : 'まだありません'}</p>`}`;
 }
 
@@ -3768,6 +3904,10 @@ async function onAction(el, ev){
     case 'ssets': S.sets = +v; render(cur(), true); break;
     case 'ssize': S.size = +v; render(cur(), true); break;
     case 'startSetup': startFromSetup(); break;
+    case 'sgenre': { const cs = catsFor(cur().a, cur().u); state.setup.cats[`${cur().u}|${cur().a}`] = new Set(v ? [v] : cs); render(cur(), true); break; }
+    case 'gpick': { const S2 = state.search[el.dataset.c]; S2[el.dataset.k] = v; if (el.dataset.k === 'unit') S2.cat = ''; state.opened.clear(); render(cur(), true); break; }
+    case 'sheet': openSheet(v); break;
+    case 'goSheets': state.dict.tab = 'tables'; state.search.dict = { ...blankSearchState(), unit: v }; go({ v: 'dict' }, 'tab'); break;
     case 'choose': choose(+v); break;
     case 'dontknow': choose(-1); break;
     case 'submitSort': submitSort(); break;
@@ -3776,7 +3916,7 @@ async function onAction(el, ev){
     case 'classify':
       setBucket(el.dataset.k, el.dataset.id, v);
       if (cur().v === 'round') el.closest('.seg3').outerHTML = classifySeg(el.dataset.k, el.dataset.id, el.dataset.new === '1');
-      else if (el.closest('li.row')) redrawRow(el, (el.dataset.k === 'q' ? 'q:' : 'e:') + el.dataset.id);
+      else if (el.closest('li.row')) redrawRow(el, (el.dataset.k === 'q' ? 'q:' : el.dataset.k === 'd' ? 'd:' : 'e:') + el.dataset.id);
       else render(cur(), true);
       toast(`「${BL[v]}」に振り分けました`);
       break;
@@ -3966,16 +4106,17 @@ document.addEventListener('compositionend', ev => {   // 変換が確定して�
 });
 document.addEventListener('change', ev => {
   const t = ev.target;
-  if (cur().v === 'setup' && ['sDir', 'sCat', 'sCount', 'sSets', 'sSize'].includes(t.id)) {
+  if (cur().v === 'setup' && ['sDir', 'sForm', 'sCat', 'sCount', 'sSets', 'sSize'].includes(t.id)) {
     const S = state.setup, kind = cur().a, unit = cur().u, v = t.value;
     if (t.id === 'sDir') S.dir = v;
+    if (t.id === 'sForm') S.form = v;
     if (t.id === 'sCat') { const cs = catsFor(kind, unit); state.setup.cats[`${unit}|${kind}`] = new Set(v ? [v] : cs); }
     if (t.id === 'sCount') S.count = v === 'all' ? 'all' : +v;
     if (t.id === 'sSets') S.sets = +v;
     if (t.id === 'sSize') S.size = +v;
     render(cur(), true); return;
   }
-  if (t.id === 'lkind') { state.list.kind = t.value; state.opened.clear(); render(cur(), true); return; }
+  if (t.id === 'lkind') { state.list.kind = t.value; state.search.list.cat = ''; state.search.list.bucket = ''; state.opened.clear(); render(cur(), true); return; }
   if (t.id === 'dtab') { state.dict.tab = t.value; state.search.dict.cat = ''; render(cur(), true); return; }
   if (t.id === 'fUnit' && document.getElementById('fCat')) {
     const yr = state.dict.tab === 'years', sel = document.getElementById('fCat');
