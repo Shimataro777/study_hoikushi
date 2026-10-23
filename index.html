@@ -623,6 +623,11 @@ body{overflow-wrap:anywhere}
 .tl .x + .btnrow{margin:-4px 0 10px}
 rt{font-size:.5em;font-weight:400;color:var(--muted);letter-spacing:0;font-feature-settings:normal}
 ruby{ruby-align:center}
+/* ふりがな（furi）：読みを語の上に重ねる。語の幅は変えないので、まわりの文字とずれない */
+.fr{display:inline-block;position:relative;padding-top:.55em;line-height:1.25;text-indent:0;vertical-align:baseline;white-space:nowrap}
+.frt{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:.5em;line-height:1.1;font-weight:400;color:var(--muted);letter-spacing:0;white-space:nowrap;pointer-events:none;font-feature-settings:normal}
+/* ふりがなの入った文のまとまり（flex/grid の中でも1つの文として流す） */
+.rtx{display:inline;min-width:0}
 .qtext,.prose,.cs,.row-t,.ds,.lead,.tl .x,.tl .t,.ctext,.dn,.st{line-height:1.95}
 .legend{grid-template-columns:repeat(var(--n,5),minmax(0,1fr))}
 @media (max-width:420px){.legend{grid-template-columns:repeat(min(var(--n,5),3),minmax(0,1fr));row-gap:10px}}
@@ -833,6 +838,14 @@ ruby{ruby-align:center}
   .dthead .dtabs button{font-size:var(--fs-caption);white-space:nowrap}
   .ccr{grid-template-columns:6.5em minmax(0,1fr)}
 }
+.gloss h3{display:flex;align-items:center;gap:6px}
+.gloss h3 .i{width:16px;height:16px}
+.gloss dl{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.gloss dl div{display:grid;grid-template-columns:8em minmax(0,1fr);gap:10px;padding:9px 12px;font-size:var(--fs-body-sm);line-height:1.7}
+.gloss dl div+div{border-top:1px solid var(--line)}
+.gloss dt{font-weight:700;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.gloss dd{margin:0;color:var(--ink2)}
+@media (max-width:480px){.gloss dl div{grid-template-columns:1fr;gap:2px}.gloss dt{color:var(--primary)}}
 /* 早見表 */
 .msheet.wide{max-width:min(1100px,100%)}
 @media (min-width:700px){.msheet.wide{max-width:min(1100px,94vw);max-height:92vh}}
@@ -990,19 +1003,20 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.13.0"></script>
-<script src="hoiku-genri.js?v=1.13.0"></script>
-<script src="hoiku-shinri.js?v=1.13.0"></script>
-<script src="seido-nengo.js?v=1.13.0"></script>
-<script src="shokuin-haichi.js?v=1.13.0"></script>
-<script src="kodomo-hoken.js?v=1.13.0"></script>
-<script src="kodomo-hattatsu.js?v=1.13.0"></script>
-<script src="ruby.js?v=1.13.0"></script>
+<script src="kyoiku-genri.js?v=1.15.1"></script>
+<script src="hoiku-genri.js?v=1.15.1"></script>
+<script src="hoiku-shinri.js?v=1.15.1"></script>
+<script src="seido-nengo.js?v=1.15.1"></script>
+<script src="shokuin-haichi.js?v=1.15.1"></script>
+<script src="kodomo-hoken.js?v=1.15.1"></script>
+<script src="kodomo-hattatsu.js?v=1.15.1"></script>
+<script src="kodomo-yougo.js?v=1.15.1"></script>
+<script src="ruby.js?v=1.15.1"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.13.0';
+const APP_VERSION = '1.15.1';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -1152,7 +1166,7 @@ function ensureStaffUnit(db){
 }
 /* あとから足した付属の単元（子どもの保健など）を、すでにある置き場へ一度だけ入れる（あとで消した場合は足し直さない） */
 /*   「単元#番号」は、あとから付属ファイルに足した用語を一度だけ補う（単元を消していたら補わない） */
-const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4', 'kodomo-hoken#5', 'kodomo-hoken#6'];
+const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4', 'kodomo-hoken#5', 'kodomo-hoken#6', 'kodomo-hoken#7'];
 /* 1.7.0：分野を「発育・発達／病気・医療／発達障害・心の健康」の3つの大分類にまとめる */
 const CAT_RENAME5 = {"心の健康：発達障害（DSM-5-TR）": "発達障害・心の健康：発達障害（DSM-5-TR）", "心の健康：発達障害（法律上の分類）": "発達障害・心の健康：発達障害（法律上の分類）", "心の健康：知的障害": "発達障害・心の健康：知的障害", "心の健康：神経症性障害と不適応": "発達障害・心の健康：神経症性障害と不適応", "発達：原始反射の種類": "発育・発達：原始反射の種類", "発達：反射と運動のしくみ": "発育・発達：反射と運動のしくみ", "発達：学童期以降": "発育・発達：学童期以降", "発達：成長の時期と体の変化": "発育・発達：成長の時期と体の変化", "発達：母親のメンタルヘルス": "発育・発達：母親のメンタルヘルス", "発達：生まれたときの状態": "発育・発達：生まれたときの状態", "発達：発達の原則": "発育・発達：発達の原則", "発達：社会性・愛着": "発育・発達：社会性・愛着", "発達：言葉": "発育・発達：言葉", "発達：認知": "発育・発達：認知", "病気：新生児": "病気・医療：新生児の病気", "病気：おなか・心臓・血液・腎臓": "病気・医療：病気（おなか・心臓・血液・腎臓）", "病気：脳・代謝・がん・その他": "病気・医療：病気（脳・代謝・がん・その他）", "アレルギー": "病気・医療：アレルギー", "感染症：感染経路": "病気・医療：感染経路", "感染症：主な感染症": "病気・医療：感染症", "予防接種": "病気・医療：予防接種", "看護・救急": "病気・医療：看護・救急", "衛生：消毒薬": "病気・医療：消毒薬"};
 /* 1.6.0：○×に移した「発達の時期」の4択と、分野名の変更 */
@@ -1347,7 +1361,17 @@ function buildRuby(){
   const keys = Object.keys(m).filter(k => /[\u4e00-\u9fff々]/.test(k)).sort((a, b) => b.length - a.length);
   RUBY_RE = keys.length ? new RegExp(keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g') : null;
 }
-const rb = s => { const e = esc(s); return SET.ruby && RUBY_RE ? e.replace(RUBY_RE, w => `<ruby>${w}<rt>${RUBY_MAP[w]}</rt></ruby>`) : e; };
+/* =========================================================
+ * ふりがな　【申し送り：表記崩れを起こさないための決まり】（README の「開発メモ」にも同じ内容）
+ *  1. ふりがなは必ず furi(語, 読み) で作る。HTMLの ruby タグ（rt）は使わない。
+ *     ブラウザの ruby は、読みが語より長いと語の前後にすき間を空け、flex/grid の中では語だけ下にずれる。
+ *     furi() は読みを語の上に重ねるだけで、語の幅を変えない。
+ *  2. ふりがなが入る文は rb(文) / rbL(文) で作る。どちらも <span class="rtx"> で包んで1つの文にするので、
+ *     flex や grid の箱（行の見出し・選択肢・表のセルなど）に直接入れても、文がばらばらに並ばない。
+ *  3. 新しい画面を作ったら、ふりがなの語が入る文で「すき間・段ずれ」がないか、スマホ幅と iPad 幅で見る。
+ * ========================================================= */
+const furi = (w, r) => `<span class="fr">${w}<span class="frt" aria-hidden="true">${r}</span></span>`;
+const rb = s => { const e = esc(s); if (!SET.ruby || !RUBY_RE) return e; const r = e.replace(RUBY_RE, w => furi(w, esc(RUBY_MAP[w]))); return r === e ? e : `<span class="rtx">${r}</span>`; };
 const lifeText = t => t ? [t.country, t.life].filter(Boolean).join('・') : '';
 const lifeLine = t => lifeText(t) ? `<p class="lifeln">${I('clock')}${esc(lifeText(t))}</p>` : '';
 const memoKey = q => q.termKey ? 'k:' + q.termKey : 'e:' + q.eventId;
@@ -2034,7 +2058,47 @@ function renderItem(){
 const prevTag = (k, id) => { const b = bucket(k, id); return b === 'new' ? '' : `<span class="prev"><span class="dot b-${b}"></span>前回 ${BL[b]}</span>`; };
 const unsureToggle = () => '';
 const isLast = () => state.round.i + 1 >= state.round.items.length;
-const nextBar = label => `<div class="actionbar"><button class="btn primary block" data-act="next" id="nextBtn">${label}</button></div>`;
+const nextBar = label => `<div data-gloss></div><div class="actionbar"><button class="btn primary block" data-act="next" id="nextBtn">${label}</button></div>`;
+
+/* =========================================================
+ * ことばの補足（kodomo-yougo.js）
+ *   画面に出てきた専門的なことばを、解説の下に短く説明する。図鑑にある語句は下線のリンクで説明するので、ここには入れない。
+ * ========================================================= */
+const GL = window.GLOSS || null;
+function textOf(el){
+  let out = '';
+  const walk = n => { for (const c of n.childNodes) { if (c.nodeType === 3) out += c.textContent; else if (c.nodeType === 1 && !c.classList.contains('frt') && !c.hasAttribute('data-gloss') && !c.classList.contains('gloss')) walk(c); } };
+  if (el) walk(el);
+  return out;
+}
+function glossFind(text){
+  if (!GL || !text) return [];
+  const terms = new Set(TERMS.filter(t => t.unit === GL.unit).map(t => t.term));
+  let hit = GL.items.filter(([w, , , al]) => !terms.has(w) && (text.includes(w) || (al || []).some(x => text.includes(x))));
+  /* 長いことばに含まれる短いことば（例：「生ワクチン」の中の「ワクチン」）は、短い方が単独で出てこなければ省く */
+  hit = hit.filter(([w, , , al]) => (al || []).some(x => text.includes(x)) || !hit.some(([v]) => v !== w && v.includes(w) && text.split(v).join('').indexOf(w) < 0));
+  /* いっしょに出すことば（例：「ワクチン」→ 生ワクチン・不活化ワクチン・トキソイド） */
+  for (const [, , , , also] of [...hit]) for (const w of (also || [])) if (!hit.some(h => h[0] === w)) { const it = GL.items.find(x => x[0] === w); if (it) hit.push(it); }
+  const order = GL.items.map(x => x[0]);
+  return hit.sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+}
+function glossHTML(text){
+  const hit = glossFind(text); if (!hit.length) return '';
+  return `<section class="block gloss"><h3>${I('book')}ことばの補足</h3><dl>${hit.map(([w, d]) => `<div><dt>${rb(w)}</dt><dd>${rb(d)}</dd></div>`).join('')}</dl></section>`;
+}
+function itemUnitNow(){
+  const r = state.round, it = r && r.items && r.items[r.i]; if (!it) return '';
+  if (it.type === 'quiz') { const q = qById.get(it.id); return q ? q.unit : ''; }
+  if (['dchk', 'dord', 'dmat'].includes(it.type)) return DV ? DV.unit : '';
+  return '';
+}
+/* 解答のあと（次へボタンの上）に自動で入れる */
+new MutationObserver(() => {
+  const box = document.querySelector('#app [data-gloss]:not([data-done])'); if (!box) return;
+  box.setAttribute('data-done', '1');
+  if (!GL || itemUnitNow() !== GL.unit) return;
+  box.innerHTML = glossHTML(textOf(document.getElementById('app')));
+}).observe(document.getElementById('app'), { childList: true, subtree: true });
 
 /* ---------- 4択 ---------- */
 function renderQuiz(it){
@@ -2409,7 +2473,7 @@ const dTbl = key => DV && DV.tables && DV.tables[key];
 /* 表や解説の中の語句を図鑑につなぐ（子どもの保健の語句。押すと図鑑の説明が開く） */
 let _lk = null;
 function linkIndex(){
-  const T = DV ? TERMS.filter(t => t.unit === DV.unit && t.term.length >= 2) : [];
+  const T = DV ? TERMS.filter(t => t.unit === DV.unit && t.term.length >= 2 && !/潜伏期間$/.test(t.cat)) : [];
   if (_lk && _lk.n === T.length && _lk.T === TERMS) return _lk;
   const map = new Map();
   for (const t of T) if (!map.has(t.term)) map.set(t.term, t.key);
@@ -2421,7 +2485,7 @@ function rbL(text){
   if (!L.re || !s) return rb(s);
   let out = '', last = 0;
   s.replace(L.re, (m, off) => { out += rb(s.slice(last, off)) + `<button type="button" class="tlink" data-act="tlink" data-v="${esc(L.map.get(m))}">${rb(m)}</button>`; last = off + m.length; return m; });
-  return out + rb(s.slice(last));
+  return `<span class="rtx">${out + rb(s.slice(last))}</span>`;
 }
 /* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部） */
 function tblHTML(spec, match){
@@ -2759,7 +2823,7 @@ function dtCur(){
 const dtTitle = k => k === '@periods' ? '時期ごとの特徴' : (dTbl(k) || {}).title || '';
 function dtBody(){
   const D = dtState(), g = state.devGenre, t = state.devTab;
-  if (t === 'tips') return `<ol class="stips">${tipsOf(g).map(x => `<li><span class="stx">${rbL(x.t)}</span></li>`).join('')}</ol>`;
+  if (t === 'tips') return `<ol class="stips">${tipsOf(g).map(x => `<li><span class="stx">${rbL(x.t)}</span></li>`).join('')}</ol>${glossHTML(tipsOf(g).map(x => x.t).join(' '))}`;
   const { items, key } = dtCur();
   /* 表の一覧（選ぶ画面） */
   if (D.pick && t === 'tables') {
@@ -2775,9 +2839,10 @@ function dtBody(){
     return res.length ? `<p class="dtcount">${res.length}つの表で見つかりました</p>` + res.map(([k]) => `<section class="dtcard"><h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k], titleHit(k) ? null : hit)}</section>`).join('') : `<p class="empty">「${esc(D.q)}」は見つかりません</p>`;
   }
   if (!key) return '<p class="empty">表がありません</p>';
+  const raw = key === '@periods' ? DV.periods.map(p => p.lines.map(l => l.join(' ')).join(' ')).join(' ') : (() => { const tb = dTbl(key); return [tb.cols.join(' '), ...tb.rows.map(r => r.join(' ')), tb.note || ''].join(' '); })();
   return `<section class="dtcard">${key === '@periods'
     ? DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd><span>${rbL(x)}</span></dd></div>`).join('')}</dl></section>`).join('')
-    : tblHTML([key])}</section>`;
+    : tblHTML([key])}</section>${glossHTML(raw)}`;
 }
 /* 表の選び方：時期で見るは4つのボタン、比較の表は「表を選ぶ」ボタン（一覧が開く）と前後の矢印 */
 function dtChips(){
@@ -2892,6 +2957,7 @@ function openTerm(key){
     ${t.detail ? `<section class="block"><h3>くわしく</h3><p class="prose">${rb(t.detail)}</p></section>` : ''}
     ${t.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(t.point)}</p></section>` : ''}
     ${tblOfTerm(t) ? tblBlocks([[tblOfTerm(t)]], false) : ''}
+    ${GL && t.unit === GL.unit ? glossHTML([t.summary, t.detail, t.point].join(' ')) : ''}
     ${others.length ? `<section class="block"><h3>他の単元での説明</h3>${others.map(o => `<button class="other" data-act="term" data-v="${esc(o.key)}"><b>${esc(unitName(o.unit))}</b><span>${rb(o.summary)}</span></button>`).join('')}</section>` : ''}
     ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${rb(x.term)}</button>`).join('')}</div></section>` : ''}
     ${asAns.length ? `<section class="block"><h3>問題</h3><div class="rel">${asAns.map(q => { const b = bucket('q', q.id); return `<div><span class="dot b-${b}" title="${BL[b]}"></span><span>${rb(q.question)}</span></div>`; }).join('')}</div></section>` : ''}
@@ -3490,7 +3556,7 @@ function markHTML(text, words, snip){
   const parts = RUBY_RE ? text.split(new RegExp('(' + RUBY_RE.source + ')', 'g')) : [text];
   return parts.map((p, i) => {
     if (i % 2 === 1) {
-      const inner = SET.ruby ? `<ruby>${esc(p)}<rt>${esc(RUBY_MAP[p])}</rt></ruby>` : esc(p);
+      const inner = SET.ruby ? furi(esc(p), esc(RUBY_MAP[p])) : esc(p);
       re.lastIndex = 0;
       return readHit(p) || re.test(p) ? `<mark class="hit">${inner}</mark>` : inner;
     }
@@ -3908,7 +3974,7 @@ function drawRuby(){
   for (const x of list) {
     const h = kanaRow(x.reading);
     if (h !== head) { if (open) html += '</div>'; html += `<h2 class="rgroup">${h}</h2><div class="menu">`; head = h; open = true; }
-    html += `<button class="rrow" data-act="rubyEdit" data-v="${esc(x.word)}"><span class="rw"><ruby>${esc(x.word)}<rt>${esc(x.reading)}</rt></ruby></span><span class="rr">${markHTML(x.reading, words)}</span>${I('chev', 'mchev')}</button>`;
+    html += `<button class="rrow" data-act="rubyEdit" data-v="${esc(x.word)}"><span class="rw">${furi(esc(x.word), esc(x.reading))}</span><span class="rr">${markHTML(x.reading, words)}</span>${I('chev', 'mchev')}</button>`;
   }
   box.innerHTML = html + (open ? '</div>' : '');
 }
@@ -3919,7 +3985,7 @@ function openRubySheet(word){
     <form id="rubyForm" data-guard data-word="${esc(word || '')}">
       <div class="fld"><label for="rbWord" class="req">語</label><input class="inp" id="rbWord" data-f="word" value="${esc(word || '')}" placeholder="例：恩物"></div>
       <div class="fld"><label for="rbRead" class="req">読み</label><input class="inp" id="rbRead" data-f="reading" value="${esc(r || '')}" placeholder="例：おんぶつ"></div>
-      <div class="rpv" id="rbPv">${word ? `<ruby>${esc(word)}<rt>${esc(r)}</rt></ruby>` : '<span class="muted">ここに見え方が出ます</span>'}</div>
+      <div class="rpv" id="rbPv">${word ? furi(esc(word), esc(r)) : '<span class="muted">ここに見え方が出ます</span>'}</div>
       <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="closeModal">キャンセル</button><button type="submit" class="btn primary">保存する</button></div>
         ${word ? `<div class="sheet-sub"><button type="button" class="textbtn danger" data-act="rubyDel" data-v="${esc(word)}">このふりがなを削除</button></div>` : ''}</div>
     </form>`, { noFocus: !!word });
@@ -4249,7 +4315,7 @@ document.addEventListener('input', ev => {
   else if (t.id === 'rubyQ') { state.ruby.q = t.value; drawRuby(); }
   else if (t.id === 'rbWord' || t.id === 'rbRead') {
     const w = document.getElementById('rbWord').value.trim(), r = document.getElementById('rbRead').value.trim();
-    document.getElementById('rbPv').innerHTML = w ? (r ? `<ruby>${esc(w)}<rt>${esc(r)}</rt></ruby>` : esc(w)) : '<span class="muted">ここに見え方が出ます</span>';
+    document.getElementById('rbPv').innerHTML = w ? (r ? furi(esc(w), esc(r)) : esc(w)) : '<span class="muted">ここに見え方が出ます</span>';
   }
   else if (t.id === 'bulkText') { state.bulk.text = t.value; onBulkInput(); }
   else if (t.id === 'bulkNew') state.bulk.newName = t.value;
