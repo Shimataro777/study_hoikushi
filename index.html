@@ -738,6 +738,41 @@ ruby{ruby-align:center}
 .sroles div+div{border-top:1px solid var(--line)}
 .sroles dt{font-weight:600;font-size:var(--fs-body-sm);margin:0 0 2px}
 .sroles dd{margin:0;font-size:var(--fs-caption);color:var(--ink2);line-height:1.7}
+/* 比較の表（月齢・年齢などを1列目に。列が多い表は横に動かせる） */
+.ctw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.ctbl{border-collapse:separate;border-spacing:0;width:100%;font-size:var(--fs-caption);line-height:1.6}
+.ctw.wide .ctbl{min-width:calc(var(--n) * 8.2em)}
+.ctbl th,.ctbl td{padding:8px 10px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line)}
+.ctbl tr:last-child > *{border-bottom:0}
+.ctbl td+td,.ctbl th+td,.ctbl thead th+th{border-left:1px solid var(--line)}
+.ctbl thead th{background:var(--surface2);color:var(--ink2);font-weight:700;font-size:var(--fs-micro);white-space:nowrap}
+.ctbl tbody th{font-weight:700;color:var(--primary);background:var(--surface);word-break:keep-all;overflow-wrap:anywhere;min-width:4.5em}
+.ctw.wide .ctbl tbody th,.ctw.wide .ctbl thead th:first-child{position:sticky;left:0;z-index:1;box-shadow:1px 0 0 var(--line)}
+.ctw.wide .ctbl thead th:first-child{background:var(--surface2)}
+.ctbl tbody tr:nth-child(even) > *{background:var(--tint)}
+.ctbl .nil{color:var(--muted)}
+.tgh{font-size:var(--fs-subhead);margin:22px 0 4px;padding-top:6px;border-top:1px solid var(--line)}
+/* 画像 */
+.media .phgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.media .phl{margin:10px 0 6px;font-size:var(--fs-caption);color:var(--muted);font-weight:600}
+.phb{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:10px;overflow:hidden;padding:0;background:var(--surface2)}
+.phb img{width:100%;height:100%;object-fit:cover;display:block}
+.phb.missing::after{content:"画像がありません";position:absolute;inset:0;display:grid;place-items:center;font-size:var(--fs-micro);color:var(--muted)}
+.phadd{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:40px;padding:6px 12px;border:1px dashed var(--line);border-radius:10px;color:var(--primary);font-size:var(--fs-caption);font-weight:600;cursor:pointer;background:var(--surface)}
+.phadd .i{width:16px;height:16px}
+.phgrid .phadd{aspect-ratio:1;flex-direction:column;padding:0}
+.phadds{display:flex;flex-wrap:wrap;gap:8px}
+.media.compact{margin-top:10px}
+.media.compact .phadd{min-height:32px;font-size:var(--fs-micro);color:var(--muted)}
+.phview{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.phv-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+.phv-btn{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:var(--fs-label)}
+.phv-btn .i{width:16px;height:16px}
+.phv-hint{color:rgba(255,255,255,.6);font-size:var(--fs-micro)}
+.phv-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;-webkit-overflow-scrolling:touch}
+.phv-body img{max-width:100%;max-height:100%;object-fit:contain}
+.phview.full .phv-body{display:block}
+.phview.full .phv-body img{max-width:none;max-height:none;width:200%}
 /* 発達チェック */
 .mpick{display:flex;flex-wrap:wrap;gap:6px}
 .mpick button{flex:1 1 auto;min-width:64px;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:var(--fs-label);font-weight:600;line-height:1.3;transition:background .12s,border-color .12s,opacity .15s}
@@ -846,7 +881,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.6.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -929,7 +964,7 @@ const HELP = {
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
-  dev: ['発達チェック', '時期ごとの特徴を、3つの形で練習します。\n\nまとめて答える：1問がひとつの表になっていて、すべての行が同じ選択肢を使います（例：「身長・体重は出生時の何倍？」で、1歳の身長・2歳の体重などをまとめて答える）。行どうしを比べながら答えるので、時期の違いが整理できます。答え終わると、選択肢（時期）ごとにまとめた表が出ます。\n\n○×：1セット5つの記述（試験のA〜E）に、適切なら○、不適切なら×を選びます。不適切な記述は「別の時期の特徴」を入れて作ってあり、選ぶとその場で正しい時期と解説が出ます。5つすべて合っていれば正解です。\n\n並べ替え：早い時期のものから順にタップして番号をつけ、「答え合わせ」を押します。\n\n答え終わると、その分野の整理と早見表が出ます。'],
+  dev: ['○×チェック', '保育士試験の子どもの保健で多い「適切な記述に○、不適切な記述に×」の形で練習します。\n\n○×：1セット5つの記述（試験のA〜E）に、○・×・？を選びます。不適切な記述は、別の時期・別の病気・別の数字を入れて作ってあり、選ぶとその場で正しい形と解説が出ます。5つすべて合っていれば正解です。答え終わると「試験の解答の形（A○ B×…）」と、その分野の比較の表が出ます。\n\n並べ替え：早い時期のものから順にタップして番号をつけ、「答え合わせ」を押します。\n\n画像：記述ごと・セットごとに「画像を追加」から教科書の写真などを付けられます。'],
   one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
 };
 const help = key => `<button class="help" data-act="help" data-v="${key}" aria-label="説明を見る">?</button>`;
@@ -946,7 +981,7 @@ let P = loadJSON(PKEY, blankP);
    アプリは空の枠。付属の問題ファイル（AIが作ったもの）も、自分で足した問題も、
    取り込んだあとは同じ置き場に入り、同じように直したり消したりできる */
 const DBKEY = 'hoikushi-anki-db-v1';
-const blankDB = () => ({ v: 1, units: [], terms: [], events: [], ruby: {}, memos: {} });
+const blankDB = () => ({ v: 1, units: [], terms: [], events: [], ruby: {}, memos: {}, media: {} });
 const hasKanji = s => /[\u4e00-\u9fff々〆]/.test(s || '');
 const kanaOk = t => t.kana && hasKanji(t.term) && !/[ぁ-んァ-ヶー・]/.test(t.term) && !/・/.test(t.kana);
 function bundleData(){
@@ -970,6 +1005,7 @@ function seedDB(old){
   for (const t of db.terms) if (kanaOk(t) && !(t.term in db.ruby)) db.ruby[t.term] = t.kana.replace(/\s+/g, '');
   for (const [k, v] of Object.entries(old.ruby)) { if (v) db.ruby[k] = v; else delete db.ruby[k]; }
   db.memos = { ...old.memos };
+  db.media = { ...(old.media || {}) };
   return db;
 }
 /* 付属ファイルに後から足した欄（国・地域、生没年）を、すでにある置き場へ一度だけ補う */
@@ -990,7 +1026,10 @@ function ensureStaffUnit(db){
 }
 /* あとから足した付属の単元（子どもの保健など）を、すでにある置き場へ一度だけ入れる（あとで消した場合は足し直さない） */
 /*   「単元#番号」は、あとから付属ファイルに足した用語を一度だけ補う（単元を消していたら補わない） */
-const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3'];
+const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4'];
+/* 1.6.0：○×に移した「発達の時期」の4択と、分野名の変更 */
+const MOVED_TERMS4 = ["新生児期", "乳児期", "幼児期", "学童期", "青年期", "成人期", "老年期"];
+const CAT_RENAME4 = {"発達の原則": "発達：発達の原則", "生まれたときの状態": "発達：生まれたときの状態", "反射と運動のしくみ": "発達：反射と運動のしくみ", "原始反射の種類": "発達：原始反射の種類", "成長の時期と体の変化": "発達：成長の時期と体の変化", "言葉の発達（用語）": "発達：言葉", "社会性・愛着（用語）": "発達：社会性・愛着", "認知の発達（用語）": "発達：認知", "学童期以降（用語）": "発達：学童期以降", "母親のメンタルヘルス": "発達：母親のメンタルヘルス"};
 /* 1.5.0：「まとめて答える」に移した4択（年齢・月齢が答えの用語）。置き場から一度だけ外す */
 const MOVED_TERMS = ["生後1〜2か月ごろ", "生後3〜4か月ごろ", "生後5か月ごろ", "生後6か月ごろ", "生後7か月ごろ", "生後8か月ごろ", "生後9〜10か月ごろ", "生後11か月ごろ", "生後12か月ごろ", "1歳〜1歳2か月ごろ", "1歳3〜4か月ごろ", "1歳6〜10か月ごろ", "2歳ごろ", "3歳ごろ", "4歳ごろ", "5歳ごろ", "首のすわり", "ねがえり", "ひとりすわり", "はいはい", "つかまり立ち", "ひとり歩き", "体重が出生時の約2倍", "体重が出生時の約3倍", "体重が出生時の約4倍", "身長が出生時の約1.5倍", "身長が出生時の約2倍"];
 function ensureAddedUnits(db){
@@ -1006,6 +1045,12 @@ function ensureAddedUnits(db){
       const old = db.terms.find(x => x.unit === id && x.term === '緊張性頭反射'), nw = b.terms.find(x => x.unit === id && x.term === '緊張性頸反射');
       if (old && nw && !db.terms.some(x => x.unit === id && x.term === nw.term)) Object.assign(old, { term: nw.term, kana: nw.kana, key: nw.key, summary: nw.summary, detail: nw.detail, q: nw.q });
       if (token === id + '#3') db.terms = db.terms.filter(x => !(x.unit === id && x.key === id + '::' + x.term && MOVED_TERMS.includes(x.term)));
+      if (token === id + '#4') {
+        db.terms = db.terms.filter(x => !(x.unit === id && x.key === id + '::' + x.term && MOVED_TERMS4.includes(x.term)));
+        for (const x of db.terms) if (x.unit === id && CAT_RENAME4[x.cat]) x.cat = CAT_RENAME4[x.cat];
+        const du = db.units.find(x => x.id === id); if (du && /^発達の時期と/.test(du.desc || '')) du.desc = u.desc;
+        if (!db.media) db.media = {};
+      }
     } else if (!db.units.some(x => x.id === id)) db.units.push(u);
     for (const t of b.terms.filter(x => x.unit === id)) {
       if (db.terms.some(x => x.key === t.key || (x.unit === id && x.term === t.term))) continue;
@@ -1247,7 +1292,7 @@ function linkedTerms(unit, texts, skip){
 /* =========================================================
  * 画面遷移（戻るボタン・端末の戻る操作に対応）
  * ========================================================= */
-const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ', staff: '施設の職員配置', dev: '発達チェック' };
+const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ', staff: '施設の職員配置', dev: '○×チェック' };
 const routeTitle = r => r.v === 'unit' ? unitName(r.a) : (TITLES[r.v] || '');
 const TAB_ROOTS = ['home', 'list', 'dict', 'data'];
 const stack = [];
@@ -1606,8 +1651,8 @@ function renderUnit(id){
       ${sf.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
       ${sf.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
       ${sf.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
-      ${dv.length ? row('goDev', 'layers', '発達チェック（試験形式）', `まとめて答える ${(DV.matches || []).length}問・○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問`) : ''}
-      ${dv.length ? row('devTable', 'book', '発達の早見表', '時期で見る・分野で見る・まちがえやすいポイント') : ''}
+      ${dv.length ? row('goDev', 'layers', '○×チェック（試験形式）', `○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問　答えると比較の表が出る`) : ''}
+      ${dv.length ? row('devTable', 'book', '子どもの保健の早見表', '時期で見る・比較の表・まちがえやすいポイント') : ''}
       ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
@@ -1808,6 +1853,8 @@ function renderQuizFeedback(first){
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('q', q.id)}</section>
   <section class="block"><h3>解説</h3><p class="prose">${rb(q.explanation)}</p></section>
   ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(q.point)}</p></section>` : ''}
+  ${q.termKey && tblOfTerm(termByKey.get(q.termKey)) ? tblBlocks([[tblOfTerm(termByKey.get(q.termKey))]], false) : ''}
+  ${q.termKey ? mediaSection([{ key: 'k:' + q.termKey, label: '語句の画像' }, { key: 'q:' + q.id, label: 'この問題の画像' }]) : ''}
   <details class="block" ${c.ok && !c.unknown ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
   ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${rb(t.term)}</button>`).join('')}</div></section>` : ''}
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
@@ -2096,6 +2143,130 @@ function openStaffTable(){
 
 
 /* =========================================================
+ * 画像（語句の解説・問題の解説に付ける）
+ *   Footprints と同じ考え方：
+ *   ・取り込むときに縮小してJPEGにする（長い辺 PH_MAX px）
+ *   ・画像そのものは「写真の置き場」（IndexedDB）に1枚ずつ保存し、問題や語句からは "photo:ph_xxx" で参照する
+ *   ・バックアップでは、参照している画像だけを photos: { ph_xxx: "data:image/jpeg;base64,..." } にまとめて書き出す
+ *   参照の置き場は U.media[キー] = ["photo:ph_xxx", ...]
+ *     k:語句のキー ／ q:問題ID ／ d:○×セットID ／ d:○×セットID:記述の番号 ／ d:並べ替えID
+ * ========================================================= */
+const PH_MAX = 1080, PH_Q = 0.8;
+const PHDB = (() => {
+  let dbp = null;
+  const open = () => dbp || (dbp = new Promise((res, rej) => {
+    const r = indexedDB.open('hoikushi-anki-photos', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('photos');
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  }));
+  const tx = (mode, fn) => open().then(db => new Promise((res, rej) => {
+    const t = db.transaction('photos', mode), st = t.objectStore('photos'), out = fn(st);
+    t.oncomplete = () => res(out && 'result' in out ? out.result : undefined); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+  }));
+  return {
+    get: id => tx('readonly', st => st.get(id)),
+    put: (id, v) => tx('readwrite', st => st.put(v, id)),
+    del: id => tx('readwrite', st => st.delete(id)),
+    keys: () => tx('readonly', st => st.getAllKeys())
+  };
+})();
+const phCache = new Map();
+const phId = ref => String(ref).replace(/^photo:/, '');
+const mediaOf = key => (U.media && U.media[key]) || [];
+function allPhotoRefs(){ const s = new Set(); for (const arr of Object.values(U.media || {})) for (const r of arr) s.add(phId(r)); return s; }
+async function phLoad(id){
+  if (phCache.has(id)) return phCache.get(id);
+  try { const v = await PHDB.get(id); if (v) phCache.set(id, v); return v || ''; } catch (_) { return ''; }
+}
+function hydratePhotos(root = document){
+  root.querySelectorAll('img[data-ph]:not([src])').forEach(img => {
+    const id = img.dataset.ph;
+    phLoad(id).then(src => { if (src) img.src = src; else img.closest('.phb')?.classList.add('missing'); });
+  });
+}
+new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) { if (n.matches?.('img[data-ph]') || n.querySelector?.('img[data-ph]')) { hydratePhotos(n.parentNode || document); return; } } })
+  .observe(document.documentElement, { childList: true, subtree: true });
+
+/* 縮小してJPEGの data URL にする */
+function shrinkImage(file){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, PH_MAX / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.max(1, Math.round(img.naturalWidth * s)), h = Math.max(1, Math.round(img.naturalHeight * s));
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg', PH_Q));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); };
+    img.src = url;
+  });
+}
+async function addPhotos(key, files){
+  if (!files || !files.length) return;
+  let n = 0;
+  for (const f of files) {
+    try {
+      const data = await shrinkImage(f), id = 'ph_' + uid();
+      await PHDB.put(id, data); phCache.set(id, data);
+      (U.media[key] = U.media[key] || []).push('photo:' + id); n++;
+    } catch (_) {}
+  }
+  saveU(); redrawMedia(key);
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  toast(n ? `画像を${n}枚追加しました` : '画像を読み込めませんでした');
+}
+async function removePhoto(key, id){
+  U.media[key] = mediaOf(key).filter(r => phId(r) !== id);
+  if (!U.media[key].length) delete U.media[key];
+  saveU();
+  if (!allPhotoRefs().has(id)) { try { await PHDB.del(id); } catch (_) {} phCache.delete(id); }
+  redrawMedia(key);
+}
+/* どこからも参照されていない画像を写真の置き場から消す */
+async function gcPhotos(){
+  try { const used = allPhotoRefs(); for (const id of await PHDB.keys()) if (!used.has(id)) { await PHDB.del(id); phCache.delete(id); } } catch (_) {}
+}
+/* 画像の欄。entries = [{ key, label }]。画像がない欄は「＋」ボタンだけを並べる */
+function mediaSection(entries, opts = {}){
+  const has = entries.filter(e => mediaOf(e.key).length), none = entries.filter(e => !mediaOf(e.key).length);
+  const addBtn = (e, text) => `<label class="phadd"><input type="file" accept="image/*" multiple data-ph-add="${esc(e.key)}" hidden>${I('plus')}${esc(text)}</label>`;
+  const keys = entries.map(e => e.key).join('|');
+  return `<section class="block media ${opts.compact ? 'compact' : ''}" data-msec="${esc(keys)}" data-mlabels="${esc(entries.map(e => e.label).join('|'))}" data-mcompact="${opts.compact ? 1 : ''}">
+    ${has.length || !opts.compact ? `<h3>画像</h3>` : ''}
+    ${has.map(e => `<div class="phgrp">${entries.length > 1 ? `<p class="phl">${esc(e.label)}</p>` : ''}<div class="phgrid">${mediaOf(e.key).map(r => { const id = phId(r); return `<button class="phb" data-act="phView" data-k="${esc(e.key)}" data-v="${esc(id)}" aria-label="画像を開く"><img data-ph="${esc(id)}" alt=""></button>`; }).join('')}${addBtn(e, '追加')}</div></div>`).join('')}
+    ${none.length ? `<div class="phadds">${none.map(e => addBtn(e, `${e.label}を追加`)).join('')}</div>` : ''}
+  </section>`;
+}
+function redrawMedia(key){
+  document.querySelectorAll('[data-msec]').forEach(sec => {
+    const keys = sec.dataset.msec.split('|'); if (!keys.includes(key)) return;
+    const labels = sec.dataset.mlabels.split('|');
+    sec.outerHTML = mediaSection(keys.map((k, i) => ({ key: k, label: labels[i] })), { compact: !!sec.dataset.mcompact });
+  });
+}
+function openPhoto(key, id){
+  const ov = document.createElement('div');
+  ov.className = 'phview'; ov.setAttribute('role', 'dialog');
+  ov.innerHTML = `<div class="phv-top"><button class="phv-btn" data-pv="del">${I('trash')}削除</button><span class="phv-hint">画像を押すと拡大</span><button class="phv-btn" data-pv="close">${I('x')}閉じる</button></div>
+    <div class="phv-body"><img data-ph="${esc(id)}" alt=""></div>`;
+  document.body.appendChild(ov);
+  hydratePhotos(ov);
+  ov.addEventListener('click', async e => {
+    const b = e.target.closest('[data-pv]');
+    if (e.target.tagName === 'IMG') { ov.classList.toggle('full'); return; }
+    if (!b) return;
+    if (b.dataset.pv === 'close') ov.remove();
+    if (b.dataset.pv === 'del' && await confirmDialog({ title: 'この画像を削除しますか？', body: '元に戻せません。', ok: '削除' })) { ov.remove(); removePhoto(key, id); toast('削除しました'); }
+  });
+}
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.dataset && t.dataset.phAdd) { const files = [...t.files]; t.value = ''; addPhotos(t.dataset.phAdd, files); }
+});
+
+/* =========================================================
  * 子どもの保健：発達チェック（試験形式）
  *   ○×：1セット＝5つの記述（試験のA〜E）。記述ごとに ○・×・？ を選ぶと、その場で正誤と正しい形が出る。
  *   並べ替え：早い時期から順にタップして番号をつける。
@@ -2110,41 +2281,54 @@ const dOrder = id => DV && DV.orders.find(x => x.id === id);
 const dMatch = id => DV && (DV.matches || []).find(x => x.id === id);
 const dItem = id => dMatch(id) || dCheck(id) || dOrder(id);
 const dType = id => dMatch(id) ? 'dmat' : dCheck(id) ? 'dchk' : 'dord';
-const dKind = x => x.rows ? 'まとめて答える' : x.items && Array.isArray(x.items[0]) ? '並べ替え' : x.kind === 'age' ? '○×（時期別）' : '○×（分野別）';
-const dTable = key => DV.table.find(t => t.key === key);
-function dTableHTML(t){
-  return `<div class="dtbl">${t.rows.map(([w, x]) => `<div><span class="dw">${esc(w)}</span><span>${rb(x)}</span></div>`).join('')}</div>${t.note ? `<p class="hint" style="margin-top:8px">${rb(t.note)}</p>` : ''}`;
+const dKind = x => x.rows ? 'まとめて答える' : x.items && Array.isArray(x.items[0]) ? '並べ替え' : '○× ' + ((DV.areas || []).find(a => a.id === x.area)?.title || '');
+const dTbl = key => DV && DV.tables && DV.tables[key];
+/* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部） */
+function tblHTML(spec){
+  const [key, from, to] = Array.isArray(spec) ? spec : [spec], t = dTbl(key); if (!t) return '';
+  let rows = t.rows;
+  if (from) { const a = rows.findIndex(r => r[0] === from), b = to ? rows.findIndex(r => r[0] === to) : rows.length - 1; if (a >= 0 && b >= a) rows = rows.slice(a, b + 1); }
+  const wide = t.cols.length > 2;
+  return `<div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${t.cols.length}"><thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rb(c)}</th>` : `<td>${c ? rb(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${t.note ? `<p class="hint" style="margin-top:8px">${rb(t.note)}</p>` : ''}`;
 }
-function dRefBlocks(keys){
-  return (keys || []).map(dTable).filter(Boolean).map((t, i) =>
-    `<details class="block dref" ${i === 0 ? 'open' : ''}><summary>早見表：${esc(t.title)}${I('chevD')}</summary>${dTableHTML(t)}</details>`).join('');
+const tblTitle = spec => { const k = Array.isArray(spec) ? spec[0] : spec; return dTbl(k)?.title || ''; };
+/* 解答後の「比較の表」。最初の1つは開いておく */
+function tblBlocks(specs, openFirst = true){
+  return (specs || []).filter(sp => dTbl(Array.isArray(sp) ? sp[0] : sp)).map((sp, i) =>
+    `<details class="block dref" ${openFirst && i === 0 ? 'open' : ''}><summary>表：${esc(tblTitle(sp))}${I('chevD')}</summary>${tblHTML(sp)}</details>`).join('');
+}
+/* 4択の語句に付けた表（付属ファイルの tbl。すでに取り込んだ語句には、付属ファイルの同じ語句から補う） */
+let _bundleTbl = null;
+function tblOfTerm(t){
+  if (!t) return '';
+  if (t.tbl) return t.tbl;
+  if (!_bundleTbl) { _bundleTbl = new Map(); for (const u of (window.UNITS || [])) for (const x of (u.terms || [])) if (x.tbl) _bundleTbl.set(u.id + '::' + x.term, x.tbl); }
+  return _bundleTbl.get(t.key) || '';
 }
 function devStart(ids){
   if (!DV) return;
   startRound(ids.filter(dItem).map(id => ({ type: dType(id), id })), { unit: DV.unit, kind: 'dev' });
 }
 
-/* ---------- 選ぶ画面 ---------- */
+/* ---------- 選ぶ画面（分野ごと） ---------- */
 function renderDevHome(){
   state.round = null;
   const all = devOf(DV.unit), c = countB('d', all), weak = all.filter(x => isWeak(bucket('d', x.id)));
   const rowOf = x => { const b = bucket('d', x.id); return `<button class="mrow" data-act="devOne" data-v="${esc(x.id)}"><span class="mtx"><span class="mt">${rb(x.title)}</span><span class="ms"><span class="dot b-${b}"></span> ${BL[b]}</span></span>${I('chev', 'mchev')}</button>`; };
-  const sect = (title, list, act) => `<section class="sect"><div class="shead"><h2 class="stitle">${title}</h2><button class="textbtn" data-act="${act}">まとめて解く${I('chev')}</button></div><div class="menu">${list.map(rowOf).join('')}</div></section>`;
-  const mrow = (act, icon, t, s) => `<button class="mrow" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${t}</span><span class="ms">${s}</span></span>${I('chev', 'mchev')}</button>`;
+  const sect = (title, desc, list, act, v) => list.length ? `<section class="sect"><div class="shead"><h2 class="stitle">${esc(title)}</h2><button class="textbtn" data-act="${act}" data-v="${esc(v || '')}">まとめて解く${I('chev')}</button></div>${desc ? `<p class="hint" style="margin:-4px 0 8px">${esc(desc)}</p>` : ''}<div class="menu">${list.map(rowOf).join('')}</div></section>` : '';
+  const mrow = (act, icon, t, sub) => `<button class="mrow" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${t}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   app.innerHTML = `
   <h1 class="ptitle">${esc(DV.title)} ${help('dev')}</h1>
-  <p class="psub">試験の形（○×の組み合わせ・早い順）で、時期ごとの特徴を整理します</p>
+  <p class="psub">試験と同じ「○×の組み合わせ」の形で練習します。答えると比較の表が出ます</p>
   <section class="sect"><div class="menu">
-    ${mrow('devMatRandom', 'layers', 'まとめて答えるをランダムに5問', '1問の中で、複数の時期や項目を比べながら答える')}
-    ${mrow('devRandom', 'list', '○×をランダムに5セット', '分野別・時期別からまぜて出題')}
-    ${mrow('devOrdRandom', 'hourglass', '並べ替えをランダムに5問', '早い時期から順にタップ')}
+    ${mrow('devRandom', 'list', '○×をランダムに5セット', 'すべての分野からまぜて出題')}
     ${weak.length ? mrow('devWeak', 'retry', '苦手を解く', `不正解・わからない・自信なし ${weak.length}問`) : ''}
-    ${mrow('devTable', 'book', '発達の早見表', '時期で見る・分野で見る・まちがえやすいポイント')}
+    ${mrow('devTable', 'book', '早見表', '時期で見る・比較の表・まちがえやすいポイント')}
   </div></section>
-  ${sect('まとめて答える', DV.matches || [], 'devAllMat')}
-  ${sect('○× 分野別', DV.checks.filter(x => x.kind !== 'age'), 'devAllTheme')}
-  ${sect('○× 時期別', DV.checks.filter(x => x.kind === 'age'), 'devAllAge')}
-  ${sect('早い順に並べる', DV.orders, 'devAllOrd')}
+  ${(DV.areas || []).map(a => sect('○× ' + a.title, a.desc, DV.checks.filter(x => x.area === a.id), 'devArea', a.id)).join('')}
+  ${sect('早い順に並べる', '時期の流れを確認する', DV.orders, 'devAllOrd')}
+  ${(DV.matches || []).length ? sect('まとめて答える', '', DV.matches, 'devAllMat') : ''}
   <section class="sect"><div class="panel"><div class="ov"><div class="ovh"><span>振り返り</span><span class="muted">${c.total}問</span></div>${stackBar(c)}${legend(c)}</div></div></section>`;
 }
 
@@ -2154,7 +2338,7 @@ function renderDevCheck(it){
   state.round.cur = { type: 'dchk', id: s.id, ans: {}, done: false, ok: null, unsure: false };
   app.innerHTML = `
   <p class="meta"><span>${esc(unitName(DV.unit))}／${dKind(s)}</span>${prevTag('d', s.id)}</p>
-  <h1 class="qtext">${s.kind === 'age' ? `${rb(s.title)}の子どもの発達` : rb(s.title)}</h1>
+  <h1 class="qtext">${s.area === 'dev-age' && /か月|歳/.test(s.title) ? `${rb(s.title)}の子どもの発達` : rb(s.title)}</h1>
   <p class="qlead">次の記述のうち、適切なものに○、不適切なものに×をつけましょう。</p>
   <p class="sprog" id="sprog"></p>
   <ol class="sgrid">${s.items.map((x, k) => `<li class="srow" id="dr-${k}">
@@ -2190,7 +2374,8 @@ function dPaintRow(k, v){
   const fb = li.querySelector('.sfb');
   fb.innerHTML = `<div class="sfb-h ${cls}">${I(cls === 'ok' ? 'check' : cls === 'ng' ? 'x' : 'book')}<b>${cls === 'ok' ? '正解' : cls === 'ng' ? '不正解' : '答え'}</b><span class="sfb-a">${x.ok ? '○ 適切' : '× 不適切'}</span></div>
     ${x.ok ? '' : `<p class="dfix"><b>正しくは</b>${rb(x.fix || '')}</p>`}
-    ${x.why ? `<p class="sfb-w">${rb(x.why)}</p>` : ''}`;
+    ${x.why ? `<p class="sfb-w">${rb(x.why)}</p>` : ''}
+    ${mediaSection([{ key: `d:${s.id}:${k}`, label: 'この記述の画像' }], { compact: true })}`;
   fb.hidden = false;
 }
 function devPick(el){
@@ -2233,7 +2418,7 @@ function devCheckComplete(){
 function dVerdict(c, okN, total, unit){
   const vb = c.unknown ? 'unknown' : c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
   const head = c.ok ? (state.streak >= 3 ? `全問正解　${state.streak}連続` : '全問正解') : `${total}${unit}中 ${okN}${unit}が正解`;
-  const sub = c.ok ? (c.unsure ? '「自信なし」に振り分けました' : 'この分野の時期はばっちりです') : c.unknown ? '下の答えと早見表を確認しましょう' : 'まちがえたところを、正しい時期と結びつけて確認しましょう';
+  const sub = c.ok ? (c.unsure ? '「自信なし」に振り分けました' : 'この分野はばっちりです') : c.unknown ? '下の答えと早見表を確認しましょう' : 'まちがえたところを、下の表と見くらべて確認しましょう';
   return `<div class="verdict b-${vb}"><span class="vi">${I(c.ok ? 'check' : c.unknown ? 'book' : 'x')}</span><div><b>${head}</b><span class="vs">${sub}</span></div></div>`;
 }
 function renderDevCheckFeedback(first){
@@ -2246,9 +2431,10 @@ function renderDevCheckFeedback(first){
     <div class="dkey">${s.items.map((x, k) => { const ok = c.ans[k] === dCode(x); return `<button class="dkc ${ok ? 'ok' : 'ng'}" data-act="dJump" data-v="${k}"><span>${ABC[k]}</span><b>${mark(dCode(x))}</b>${ok ? '' : `<small>あなた ${mark(c.ans[k])}</small>`}</button>`; }).join('')}</div>
     <p class="hint" style="margin-top:8px">試験では「A○ B× C○ …」の組み合わせを選びます。記号を押すと、その記述の解説へ移動します。</p></section>
   ${s.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rb(s.point)}</p></section>` : ''}
-  ${dRefBlocks(s.ref)}
+  ${tblBlocks(s.tbl)}
+  ${mediaSection([{ key: 'd:' + s.id, label: 'このセットの画像' }])}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', s.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}発達の早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   if (first) setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
@@ -2312,9 +2498,10 @@ function devOrderCheck(unknown){
     return `<li class="${unknown ? '' : ok ? 'ok' : 'ng'}"><span class="onum">${i + 1}</span><span class="otx"><span>${rb(t)}</span><small>${esc(w)}${unknown || ok ? '' : `　あなた：${p + 1}番目`}</small></span></li>`;
   }).join('')}</ol></section>
   ${o.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(o.point)}</p></section>` : ''}
-  ${dRefBlocks(o.ref)}
+  ${tblBlocks(o.tbl)}
+  ${mediaSection([{ key: 'd:' + o.id, label: 'この問題の画像' }])}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', o.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}発達の早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
@@ -2393,28 +2580,38 @@ function devMatComplete(){
   <section class="block"><h3>まとめると</h3><div class="mgrp">${groups.map(g => `<div><span class="mgo">${rb(g.o)}</span><span class="mgr">${g.rows.map(x => `<button class="mgi ${c.ans[x.r] === mAns(m, x.r) ? '' : 'ng'}" data-act="mJump" data-v="${x.r}">${rb(x.row[0])}</button>`).join('')}</span></div>`).join('')}</div>
     <p class="hint" style="margin-top:8px">赤い項目がまちがえたところ。押すとその行へ移動します。</p></section>
   ${m.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rb(m.point)}</p></section>` : ''}
-  ${dRefBlocks(m.ref)}
+  ${tblBlocks(m.tbl || (m.ref || []).map(k => [k]))}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', m.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}発達の早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
 
 /* ---------- 早見表 ---------- */
-function openDevTable(tab){
+/* 表を分野ごとに分ける（その表を使っている○×の分野） */
+function tableGroups(){
+  const areaOf = {};
+  for (const x of [...DV.checks, ...DV.orders]) for (const sp of (x.tbl || [])) { const k = Array.isArray(sp) ? sp[0] : sp; if (!areaOf[k]) areaOf[k] = x.area; }
+  return (DV.areas || []).map(a => ({ a, keys: Object.keys(DV.tables).filter(k => (areaOf[k] || 'dev') === a.id) })).filter(g => g.keys.length);
+}
+function openDevTable(tab, jump){
   if (!DV) return;
   state.devTab = tab || state.devTab || 'period';
-  const t = state.devTab, tabs = [['period', '時期で見る'], ['domain', '分野で見る'], ['tips', 'まちがえやすい']];
-  const body = t === 'period'
-    ? DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd>${rb(x)}</dd></div>`).join('')}</dl></section>`).join('')
-    : t === 'domain'
-      ? `<div class="dtoc">${DV.table.map(x => `<button class="chipbtn" data-act="dTo" data-v="${x.key}">${esc(x.title)}</button>`).join('')}</div>` +
-        DV.table.map(x => `<section class="block" id="dt-${x.key}"><h3>${esc(x.title)}</h3>${dTableHTML(x)}</section>`).join('')
-      : `<ol class="stips">${DV.tips.map(x => `<li>${rb(x)}</li>`).join('')}</ol>`;
+  const t = state.devTab, tabs = [['period', '時期で見る'], ['tables', '比較の表'], ['tips', 'まちがえやすい']];
+  let body = '';
+  if (t === 'period') body = `<p class="hint" style="margin:0 0 10px">月齢・年齢を軸に、体と心がどう育つかを並べています。表は横に動かせます。</p>
+      <section class="block" style="margin-top:0"><h3>${esc(dTbl('size').title)}</h3>${tblHTML(['size'])}</section>
+      <section class="block"><h3>${esc(dTbl('body-m').title)}</h3>${tblHTML(['body-m'])}</section>
+      <section class="block"><h3>${esc(dTbl('mind-m').title)}</h3>${tblHTML(['mind-m'])}</section>
+      <section class="block"><h3>時期ごとの特徴</h3>${DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd>${rb(x)}</dd></div>`).join('')}</dl></section>`).join('')}</section>`;
+  else if (t === 'tables') { const gs = tableGroups(); body = `<div class="dtoc">${gs.map(g => `<button class="chipbtn" data-act="dTo" data-v="g-${g.a.id}">${esc(g.a.title)}</button>`).join('')}</div>` +
+      gs.map(g => `<h3 class="tgh" id="dt-g-${g.a.id}">${esc(g.a.title)}</h3>` + g.keys.map(k => `<details class="block dref" id="dt-${k}"><summary>${esc(dTbl(k).title)}${I('chevD')}</summary>${tblHTML([k])}</details>`).join('')).join(''); }
+  else body = `<ol class="stips">${DV.tips.map(x => `<li>${rb(x)}</li>`).join('')}</ol>`;
   openModal(`
-    <h2>発達の早見表</h2>
+    <h2>子どもの保健の早見表</h2>
     <div class="dtabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === t}" data-act="devTab" data-v="${k}">${l}</button>`).join('')}</div>
     ${body}`);
+  if (jump) setTimeout(() => { const d = document.getElementById('dt-' + jump); if (d) { d.open = true; d.scrollIntoView({ block: 'start' }); } }, 60);
 }
 
 /* =========================================================
@@ -2444,7 +2641,7 @@ function renderResult(){
   <div class="btns" style="margin-top:20px">
     ${review.length ? `<button class="btn primary block" data-act="retryReview">苦手をもう一度（${review.length}）</button>` : ''}
     <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
-    <button class="btn block" data-act="setupAgain">${r.origin.kind === 'staff' ? '単元に戻る' : r.origin.kind === 'dev' ? '発達チェックに戻る' : '条件を変えて解く'}</button>
+    <button class="btn block" data-act="setupAgain">${r.origin.kind === 'staff' ? '単元に戻る' : r.origin.kind === 'dev' ? '○×チェックに戻る' : '条件を変えて解く'}</button>
   </div>
   <div class="foot"><button class="textbtn" data-act="back">終了する</button></div>
   <section class="sect">
@@ -2489,6 +2686,8 @@ function openTerm(key){
     ${memoBlock(U.memos['k:' + key])}
     ${t.detail ? `<section class="block"><h3>くわしく</h3><p class="prose">${rb(t.detail)}</p></section>` : ''}
     ${t.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(t.point)}</p></section>` : ''}
+    ${tblOfTerm(t) ? tblBlocks([[tblOfTerm(t)]], false) : ''}
+    ${mediaSection([{ key: 'k:' + key, label: '語句の画像' }])}
     ${others.length ? `<section class="block"><h3>他の単元での説明</h3>${others.map(o => `<button class="other" data-act="term" data-v="${esc(o.key)}"><b>${esc(unitName(o.unit))}</b><span>${rb(o.summary)}</span></button>`).join('')}</section>` : ''}
     ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(x => `<button class="tchip" data-act="term" data-v="${esc(x.key)}">${rb(x.term)}</button>`).join('')}</div></section>` : ''}
     ${asAns.length ? `<section class="block"><h3>問題</h3><div class="rel">${asAns.map(q => { const b = bucket('q', q.id); return `<div><span class="dot b-${b}" title="${BL[b]}"></span><span>${rb(q.question)}</span></div>`; }).join('')}</div></section>` : ''}
@@ -3013,7 +3212,10 @@ function bundleCandidates(){
  *   ホーム画面から開いたiPhoneでは <a download> が動かないため、
  *   スマホでは共有シート（「"ファイル"に保存」など）を使い、使えないときだけダウンロードにする */
 async function exportBackup(){
-  const data = { app: 'hoikushi-anki-note', version: 2, exportedAt: new Date().toISOString(), progress: P, db: U };
+  /* 画像は photos にまとめる（参照しているものだけ）。問題・語句の側は "photo:ID" で参照する */
+  const photos = {};
+  for (const id of allPhotoRefs()) { const v = await phLoad(id); if (v) photos[id] = v; }
+  const data = { app: 'hoikushi-anki-note', version: 3, exportedAt: new Date().toISOString(), progress: P, db: U, photos };
   const json = JSON.stringify(data, null, 1);
   const d = new Date(), pad = n => String(n).padStart(2, '0');
   const name = `anki-note-backup-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}.json`;
@@ -3042,7 +3244,9 @@ function importBackup(file){
     const when = data.exportedAt ? new Date(data.exportedAt).toLocaleString('ja-JP') : '';
     confirmDialog({ title: 'バックアップから復元しますか？', body: `${when ? when + ' に書き出した' : 'この'}バックアップで、今の問題・メモ・ふりがな・学習記録を置き換えます。今の内容は消えます。`, ok: '復元する' }).then(ok => { if (!ok) return;
     P = { ...blankP(), ...data.progress }; U = data.db ? { ...blankDB(), ...data.db } : seedDB(data.user); ensureStaffUnit(U); ensureAddedUnits(U);
-    saveP(); saveU(); buildData(); render(cur(), true); toast('復元しました'); });
+    const photos = data.photos || {};
+    Promise.all(Object.entries(photos).map(([id, v]) => PHDB.put(id, v).then(() => phCache.set(id, v)).catch(() => {}))).then(() => gcPhotos());
+    saveP(); saveU(); buildData(); render(cur(), true); toast(`復元しました${Object.keys(photos).length ? `（画像${Object.keys(photos).length}枚）` : ''}`); });
   };
   rd.readAsText(file);
 }
@@ -3525,11 +3729,11 @@ async function onAction(el, ev){
     case 'devRandom': devStart(shuffle(DV.checks).slice(0, 5).map(x => x.id)); break;
     case 'devOrdRandom': devStart(shuffle(DV.orders).slice(0, 5).map(x => x.id)); break;
     case 'devWeak': devStart(devOf(DV.unit).filter(x => isWeak(bucket('d', x.id))).map(x => x.id)); break;
-    case 'devAllTheme': devStart(DV.checks.filter(x => x.kind !== 'age').map(x => x.id)); break;
-    case 'devAllAge': devStart(DV.checks.filter(x => x.kind === 'age').map(x => x.id)); break;
+    case 'devArea': devStart(DV.checks.filter(x => x.area === v).map(x => x.id)); break;
     case 'devAllOrd': devStart(DV.orders.map(x => x.id)); break;
     case 'devTable': openDevTable(); break;
     case 'devTab': openDevTable(v); break;
+    case 'phView': openPhoto(el.dataset.k, v); break;
     case 'dTo': document.getElementById('dt-' + v)?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }); break;
     case 'dpick': devPick(el); break;
     case 'devDontKnow': devDontKnow(); break;
@@ -3620,7 +3824,7 @@ async function onAction(el, ev){
     case 'delTerm': {
       const t = termByKey.get(v);
       if (!await confirmDialog({ title: '問題を削除しますか？', body: `「${t ? t.term : ''}」を削除します。メモと振り分けも消え、元に戻せません。` })) break;
-      U.terms = U.terms.filter(x => x.key !== v); delete U.memos['k:' + v];
+      U.terms = U.terms.filter(x => x.key !== v); delete U.memos['k:' + v]; if (U.media) { delete U.media['k:' + v]; gcPhotos(); }
       saveU(); buildData(); afterDataChange(); toast('削除しました'); break;
     }
     case 'delEvent': {
@@ -3681,7 +3885,7 @@ async function onAction(el, ev){
     case 'unitTop': { const i = U.units.findIndex(u => u.id === v); if (i > 0) { const [m] = U.units.splice(i, 1); U.units.unshift(m); saveU(); buildData(); } closeModal(); render(cur(), true); toast('いちばん上へ移しました'); break; }
     case 'wipeAll': {
       if (!await confirmDialog({ title: '問題をすべて削除しますか？', body: `単元${UNITS.length}・用語${TERMS.length}件・出来事${EVENTS.length}件・メモをすべて削除し、空の状態にします。ふりがなの辞書と学習記録は残ります。元に戻せません。\n付属の問題は「付属の問題ファイルから取り込む」でもう一度入れられます。`, ok: 'すべて削除' })) break;
-      U.units = []; U.terms = []; U.events = []; U.memos = {}; saveU(); buildData(); clearSession(); render(cur(), true); toast('すべて削除しました'); break;
+      U.units = []; U.terms = []; U.events = []; U.memos = {}; U.media = {}; gcPhotos(); saveU(); buildData(); clearSession(); render(cur(), true); toast('すべて削除しました'); break;
     }
     case 'oneKind': state.one.kind = v; render(cur(), true); break;
     case 'exportBackup': exportBackup(); break;
