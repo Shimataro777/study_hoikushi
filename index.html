@@ -1008,21 +1008,20 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.17.1"></script>
-<script src="hoiku-genri.js?v=1.17.1"></script>
-<script src="hoiku-shinri.js?v=1.17.1"></script>
-<script src="seido-nengo.js?v=1.17.1"></script>
-<script src="shokuin-haichi.js?v=1.17.1"></script>
-<script src="kodomo-hoken.js?v=1.17.1"></script>
-<script src="kodomo-hattatsu.js?v=1.17.1"></script>
-<script src="kodomo-yougo.js?v=1.17.1"></script>
-<script src="shakai-yogo.js?v=1.17.1"></script>
-<script src="ruby.js?v=1.17.1"></script>
+<script src="kyoiku-genri.js?v=1.18.0"></script>
+<script src="hoiku-genri.js?v=1.18.0"></script>
+<script src="hoiku-shinri.js?v=1.18.0"></script>
+<script src="shokuin-haichi.js?v=1.18.0"></script>
+<script src="kodomo-hoken.js?v=1.18.0"></script>
+<script src="kodomo-hattatsu.js?v=1.18.0"></script>
+<script src="kodomo-yougo.js?v=1.18.0"></script>
+<script src="shakai-yogo.js?v=1.18.0"></script>
+<script src="ruby.js?v=1.18.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.17.1';
+const APP_VERSION = '1.18.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -1225,10 +1224,33 @@ function ensureAddedUnits(db){
   }
   return changed;
 }
+/* 1.18.0：分野の名前を短くそろえる。教育制度年号の単元を教育原理にまとめる（学習記録・メモも移す） */
+const CAT_RENAME18 = {"西洋の教育者・思想家": "西洋の人物", "わが国の教育者": "日本の人物", "外国の教育制度：国の特徴": "外国の制度：国", "外国の教育制度：学校・制度の用語": "外国の制度：学校・用語", "外国の教育制度：特徴的な保育・教育": "外国の制度：保育の実践", "外国の教育制度：取り組みと国": "外国の制度：実践と国", "外国の教育制度：テ・ファリキの原則と要素": "外国の制度：テ・ファリキ", "わが国の人物": "日本の人物", "発達の考え方・生涯発達": "発達の理論：考え方・生涯発達", "心理学の諸分野・その他": "発達の理論：心理学の人物", "乳幼児の知覚・認知": "心の発達：知覚・認知", "愛着・情緒・気質": "心の発達：愛着・情緒・気質", "言葉・社会性・道徳性": "心の発達：言葉・社会性", "学習・動機づけ・知能": "学習・知能", "発育・発達：体の大きさと計測": "発育・発達：体の大きさ", "発育・発達：スキャモンの発育曲線": "発育・発達：スキャモン", "発育・発達：脳と神経": "発育・発達：脳", "権利と親権：親権": "権利・親権：親権", "権利と親権：権利擁護と保護": "権利・親権：権利擁護", "権利と親権：虐待の種類": "権利・親権：虐待", "家庭養育：里親の種類": "家庭養育：里親", "家庭養育：養子縁組と家庭的な養育": "家庭養育：養子縁組・小規模化", "相談機関：機関の名前": "相談機関：役割", "相談機関：児童相談所の相談と診断": "相談機関：相談と診断", "施設：施設の名前": "施設：特徴", "施設：施設の制度": "施設：制度"};
+const DESC18 = { "kyoiku-genri": ["教育思想の流れと、思想家・教育者の考え方", "教育思想の流れと、思想家・教育者の考え方、外国の教育制度"],
+  "shakaiteki-yogo": ["児童福祉施設の職員配置（設備運営基準）", "社会的養護の理念・権利と親権・家庭養育・相談機関・施設と職員配置"] };
+function tidyUnits(db){
+  if (db.tidy >= 1) return false;
+  for (const t of db.terms) if (CAT_RENAME18[t.cat]) t.cat = CAT_RENAME18[t.cat];
+  const b = bundleData();
+  for (const u of db.units) { const nu = b.units.find(x => x.id === u.id); if (nu && (DESC18[u.id] || []).includes(u.desc)) u.desc = nu.desc; }
+  const from = 'seido-nengo', to = 'kyoiku-genri';
+  if (db.units.some(u => u.id === from) && db.units.some(u => u.id === to)) {
+    const keyMap = {};
+    for (const e of db.events) if (e.unit === from) e.unit = to;
+    for (const t of db.terms) if (t.unit === from) { const nk = t.key.replace(from + '::', to + '::'); keyMap['k:' + t.key] = 'k:' + nk; t.unit = to; t.key = nk; }
+    for (const [o, n] of Object.entries(keyMap)) if (db.memos && db.memos[o] != null) { db.memos[n] = db.memos[o]; delete db.memos[o]; }
+    db.units = db.units.filter(u => u.id !== from);
+    let moved = false;
+    for (const k of Object.keys(P.q || {})) if (k.startsWith(from + ':')) { P.q[to + k.slice(from.length)] = P.q[k]; delete P.q[k]; moved = true; }
+    if (moved) try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) {}
+  }
+  db.tidy = 1;
+  return true;
+}
 let U = (() => {
-  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db) | ensureAddedUnits(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
+  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db) | ensureAddedUnits(db) | tidyUnits(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
   let old = null; try { old = JSON.parse(localStorage.getItem(UKEY) || 'null'); } catch (_) {}
-  const db = seedDB(old); db.filled = 1; ensureStaffUnit(db); ensureAddedUnits(db);
+  const db = seedDB(old); db.filled = 1; db.tidy = 1; ensureStaffUnit(db); ensureAddedUnits(db);
   try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {}
   return db;
 })();
@@ -1906,9 +1928,12 @@ function renderUnit(id){
   const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
   const cq = countB('q', qs), ce = countB('e', evs), cs = countB('s', sf), cd = countB('d', dv);
   const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b] + cs[b] + cd[b], 0);
-  const fx = dv.length ? [] : (bundleUnit(id).focus || []).filter(f => qs.some(q => genreOf(q.cat) === f.genre)), ut = unitTblKeys(id);
-  const genreRow = (g, sub) => { const x = progC(progressItems(id, g));
-    return `<button class="mrow urow" data-act="setupG" data-v="${esc(g)}"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">${esc(g)}<span class="upct">${x.pct}%</span></span><span class="ms">${sub}　正解 ${x.correct}／${x.total}${x.weak ? `　苦手 ${x.weak}` : ''}</span><span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span></span>${I('chev', 'mchev')}</button>`; };
+  const ut = unitTblKeys(id), GS = id === 'all' ? [] : catsFor('quiz', id), byGenre = qs.length && (dv.length || GS.length > 1);
+  const bar = x => `<span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span>`;
+  /* 単元の中の行は、子どもの保健と同じ形：名前・％・中身の数・正解数・棒 */
+  const progRow = (act, v, icon, title, parts, its) => { const x = progC(its);
+    return `<button class="mrow urow" data-act="${act}" data-v="${esc(v)}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${esc(title)}<span class="upct">${x.pct}%</span></span><span class="ms">${parts}　正解 ${x.correct}／${x.total}${x.weak ? `　苦手 ${x.weak}` : ''}</span>${bar(x)}</span>${I('chev', 'mchev')}</button>`; };
+  const partsOf = its => uniq(its.map(i => i.kind)).map(k => `${k === '語句' ? '4択' : k} ${its.filter(i => i.kind === k).length}`).join('・');
   const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   app.innerHTML = `
   
@@ -1918,19 +1943,12 @@ function renderUnit(id){
   <section class="sect">
     <h2 class="stitle">学習する</h2>
     <div class="menu">
-      ${qs.length ? (dv.length ? DEV_GENRES().map(g => { const its = progressItems(id, g), x = progC(its), parts = uniq(its.map(i => i.kind)).map(k => `${k === '語句' ? '4択' : k} ${its.filter(i => i.kind === k).length}`).join('・');
-          return `<button class="mrow urow" data-act="setupG" data-v="${esc(g)}"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">${esc(g)}<span class="upct">${x.pct}%</span></span><span class="ms">${parts}　正解 ${x.correct}／${x.total}${x.weak ? `　苦手 ${x.weak}` : ''}</span><span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span></span>${I('chev', 'mchev')}</button>`; }).join('')
-        : row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`)) : ''}
-      ${fx.map(f => genreRow(f.genre, `${esc(f.desc)}・${qs.filter(q => genreOf(q.cat) === f.genre && q.type !== 'rev').length}問`)).join('')}
-      ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
-      ${sf.length && dv.length ? (() => { const x = progC(sf.map(f => ({ b: bucket('s', f.id) })));
-          return `<button class="mrow urow" data-act="goStaff"><span class="mi">${I('building')}</span><span class="mtx"><span class="mt">職員配置<span class="upct">${x.pct}%</span></span><span class="ms">${sf.length}施設・まとめて解く／早見表　正解 ${x.correct}／${x.total}</span><span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span></span>${I('chev', 'mchev')}</button>`; })() : ''}
-      ${sf.length && !dv.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
-      ${sf.length && !dv.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
-      ${sf.length && !dv.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
-      ${dv.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：分野ごとの比較の表・まちがえやすいポイント</span></span>${I('chev', 'mchev')}</button>`
-        : ut.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">${esc(ut.map(k => unitTables()[k].title).join('・'))}</span></span>${I('chev', 'mchev')}</button>` : ''}
-      ${reviewN && !dv.length ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない ${reviewN}件`, 'accent') : ''}
+      ${byGenre ? GS.map(g => { const its = progressItems(id, g); return progRow('setupG', g, 'list', g, partsOf(its), its); }).join('')
+        : qs.length ? row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`) : ''}
+      ${evs.length ? progRow('setupSort', '', 'hourglass', '年号並べ替え', `出来事 ${evs.length}`, evs.map(e => ({ b: bucket('e', e.id) }))) : ''}
+      ${sf.length ? progRow('goStaff', '', 'building', '職員配置', `施設 ${sf.length}`, sf.map(f => ({ b: bucket('s', f.id) }))) : ''}
+      ${dv.length || ut.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：分野ごとの比較の表${dv.length ? '・まちがえやすいポイント' : ''}</span></span>${I('chev', 'mchev')}</button>` : ''}
+      ${reviewN && !byGenre ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
   </section>
@@ -1939,7 +1957,7 @@ function renderUnit(id){
     ${(() => {
       const items = progressItems(id);
       if (id === 'all') return progressPanel(items, UNITS.map(u => ({ label: u.name, items: progressItems(u.id), unitWord: '件' })).filter(r => r.items.length));
-      if (dv.length) return progressPanel(items, DEV_GENRES().map(g => { const its = progressItems(id, g); const sub = uniq(its.map(x => x.kind)).map(k => { const x = progC(its.filter(i => i.kind === k)); return `${k === '語句' ? '4択' : k} ${x.correct}/${x.total}`; }).join('・'); return { label: g, items: its, unitWord: '件', sub }; }).concat(sf.length ? [{ label: '職員配置', items: items.filter(i => i.kind === '職員配置'), unitWord: '施設', sub: '' }] : []));
+      if (byGenre) return progressPanel(items, GS.map(g => { const its = progressItems(id, g); const sub = uniq(its.map(x => x.kind)).map(k => { const x = progC(its.filter(i => i.kind === k)); return `${k === '語句' ? '4択' : k} ${x.correct}/${x.total}`; }).join('・'); return { label: g, items: its, unitWord: '件', sub }; }).concat(evs.length ? [{ label: '年号並べ替え', items: items.filter(i => i.kind === '年号'), unitWord: '件', sub: '' }] : [], sf.length ? [{ label: '職員配置', items: items.filter(i => i.kind === '職員配置'), unitWord: '施設', sub: '' }] : []));
       return progressPanel(items, kindRows(items));
     })()}
   </section>` : ''}
@@ -1961,7 +1979,7 @@ function setupPool(kind, unit){
     const inScope = inUnit(EVENTS, unit).filter(e => cats.has(e.group || 'その他'));
     return { pool: inScope.filter(x => B.has(bucket('e', x.id))), c: countB('e', inScope) };
   }
-  const hasRev = inUnit(QUESTIONS, unit).some(q => q.type === 'rev'), dir = hasRev ? state.setup.dir : 'fwd';
+  const hasRev = inUnit(QUESTIONS, unit).some(q => q.type === 'rev' && cats.has(genreOf(q.cat))), dir = hasRev ? state.setup.dir : 'fwd';
   const hasDev = devIn(unit).length > 0, form = hasDev ? (state.setup.form || 'mix') : 'quiz';
   const qs = form === 'ox' ? [] : inUnit(QUESTIONS, unit).filter(q => cats.has(genreOf(q.cat)) && dirOk(q, dir));
   const ds = form === 'quiz' ? [] : devIn(unit).filter(x => cats.has(devGenre(x)));
@@ -1976,11 +1994,11 @@ function renderSetup(r){
   const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
   const { pool, c } = setupPool(kind, unit);
   const hasDev = kind === 'quiz' && devIn(unit).length > 0, form = hasDev ? (S.form || 'mix') : 'quiz';
-  const hasRev = kind === 'quiz' && form !== 'ox' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
   const gCount = g => inUnit(QUESTIONS, unit).filter(q => genreOf(q.cat) === g && q.type !== 'rev').length + devIn(unit).filter(x => devGenre(x) === g).length;
   const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
-  const single = hasDev && unit !== 'all' && cats.length > 1;
+  const single = kind === 'quiz' && unit !== 'all' && cats.length > 1;
   if (single && sel.size !== 1) { const f = [...sel][0] || cats[0]; sel.clear(); sel.add(f); }
+  const hasRev = kind === 'quiz' && form !== 'ox' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev' && sel.has(genreOf(q.cat)));
   const { pool: pool2, c: c2 } = single ? setupPool(kind, unit) : { pool, c };
   const catVal = sel.size === cats.length && !single ? '' : [...sel][0];
   let n, can, label;
@@ -1993,11 +2011,11 @@ function renderSetup(r){
   }
   app.innerHTML = `
   <h1 class="ptitle">${kind === 'quiz' ? (single ? esc(catVal) : hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'} ${help('buckets')}</h1>
-  ${single ? `<p class="psub">${esc(unitName(unit))}　この分野の4択と○×だけを出します</p>` : hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
+  ${single ? `<p class="psub">${esc(unitName(unit))}　この分野の4択${hasDev ? 'と○×' : ''}だけを出します</p>` : hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
   ${single ? `<div class="gseg" role="radiogroup" aria-label="分野" style="margin-top:14px">${cats.map(g => `<button type="button" role="radio" aria-pressed="${catVal === g}" data-act="sgenre" data-v="${esc(g)}">${esc(g)}</button>`).join('')}</div>
-    <div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="devTable" data-g="${esc(catVal)}">${I('book')}${esc(catVal)}の早見表を見る</button></div>` : ''}
+    ${hasDev ? `<div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="devTable" data-g="${esc(catVal)}">${I('book')}${esc(catVal)}の早見表を見る</button></div>`
+      : unitTblKeys(unit).some(k => unitTables()[k].genre === catVal) ? `<div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="goSheets" data-v="${esc(unit)}">${I('book')}${esc(catVal)}のまとめ表を見る</button></div>` : ''}` : ''}
   ${cats.length > 1 && hasDev && !single ? `<h2 class="stitle" style="margin:20px 0 8px">分野</h2><div class="gpick" role="radiogroup" aria-label="分野">${['', ...cats].map(g => `<button type="button" role="radio" aria-checked="${catVal === g}" data-act="sgenre" data-v="${esc(g)}"><b>${esc(g || 'すべての分野')}</b>${g ? `<small>${gCount(g)}問</small>` : ''}</button>`).join('')}</div>` : ''}
-  ${!hasDev && kind === 'quiz' && unitTblKeys(unit).length && [...sel].some(g => unitTblKeys(unit).some(k => unitTables()[k].genre === g)) ? `<div class="btnrow" style="justify-content:flex-start;margin-top:8px"><button class="textbtn" data-act="goSheets" data-v="${esc(unit)}">${I('book')}まとめ表（比較の表）を見る</button></div>` : ''}
   <div class="flist" style="margin-top:16px">
     ${hasDev ? `<label class="frow"><span>問題の形式</span><select class="sel" id="sForm">${FORMS.map(([v, l]) => opt(v, l, form)).join('')}</select></label>` : ''}
     ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
@@ -2010,7 +2028,7 @@ function renderSetup(r){
       </div>
       <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c2[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c2[b]}</span></button>`).join('')}</div>
     </div>
-    ${cats.length > 1 && !hasDev ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
+    ${cats.length > 1 && !hasDev && !single ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
     ${kind === 'quiz'
       ? `<label class="frow"><span>問題数</span><select class="sel" id="sCount">${[10, 20, 30, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select></label>`
       : `<label class="frow"><span>セット数</span><select class="sel" id="sSets">${[3, 5, 10].map(v => opt(v, `${v}セット`, S.sets)).join('')}</select></label>
@@ -4192,9 +4210,7 @@ async function onAction(el, ev){
       go({ v: 'dict' }, 'tab'); break;
     }
     case 'unitAdd': state.bulk.unit = state.unit; state.bulk.done = null; go({ v: 'bulk' }); break;
-    case 'setupQuiz': { const k = `${state.unit}|quiz`, sel = state.setup.cats[k], fx = (bundleUnit(state.unit).focus || []).map(f => f.genre);
-      if (sel && sel.size === 1 && fx.includes([...sel][0])) delete state.setup.cats[k];
-      go({ v: 'setup', a: 'quiz', u: state.unit }); break; }
+    case 'setupQuiz': go({ v: 'setup', a: 'quiz', u: state.unit }); break;
     case 'sheetQuiz': { const t = dTbl(v), ks = new Set(TERMS.filter(x => tblOfTerm(x) === v).map(x => x.key));
       startRound(QUESTIONS.filter(q => ks.has(q.termKey) && q.type !== 'rev').map(q => ({ type: 'quiz', id: q.id })), { unit: (t && t.unit) || state.unit, kind: 'quiz' }); break; }
     case 'setupSort': go({ v: 'setup', a: 'sort', u: state.unit }); break;
