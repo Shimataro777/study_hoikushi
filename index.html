@@ -738,6 +738,61 @@ ruby{ruby-align:center}
 .sroles div+div{border-top:1px solid var(--line)}
 .sroles dt{font-weight:600;font-size:var(--fs-body-sm);margin:0 0 2px}
 .sroles dd{margin:0;font-size:var(--fs-caption);color:var(--ink2);line-height:1.7}
+/* 発達チェック */
+.qlead{margin:-6px 0 14px;color:var(--muted);font-size:var(--fs-body-sm);line-height:1.7}
+.sname.dstmt{align-items:flex-start;font-weight:500;line-height:1.75}
+.dstmt .sno{margin-top:3px;background:var(--tint2);color:var(--primary);font-weight:700}
+.dpick{display:grid;grid-template-columns:1fr 1fr 76px;gap:6px}
+.dpick button{min-height:50px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--ink);transition:background .12s,border-color .12s,opacity .15s}
+.dpick .dmk{font-size:20px;font-weight:700;line-height:1.1}
+.dpick small{font-size:var(--fs-micro);color:var(--ink2);font-weight:600}
+.dpick button:disabled{cursor:default;opacity:.35}
+.dpick button.is-ok{opacity:1;border-color:var(--b-correct);background:color-mix(in srgb,var(--b-correct) 12%,var(--surface))}
+.dpick button.is-ng{opacity:1;border-color:var(--b-wrong);background:color-mix(in srgb,var(--b-wrong) 12%,var(--surface))}
+.dpick button.dp-unk.is-ng{border-color:var(--b-unknown);background:color-mix(in srgb,var(--b-unknown) 10%,var(--surface))}
+.dpick button.is-ans{opacity:1;border:2px solid var(--b-correct)}
+.dfix{margin:8px 0 0;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--b-correct) 9%,var(--surface));font-size:var(--fs-body-sm);line-height:1.75}
+.dfix b{color:var(--b-correct);margin-right:8px;font-size:var(--fs-caption)}
+.dkey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.dkc{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.dkc span{font-size:var(--fs-micro);color:var(--muted);font-weight:600}
+.dkc b{font-size:20px;line-height:1.2}
+.dkc small{font-size:var(--fs-micro);color:var(--b-wrong);font-weight:600}
+.dkc.ng{border-color:color-mix(in srgb,var(--b-wrong) 50%,var(--line))}
+.olist,.oans{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.obtn{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:left;color:var(--ink);font-size:var(--fs-body);font-weight:600;line-height:1.45}
+.onum{width:30px;height:30px;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;flex:none;font-weight:700;font-size:var(--fs-label);font-variant-numeric:tabular-nums}
+.obtn.on{border-color:color-mix(in srgb,var(--primary) 45%,var(--line))}
+.obtn.on .onum,.oans .onum{border:0;background:var(--primary);color:var(--on-primary)}
+.obtn.ok{border-color:var(--b-correct)} .obtn.ok .onum{background:var(--b-correct)}
+.obtn.ng{border-color:var(--b-wrong)} .obtn.ng .onum{background:var(--b-wrong)}
+.obtn:disabled{cursor:default}
+.otx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.otx small{font-size:var(--fs-caption);color:var(--muted);font-weight:500}
+.oans li{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-weight:600}
+.oans li.ok{border-color:color-mix(in srgb,var(--b-correct) 45%,var(--line))}
+.oans li.ng{border-color:color-mix(in srgb,var(--b-wrong) 50%,var(--line))}
+.oans li.ng small{color:var(--b-wrong)}
+.obar{display:grid;grid-template-columns:1fr 2fr;gap:8px}
+.dtbl{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.dtbl > div{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:10px;padding:9px 12px;font-size:var(--fs-body-sm);line-height:1.65;background:var(--surface)}
+.dtbl > div+div{border-top:1px solid var(--line)}
+.dtbl > div:nth-child(even){background:var(--tint)}
+.dtbl .dw{font-weight:700;color:var(--primary);font-size:var(--fs-caption);line-height:1.9;word-break:keep-all;overflow-wrap:anywhere}
+.dtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;margin:6px 0 16px;border-radius:12px;background:var(--surface2)}
+.dtabs button{min-height:38px;border:0;border-radius:9px;background:none;color:var(--ink2);font-size:var(--fs-label);font-weight:600}
+.dtabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.dper{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.dper h3{display:flex;align-items:baseline;gap:10px;margin:0;padding:10px 14px;background:var(--tint2);font-size:var(--fs-body)}
+.dper h3 span{font-size:var(--fs-caption);color:var(--muted);font-weight:500}
+.dper dl{margin:0}
+.dper dl div{display:grid;grid-template-columns:4em minmax(0,1fr);gap:8px;padding:9px 14px;font-size:var(--fs-body-sm);line-height:1.7}
+.dper dl div+div{border-top:1px solid var(--line)}
+.dper dt{font-weight:700;color:var(--primary);font-size:var(--fs-caption);line-height:1.95}
+.dper dd{margin:0}
+.dtoc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chipbtn{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);color:var(--ink2)}
+.dref .dtbl{margin-top:2px}
 @media (max-width:374px){ .spick{gap:3px} .srow{padding:10px} .spick .sp-l{letter-spacing:-.08em} }
 </style>
 </head>
@@ -767,13 +822,15 @@ ruby{ruby-align:center}
 <script src="hoiku-shinri.js"></script>
 <script src="seido-nengo.js"></script>
 <script src="shokuin-haichi.js"></script>
+<script src="kodomo-hoken.js"></script>
+<script src="kodomo-hattatsu.js"></script>
 <script src="ruby.js"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.2.0';
-const APP_BUILD = '2026-10-20';
+const APP_VERSION = '1.4.0';
+const APP_BUILD = '2026-10-23';
 
 /* =========================================================
  * ユーティリティ・アイコン
@@ -825,6 +882,7 @@ const ICONS = {
   calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   trash: '<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/>',
   building: '<path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01M12 10h.01"/>',
+  heart: '<path d="M12 20s-7.5-4.6-9.2-9.4C1.6 7.2 3.8 4 7.1 4c2 0 3.6 1.1 4.9 2.8C13.3 5.1 14.9 4 16.9 4c3.3 0 5.5 3.2 4.3 6.6C19.5 15.4 12 20 12 20z"/>',
   refresh: '<path d="M21 12a9 9 0 1 1-9-9 9.8 9.8 0 0 1 6.7 2.7L21 8"/><path d="M21 3v5h-5"/>'
 };
 const I = (name, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ICONS.book}</svg>`;
@@ -854,6 +912,7 @@ const HELP = {
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
+  dev: ['発達チェック', '試験でよく出る2つの形で、時期ごとの特徴を練習します。\n\n○×：1セット5つの記述（試験のA〜E）に、適切なら○、不適切なら×を選びます。不適切な記述は「別の時期の特徴」を入れて作ってあり、選ぶとその場で正しい時期と解説が出ます。5つすべて合っていれば正解です。\n\n並べ替え：早い時期のものから順にタップして番号をつけ、「答え合わせ」を押します。\n\n答え終わると、その分野の整理と早見表が出ます。'],
   one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
 };
 const help = key => `<button class="help" data-act="help" data-v="${key}" aria-label="説明を見る">?</button>`;
@@ -862,7 +921,7 @@ const help = key => `<button class="help" data-act="help" data-v="${key}" aria-l
  * 保存（学習記録 P と、ユーザーの編集・追加 U）
  * ========================================================= */
 const PKEY = 'hoikushi-anki-v2', UKEY = 'hoikushi-anki-user-v1';
-const blankP = () => ({ q: {}, e: {}, s: {}, best: 0 });
+const blankP = () => ({ q: {}, e: {}, s: {}, d: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP);
@@ -912,10 +971,40 @@ function ensureStaffUnit(db){
   db.staffUnit = 1;
   return true;
 }
+/* あとから足した付属の単元（子どもの保健など）を、すでにある置き場へ一度だけ入れる（あとで消した場合は足し直さない） */
+/*   「単元#番号」は、あとから付属ファイルに足した用語を一度だけ補う（単元を消していたら補わない） */
+const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2'];
+function ensureAddedUnits(db){
+  const done = new Set(db.addedUnits || []), b = bundleData();
+  let changed = false;
+  for (const token of ADDED_UNITS) {
+    if (done.has(token)) continue;
+    const id = token.split('#')[0], u = b.units.find(x => x.id === id);
+    if (!u) continue;
+    if (token.includes('#')) {
+      if (!db.units.some(x => x.id === id)) { done.add(token); changed = true; continue; }
+      /* 1.4.0：「緊張性頭反射」を「緊張性頸反射」に直す */
+      const old = db.terms.find(x => x.unit === id && x.term === '緊張性頭反射'), nw = b.terms.find(x => x.unit === id && x.term === '緊張性頸反射');
+      if (old && nw && !db.terms.some(x => x.unit === id && x.term === nw.term)) Object.assign(old, { term: nw.term, kana: nw.kana, key: nw.key, summary: nw.summary, detail: nw.detail, q: nw.q });
+    } else if (!db.units.some(x => x.id === id)) db.units.push(u);
+    for (const t of b.terms.filter(x => x.unit === id)) {
+      if (db.terms.some(x => x.key === t.key || (x.unit === id && x.term === t.term))) continue;
+      db.terms.push({ ...t });
+      if (kanaOk(t) && !(t.term in (db.ruby || {}))) (db.ruby = db.ruby || {})[t.term] = t.kana.replace(/\s+/g, '');
+    }
+    done.add(token); changed = true;
+  }
+  if (changed) {
+    db.ruby = db.ruby || {};
+    for (const [k, r] of Object.entries(b.ruby)) if (!(k in db.ruby)) db.ruby[k] = r;
+    db.addedUnits = [...done];
+  }
+  return changed;
+}
 let U = (() => {
-  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
+  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db) | ensureAddedUnits(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
   let old = null; try { old = JSON.parse(localStorage.getItem(UKEY) || 'null'); } catch (_) {}
-  const db = seedDB(old); db.filled = 1; ensureStaffUnit(db);
+  const db = seedDB(old); db.filled = 1; ensureStaffUnit(db); ensureAddedUnits(db);
   try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {}
   return db;
 })();
@@ -1138,7 +1227,7 @@ function linkedTerms(unit, texts, skip){
 /* =========================================================
  * 画面遷移（戻るボタン・端末の戻る操作に対応）
  * ========================================================= */
-const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ', staff: '施設の職員配置' };
+const TITLES = { home: '学習', list: '振り分け', dict: '図鑑', data: 'データ', setup: '出題の設定', result: '結果', round: '問題', bulk: 'まとめて追加', one: '1件ずつ追加', mine: '追加・編集した問題', ruby: 'ふりがなの辞書', units: '単元', import: '取り込む内容の確認', mine: 'メモ', staff: '施設の職員配置', dev: '発達チェック' };
 const routeTitle = r => r.v === 'unit' ? unitName(r.a) : (TITLES[r.v] || '');
 const TAB_ROOTS = ['home', 'list', 'dict', 'data'];
 const stack = [];
@@ -1243,7 +1332,7 @@ function restoreNav(){
   let s = null;
   try { s = JSON.parse(localStorage.getItem(NAVKEY) || 'null'); } catch (_) {}
   if (!s || !Array.isArray(s.stack) || Date.now() - s.t > 12 * 3600e3) return false;
-  const known = ['home', 'staff', 'unit', 'setup', 'round', 'result', 'list', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
+  const known = ['home', 'staff', 'dev', 'unit', 'setup', 'round', 'result', 'list', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
   const ok = r => r && known.includes(r.v) && (r.v !== 'unit' || r.a === 'all' || unitById.has(r.a)) && (r.v !== 'setup' || r.u === 'all' || unitById.has(r.u));
   let st = s.stack.filter(ok);
   if (s.round && Array.isArray(s.round.items)) {
@@ -1270,6 +1359,7 @@ function render(r, keep){
   switch (r.v) {
     case 'unit': renderUnit(r.a); break;
     case 'staff': if (ST) renderStaffHome(); else renderHome(); break;
+    case 'dev': if (DV && isDevUnit(DV.unit)) renderDevHome(); else renderHome(); break;
     case 'setup': renderSetup(r); break;
     case 'round': if (state.round) renderItem(); else renderHome(); break;
     case 'result': if (state.round) renderResult(); else renderHome(); break;
@@ -1454,9 +1544,9 @@ const unitIcon = id => id === 'all' ? 'layers' : (unitById.get(id)?.icon || 'boo
 function renderHome(){
   state.round = null; state.opened.clear();
   const unitRow = id => {
-    const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id);
-    const c = sumC(sumC(countB('q', qs), countB('e', evs)), countB('s', sf));
-    const parts = [qs.length ? `4択 ${qs.length}問` : '', evs.length ? `年号 ${evs.length}件` : '', sf.length ? `職員配置 ${sf.length}施設` : ''].filter(Boolean).join('　');
+    const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
+    const c = sumC(sumC(sumC(countB('q', qs), countB('e', evs)), countB('s', sf)), countB('d', dv));
+    const parts = [qs.length ? `4択 ${qs.length}問` : '', evs.length ? `年号 ${evs.length}件` : '', sf.length ? `職員配置 ${sf.length}施設` : '', dv.length ? `発達チェック ${dv.length}問` : ''].filter(Boolean).join('　');
     return `<button class="mrow urow" data-act="goUnit" data-v="${esc(id)}">
       <span class="mi">${I(unitIcon(id))}</span>
       <span class="mtx"><span class="mt">${esc(unitName(id))}</span>
@@ -1479,9 +1569,9 @@ function renderHome(){
  * ========================================================= */
 function renderUnit(id){
   state.unit = id; state.round = null; state.opened.clear();
-  const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id);
-  const cq = countB('q', qs), ce = countB('e', evs), cs = countB('s', sf);
-  const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b] + cs[b], 0);
+  const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
+  const cq = countB('q', qs), ce = countB('e', evs), cs = countB('s', sf), cd = countB('d', dv);
+  const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b] + cs[b] + cd[b], 0);
   const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   app.innerHTML = `
   
@@ -1496,16 +1586,19 @@ function renderUnit(id){
       ${sf.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
       ${sf.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
       ${sf.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
+      ${dv.length ? row('goDev', 'layers', '発達チェック（試験形式）', `○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問　時期の取り違えを見抜く`) : ''}
+      ${dv.length ? row('devTable', 'book', '発達の早見表', '時期で見る・分野で見る・まちがえやすいポイント') : ''}
       ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
-      ${!qs.length && !evs.length && !sf.length ? `<p class="empty">まだ問題がありません</p>` : ''}
+      ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
   </section>
-  ${qs.length || evs.length || sf.length ? `<section class="sect">
+  ${qs.length || evs.length || sf.length || dv.length ? `<section class="sect">
     <div class="shead"><h2 class="stitle">振り返り</h2>${qs.length || evs.length ? `<button class="textbtn" data-act="unitList">振り分けを見る${I('chev')}</button>` : ''}</div>
     <div class="panel">
       ${qs.length ? `<div class="ov"><div class="ovh"><span>4択問題</span><span class="muted">${cq.total}問</span></div>${stackBar(cq)}${legend(cq)}</div>` : ''}
       ${evs.length ? `<div class="ov"><div class="ovh"><span>年号</span><span class="muted">${ce.total}件</span></div>${stackBar(ce)}${legend(ce)}</div>` : ''}
       ${sf.length ? `<div class="ov"><div class="ovh"><span>施設の職員配置</span><span class="muted">${cs.total}施設</span></div>${stackBar(cs)}${legend(cs)}</div>` : ''}
+      ${dv.length ? `<div class="ov"><div class="ovh"><span>発達チェック</span><span class="muted">${cd.total}問</span></div>${stackBar(cd)}${legend(cd)}</div>` : ''}
     </div>
   </section>` : ''}
   <div class="foot btnrow" style="justify-content:center">
@@ -1598,7 +1691,8 @@ function quickReview(){
   const evs = inUnit(EVENTS, u).filter(e => rev(bucket('e', e.id)));
   const nSets = evs.length ? Math.min(5, Math.ceil(evs.length / state.setup.size)) : 0;
   const ss = staffOf(u).filter(f => rev(bucket('s', f.id))).map(f => ({ type: 'staff', id: f.id }));
-  startRound([...qs, ...makeSortSets(evs, nSets, u), ...ss], { unit: u, kind: 'quiz' });
+  const ds = devOf(u).filter(x => rev(bucket('d', x.id))).map(x => ({ type: dType(x.id), id: x.id }));
+  startRound([...qs, ...makeSortSets(evs, nSets, u), ...ss, ...ds], { unit: u, kind: 'quiz' });
 }
 
 /* =========================================================
@@ -1622,12 +1716,12 @@ function renderItem(){
   const r = state.round;
   while (r.i < r.items.length) {   // 削除された問題は飛ばす
     const it = r.items[r.i];
-    if (it.type === 'quiz' ? qById.has(it.id) : it.type === 'staff' ? !!sFac(it.id) : it.ids.every(id => eById.has(id))) break;
+    if (it.type === 'quiz' ? qById.has(it.id) : it.type === 'staff' ? !!sFac(it.id) : it.type === 'dchk' ? !!dCheck(it.id) : it.type === 'dord' ? !!dOrder(it.id) : it.ids.every(id => eById.has(id))) break;
     r.i++;
   }
   if (r.i >= r.items.length) { finishRound(); return; }
   const it = r.items[r.i];
-  if (it.type === 'quiz') renderQuiz(it); else if (it.type === 'staff') renderStaff(it); else renderSort(it);
+  if (it.type === 'quiz') renderQuiz(it); else if (it.type === 'staff') renderStaff(it); else if (it.type === 'dchk') renderDevCheck(it); else if (it.type === 'dord') renderDevOrder(it); else renderSort(it);
 }
 const prevTag = (k, id) => { const b = bucket(k, id); return b === 'new' ? '' : `<span class="prev"><span class="dot b-${b}"></span>前回 ${BL[b]}</span>`; };
 const unsureToggle = () => `<label class="toggle"><input type="checkbox" id="unsure"><span class="sw" aria-hidden="true"></span><span>自信がない</span></label>`;
@@ -1980,12 +2074,252 @@ function openStaffTable(){
     <section class="block"><h3>職種の役割</h3><dl class="sroles">${ST.staff.map(s => `<div><dt>${rb(s.name)}</dt><dd>${rb(s.role)}</dd></div>`).join('')}</dl></section>`);
 }
 
+
+/* =========================================================
+ * 子どもの保健：発達チェック（試験形式）
+ *   ○×：1セット＝5つの記述（試験のA〜E）。記述ごとに ○・×・？ を選ぶと、その場で正誤と正しい形が出る。
+ *   並べ替え：早い時期から順にタップして番号をつける。
+ *   どちらも、答え終わると「この分野の整理」と早見表の該当部分が出る
+ * ========================================================= */
+const DV = window.DEVCHECK || null;
+const ABC = 'ABCDEFGHIJ';
+const isDevUnit = id => !!DV && id === DV.unit && unitById.has(id);
+const devOf = id => isDevUnit(id) ? [...DV.checks, ...DV.orders] : [];
+const dCheck = id => DV && DV.checks.find(x => x.id === id);
+const dOrder = id => DV && DV.orders.find(x => x.id === id);
+const dItem = id => dCheck(id) || dOrder(id);
+const dType = id => dCheck(id) ? 'dchk' : 'dord';
+const dKind = x => x.items && Array.isArray(x.items[0]) ? '並べ替え' : x.kind === 'age' ? '○×（時期別）' : '○×（分野別）';
+const dTable = key => DV.table.find(t => t.key === key);
+function dTableHTML(t){
+  return `<div class="dtbl">${t.rows.map(([w, x]) => `<div><span class="dw">${esc(w)}</span><span>${rb(x)}</span></div>`).join('')}</div>${t.note ? `<p class="hint" style="margin-top:8px">${rb(t.note)}</p>` : ''}`;
+}
+function dRefBlocks(keys){
+  return (keys || []).map(dTable).filter(Boolean).map((t, i) =>
+    `<details class="block dref" ${i === 0 ? 'open' : ''}><summary>早見表：${esc(t.title)}${I('chevD')}</summary>${dTableHTML(t)}</details>`).join('');
+}
+function devStart(ids){
+  if (!DV) return;
+  startRound(ids.filter(dItem).map(id => ({ type: dType(id), id })), { unit: DV.unit, kind: 'dev' });
+}
+
+/* ---------- 選ぶ画面 ---------- */
+function renderDevHome(){
+  state.round = null;
+  const all = devOf(DV.unit), c = countB('d', all), weak = all.filter(x => isWeak(bucket('d', x.id)));
+  const rowOf = x => { const b = bucket('d', x.id); return `<button class="mrow" data-act="devOne" data-v="${esc(x.id)}"><span class="mtx"><span class="mt">${rb(x.title)}</span><span class="ms"><span class="dot b-${b}"></span> ${BL[b]}</span></span>${I('chev', 'mchev')}</button>`; };
+  const sect = (title, list, act) => `<section class="sect"><div class="shead"><h2 class="stitle">${title}</h2><button class="textbtn" data-act="${act}">まとめて解く${I('chev')}</button></div><div class="menu">${list.map(rowOf).join('')}</div></section>`;
+  const mrow = (act, icon, t, s) => `<button class="mrow" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${t}</span><span class="ms">${s}</span></span>${I('chev', 'mchev')}</button>`;
+  app.innerHTML = `
+  <h1 class="ptitle">${esc(DV.title)} ${help('dev')}</h1>
+  <p class="psub">試験の形（○×の組み合わせ・早い順）で、時期ごとの特徴を整理します</p>
+  <section class="sect"><div class="menu">
+    ${mrow('devRandom', 'list', '○×をランダムに5セット', '分野別・時期別からまぜて出題')}
+    ${mrow('devOrdRandom', 'hourglass', '並べ替えをランダムに5問', '早い時期から順にタップ')}
+    ${weak.length ? mrow('devWeak', 'retry', '苦手を解く', `不正解・わからない・自信なし ${weak.length}問`) : ''}
+    ${mrow('devTable', 'book', '発達の早見表', '時期で見る・分野で見る・まちがえやすいポイント')}
+  </div></section>
+  ${sect('○× 分野別', DV.checks.filter(x => x.kind !== 'age'), 'devAllTheme')}
+  ${sect('○× 時期別', DV.checks.filter(x => x.kind === 'age'), 'devAllAge')}
+  ${sect('早い順に並べる', DV.orders, 'devAllOrd')}
+  <section class="sect"><div class="panel"><div class="ov"><div class="ovh"><span>振り返り</span><span class="muted">${c.total}問</span></div>${stackBar(c)}${legend(c)}</div></div></section>`;
+}
+
+/* ---------- ○× ---------- */
+function renderDevCheck(it){
+  const s = dCheck(it.id);
+  state.round.cur = { type: 'dchk', id: s.id, ans: {}, done: false, ok: null, unsure: false };
+  app.innerHTML = `
+  <p class="meta"><span>${esc(unitName(DV.unit))}／${dKind(s)}</span>${prevTag('d', s.id)}</p>
+  <h1 class="qtext">${s.kind === 'age' ? `${rb(s.title)}の子どもの発達` : rb(s.title)}</h1>
+  <p class="qlead">次の記述のうち、適切なものに○、不適切なものに×をつけましょう。</p>
+  <p class="sprog" id="sprog"></p>
+  <ol class="sgrid">${s.items.map((x, k) => `<li class="srow" id="dr-${k}">
+    <div class="sname dstmt"><span class="sno">${ABC[k]}</span><span>${rb(x.s)}</span></div>
+    <div class="dpick" role="group" aria-label="${ABC[k]}">
+      <button type="button" data-act="dpick" data-r="${k}" data-v="o" aria-pressed="false"><span class="dmk">○</span><small>適切</small></button>
+      <button type="button" data-act="dpick" data-r="${k}" data-v="x" aria-pressed="false"><span class="dmk">×</span><small>不適切</small></button>
+      <button type="button" data-act="dpick" data-r="${k}" data-v="unk" class="dp-unk" aria-pressed="false"><span class="dmk">？</span><small>わからない</small></button>
+    </div>
+    <div class="sfb" hidden></div>
+  </li>`).join('')}</ol>
+  ${unsureToggle()}
+  <div id="fb"><div class="actionbar static"><button class="btn block" data-act="devDontKnow">${I('question')}残りをすべて「わからない」にして答えを見る</button></div></div>`;
+  devProgress();
+}
+const dCode = x => x.ok ? 'o' : 'x';
+function devProgress(){
+  const c = state.round.cur, s = dCheck(c.id);
+  const done = s.items.filter((_, k) => c.ans[k]), ok = s.items.filter((x, k) => c.ans[k] === dCode(x)).length;
+  const el = document.getElementById('sprog');
+  if (el) el.innerHTML = `<span>回答 <b>${done.length}</b> / ${s.items.length}</span><span>正解 <b>${ok}</b></span>${done.length - ok ? `<span class="ng">不正解・わからない <b>${done.length - ok}</b></span>` : ''}`;
+}
+function dPaintRow(k, v){
+  const s = dCheck(state.round.cur.id), x = s.items[k], code = dCode(x), ok = v === code;
+  const li = document.getElementById('dr-' + k); if (!li) return;
+  const cls = v === 'unk' ? 'unk' : ok ? 'ok' : 'ng';
+  li.classList.add('done', cls);
+  li.querySelectorAll('.dpick button').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.v === v) { b.setAttribute('aria-pressed', 'true'); b.classList.add(ok ? 'is-ok' : 'is-ng'); }
+    if (b.dataset.v === code && !ok) b.classList.add('is-ans');
+  });
+  const fb = li.querySelector('.sfb');
+  fb.innerHTML = `<div class="sfb-h ${cls}">${I(cls === 'ok' ? 'check' : cls === 'ng' ? 'x' : 'book')}<b>${cls === 'ok' ? '正解' : cls === 'ng' ? '不正解' : '答え'}</b><span class="sfb-a">${x.ok ? '○ 適切' : '× 不適切'}</span></div>
+    ${x.ok ? '' : `<p class="dfix"><b>正しくは</b>${rb(x.fix || '')}</p>`}
+    ${x.why ? `<p class="sfb-w">${rb(x.why)}</p>` : ''}`;
+  fb.hidden = false;
+}
+function devPick(el){
+  const c = state.round && state.round.cur;
+  if (!c || c.type !== 'dchk' || c.done || c.ans[el.dataset.r]) return;
+  const s = dCheck(c.id), k = +el.dataset.r, v = el.dataset.v;
+  c.ans[k] = v;
+  dPaintRow(k, v); devProgress();
+  const last = s.items.every((_, i) => c.ans[i]);
+  const allOk = last && s.items.every((x, i) => c.ans[i] === dCode(x));
+  if (!allOk) { if (v === 'unk') SFX.rowUnk(); else if (v === dCode(s.items[k])) SFX.rowOk(); else SFX.rowNg(); }
+  if (last) devCheckComplete();
+}
+function devDontKnow(){
+  const c = state.round && state.round.cur;
+  if (!c || c.type !== 'dchk' || c.done) return;
+  dCheck(c.id).items.forEach((_, k) => { if (!c.ans[k]) { c.ans[k] = 'unk'; dPaintRow(k, 'unk'); } });
+  devProgress(); SFX.unknown();
+  devCheckComplete();
+}
+function devRecord(c, wrongN, unkN){
+  c.done = true;
+  c.ok = !wrongN && !unkN;
+  c.unknown = !wrongN && unkN > 0;
+  c.unsure = c.ok && document.getElementById('unsure').checked;
+  recordAnswer('d', c.id, c.ok, c.unsure, c.unknown);
+  state.streak = c.ok ? state.streak + 1 : 0;
+  if (state.streak > P.best) P.best = state.streak;
+  saveP(); persistNav();
+  if (c.ok) SFX.correct(state.streak);
+  const t = document.querySelector('.toggle'); if (t) t.hidden = true;
+}
+function devCheckComplete(){
+  const c = state.round.cur, s = dCheck(c.id);
+  const wrong = s.items.filter((x, k) => c.ans[k] !== 'unk' && c.ans[k] !== dCode(x)).length;
+  const unk = s.items.filter((_, k) => c.ans[k] === 'unk').length;
+  devRecord(c, wrong, unk);
+  renderDevCheckFeedback(true);
+}
+function dVerdict(c, okN, total, unit){
+  const vb = c.unknown ? 'unknown' : c.ok ? (c.unsure ? 'unsure' : 'correct') : 'wrong';
+  const head = c.ok ? (state.streak >= 3 ? `全問正解　${state.streak}連続` : '全問正解') : `${total}${unit}中 ${okN}${unit}が正解`;
+  const sub = c.ok ? (c.unsure ? '「自信なし」に振り分けました' : 'この分野の時期はばっちりです') : c.unknown ? '下の答えと早見表を確認しましょう' : 'まちがえたところを、正しい時期と結びつけて確認しましょう';
+  return `<div class="verdict b-${vb}"><span class="vi">${I(c.ok ? 'check' : c.unknown ? 'book' : 'x')}</span><div><b>${head}</b><span class="vs">${sub}</span></div></div>`;
+}
+function renderDevCheckFeedback(first){
+  const c = state.round.cur, s = dCheck(c.id);
+  const okN = s.items.filter((x, k) => c.ans[k] === dCode(x)).length;
+  const mark = v => v === 'o' ? '○' : v === 'x' ? '×' : '？';
+  document.getElementById('fb').innerHTML = `
+  ${dVerdict(c, okN, s.items.length, 'つ')}
+  <section class="block"><h3>試験の解答の形にすると</h3>
+    <div class="dkey">${s.items.map((x, k) => { const ok = c.ans[k] === dCode(x); return `<button class="dkc ${ok ? 'ok' : 'ng'}" data-act="dJump" data-v="${k}"><span>${ABC[k]}</span><b>${mark(dCode(x))}</b>${ok ? '' : `<small>あなた ${mark(c.ans[k])}</small>`}</button>`; }).join('')}</div>
+    <p class="hint" style="margin-top:8px">試験では「A○ B× C○ …」の組み合わせを選びます。記号を押すと、その記述の解説へ移動します。</p></section>
+  ${s.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rb(s.point)}</p></section>` : ''}
+  ${dRefBlocks(s.ref)}
+  <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', s.id)}</section>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}発達の早見表を開く</button></div>
+  ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
+  if (first) setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
+}
+function devJump(k){
+  const li = document.getElementById('dr-' + k); if (!li) return;
+  li.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+  li.classList.remove('flash'); void li.offsetWidth; li.classList.add('flash');
+}
+
+/* ---------- 早い順に並べる ---------- */
+function renderDevOrder(it){
+  const o = dOrder(it.id), n = o.items.length;
+  let order = shuffle([...Array(n).keys()]);
+  while (n > 1 && order.every((x, i) => x === i)) order = shuffle(order);
+  state.round.cur = { type: 'dord', id: o.id, order, picks: [], done: false, ok: null, unsure: false };
+  app.innerHTML = `
+  <p class="meta"><span>${esc(unitName(DV.unit))}／並べ替え</span>${prevTag('d', o.id)}</p>
+  <h1 class="qtext">${rb(o.title)}</h1>
+  <p class="qlead">早い時期のものから順に、1→2→3…とタップしましょう。番号のついたものをもう一度押すと、そこから取り消せます。</p>
+  <ol class="olist" id="olist"></ol>
+  ${unsureToggle()}
+  <div id="fb"><div class="actionbar static obar">
+    <button class="btn" data-act="oReset">やり直す</button>
+    <button class="btn primary" data-act="oCheck" id="oCheck" disabled>答え合わせ</button>
+  </div><div class="btnrow"><button class="textbtn" data-act="oUnknown">${I('question')}わからない（答えを見る）</button></div></div>`;
+  drawOrder();
+}
+function drawOrder(){
+  const c = state.round.cur, o = dOrder(c.id), el = document.getElementById('olist'); if (!el) return;
+  el.innerHTML = c.order.map(idx => {
+    const p = c.picks.indexOf(idx);
+    let st = '';
+    if (c.done) st = c.unknown && p < 0 ? '' : p === idx ? 'ok' : 'ng';
+    return `<li><button class="obtn ${p >= 0 ? 'on' : ''} ${st}" data-act="opick" data-v="${idx}" ${c.done ? 'disabled' : ''}>
+      <span class="onum">${p >= 0 ? p + 1 : ''}</span><span class="otx"><span>${rb(o.items[idx][0])}</span>${c.done ? `<small>${esc(o.items[idx][1])}・正しくは${idx + 1}番目</small>` : ''}</span></button></li>`;
+  }).join('');
+  const b = document.getElementById('oCheck'); if (b) b.disabled = c.picks.length < o.items.length;
+}
+function devOrderPick(el){
+  const c = state.round && state.round.cur;
+  if (!c || c.type !== 'dord' || c.done) return;
+  const idx = +el.dataset.v, p = c.picks.indexOf(idx);
+  if (p >= 0) c.picks = c.picks.slice(0, p); else c.picks.push(idx);
+  drawOrder();
+}
+function devOrderCheck(unknown){
+  const c = state.round && state.round.cur;
+  if (!c || c.type !== 'dord' || c.done) return;
+  const o = dOrder(c.id), n = o.items.length;
+  if (unknown) { c.picks = []; c.unknownAll = true; }
+  else if (c.picks.length < n) return;
+  const wrong = unknown ? 0 : c.picks.filter((idx, i) => idx !== i).length;
+  devRecord(c, wrong, unknown ? n : 0);
+  if (unknown) SFX.unknown(); else if (!c.ok) SFX.wrong();
+  drawOrder();
+  const okN = unknown ? 0 : c.picks.filter((idx, i) => idx === i).length;
+  document.getElementById('fb').innerHTML = `
+  ${dVerdict(c, okN, n, 'つ')}
+  <section class="block"><h3>正しい順番</h3><ol class="oans">${o.items.map(([t, w], i) => {
+    const p = c.picks.indexOf(i), ok = p === i;
+    return `<li class="${unknown ? '' : ok ? 'ok' : 'ng'}"><span class="onum">${i + 1}</span><span class="otx"><span>${rb(t)}</span><small>${esc(w)}${unknown || ok ? '' : `　あなた：${p + 1}番目`}</small></span></li>`;
+  }).join('')}</ol></section>
+  ${o.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(o.point)}</p></section>` : ''}
+  ${dRefBlocks(o.ref)}
+  <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', o.id)}</section>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}発達の早見表を開く</button></div>
+  ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
+  setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
+}
+
+/* ---------- 早見表 ---------- */
+function openDevTable(tab){
+  if (!DV) return;
+  state.devTab = tab || state.devTab || 'period';
+  const t = state.devTab, tabs = [['period', '時期で見る'], ['domain', '分野で見る'], ['tips', 'まちがえやすい']];
+  const body = t === 'period'
+    ? DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd>${rb(x)}</dd></div>`).join('')}</dl></section>`).join('')
+    : t === 'domain'
+      ? `<div class="dtoc">${DV.table.map(x => `<button class="chipbtn" data-act="dTo" data-v="${x.key}">${esc(x.title)}</button>`).join('')}</div>` +
+        DV.table.map(x => `<section class="block" id="dt-${x.key}"><h3>${esc(x.title)}</h3>${dTableHTML(x)}</section>`).join('')
+      : `<ol class="stips">${DV.tips.map(x => `<li>${rb(x)}</li>`).join('')}</ol>`;
+  openModal(`
+    <h2>発達の早見表</h2>
+    <div class="dtabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === t}" data-act="devTab" data-v="${k}">${l}</button>`).join('')}</div>
+    ${body}`);
+}
+
 /* =========================================================
  * 結果
  * ========================================================= */
 function unitBucket(x){
   if (x.item.type === 'quiz') return bucket('q', x.item.id);
   if (x.item.type === 'staff') return bucket('s', x.item.id);
+  if (x.item.type === 'dchk' || x.item.type === 'dord') return bucket('d', x.item.id);
   const bs = x.item.ids.map(id => bucket('e', id));
   return bs.includes('wrong') ? 'wrong' : bs.includes('unknown') ? 'unknown' : bs.includes('unsure') ? 'unsure' : 'correct';
 }
@@ -1997,6 +2331,7 @@ function renderResult(){
   const qIds = uniq(res.filter(x => x.item.type === 'quiz').map(x => x.item.id)).filter(id => qById.has(id));
   const eIds = uniq(res.filter(x => x.item.type === 'sort').flatMap(x => x.item.ids)).filter(id => eById.has(id));
   const sIds = uniq(res.filter(x => x.item.type === 'staff').map(x => x.item.id)).filter(id => sFac(id));
+  const dIds = uniq(res.filter(x => x.item.type === 'dchk' || x.item.type === 'dord').map(x => x.item.id)).filter(id => dItem(id));
   app.innerHTML = `
   <p class="psub" style="margin:0 0 4px">${esc(unitName(r.origin.unit))}</p>
   <h1 class="ptitle">おつかれさまでした</h1>
@@ -2005,7 +2340,7 @@ function renderResult(){
   <div class="btns" style="margin-top:20px">
     ${review.length ? `<button class="btn primary block" data-act="retryReview">苦手をもう一度（${review.length}）</button>` : ''}
     <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
-    <button class="btn block" data-act="setupAgain">${r.origin.kind === 'staff' ? '単元に戻る' : '条件を変えて解く'}</button>
+    <button class="btn block" data-act="setupAgain">${r.origin.kind === 'staff' ? '単元に戻る' : r.origin.kind === 'dev' ? '発達チェックに戻る' : '条件を変えて解く'}</button>
   </div>
   <div class="foot"><button class="textbtn" data-act="back">終了する</button></div>
   <section class="sect">
@@ -2013,6 +2348,7 @@ function renderResult(){
     ${qIds.length ? `<ul class="rows">${qIds.map(id => qRow(qById.get(id), r.origin.unit === 'all')).join('')}</ul>` : ''}
     ${eIds.length ? `<ul class="rows" style="margin-top:12px">${eIds.map(id => eRow(eById.get(id))).join('')}</ul>` : ''}
     ${sIds.length ? `<div class="menu">${sIds.map(id => { const f = sFac(id), b = bucket('s', id); return `<button class="mrow" data-act="staffOne" data-v="${esc(id)}"><span class="dot b-${b}"></span><span class="mtx"><span class="mt">${rb(sFacName(f))}</span><span class="ms">${BL[b]}　もう一度解く</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>` : ''}
+    ${dIds.length ? `<div class="menu" style="margin-top:12px">${dIds.map(id => { const x = dItem(id), b = bucket('d', id); return `<button class="mrow" data-act="devOne" data-v="${esc(id)}"><span class="dot b-${b}"></span><span class="mtx"><span class="mt">${rb(x.title)}</span><span class="ms">${dKind(x)}　${BL[b]}　もう一度解く</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>` : ''}
   </section>`;
 }
 function retry(kind){
@@ -2601,7 +2937,7 @@ function importBackup(file){
     if (!data || data.app !== 'hoikushi-anki-note' || !(data.db || data.user) || !data.progress) { toast('このアプリのバックアップではありません'); return; }
     const when = data.exportedAt ? new Date(data.exportedAt).toLocaleString('ja-JP') : '';
     confirmDialog({ title: 'バックアップから復元しますか？', body: `${when ? when + ' に書き出した' : 'この'}バックアップで、今の問題・メモ・ふりがな・学習記録を置き換えます。今の内容は消えます。`, ok: '復元する' }).then(ok => { if (!ok) return;
-    P = { ...blankP(), ...data.progress }; U = data.db ? { ...blankDB(), ...data.db } : seedDB(data.user); ensureStaffUnit(U);
+    P = { ...blankP(), ...data.progress }; U = data.db ? { ...blankDB(), ...data.db } : seedDB(data.user); ensureStaffUnit(U); ensureAddedUnits(U);
     saveP(); saveU(); buildData(); render(cur(), true); toast('復元しました'); });
   };
   rd.readAsText(file);
@@ -3012,7 +3348,7 @@ function saveRubyForm(form){
 /* =========================================================
  * 単元
  * ========================================================= */
-const UNIT_ICONS = ['book', 'cap', 'blocks', 'sprout', 'calendar', 'building', 'layers', 'note'];
+const UNIT_ICONS = ['book', 'cap', 'blocks', 'sprout', 'heart', 'calendar', 'building', 'layers', 'note'];
 function renderUnits(){
   const row = u => {
     const nq = TERMS.filter(t => t.unit === u.id).length, ne = EVENTS.filter(e => e.unit === u.id).length;
@@ -3075,6 +3411,24 @@ async function onAction(el, ev){
     case 'staffWeak': staffStart(ST.facilities.filter(f => isWeak(bucket('s', f.id))).map(f => f.id)); break;
     case 'staffOne': staffStart([v]); break;
     case 'staffTable': openStaffTable(); break;
+    case 'goDev': go({ v: 'dev' }); break;
+    case 'devOne': devStart([v]); break;
+    case 'devRandom': devStart(shuffle(DV.checks).slice(0, 5).map(x => x.id)); break;
+    case 'devOrdRandom': devStart(shuffle(DV.orders).slice(0, 5).map(x => x.id)); break;
+    case 'devWeak': devStart(devOf(DV.unit).filter(x => isWeak(bucket('d', x.id))).map(x => x.id)); break;
+    case 'devAllTheme': devStart(DV.checks.filter(x => x.kind !== 'age').map(x => x.id)); break;
+    case 'devAllAge': devStart(DV.checks.filter(x => x.kind === 'age').map(x => x.id)); break;
+    case 'devAllOrd': devStart(DV.orders.map(x => x.id)); break;
+    case 'devTable': openDevTable(); break;
+    case 'devTab': openDevTable(v); break;
+    case 'dTo': document.getElementById('dt-' + v)?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }); break;
+    case 'dpick': devPick(el); break;
+    case 'devDontKnow': devDontKnow(); break;
+    case 'dJump': devJump(v); break;
+    case 'opick': devOrderPick(el); break;
+    case 'oReset': { const c = state.round && state.round.cur; if (c && c.type === 'dord' && !c.done) { c.picks = []; drawOrder(); } break; }
+    case 'oCheck': devOrderCheck(false); break;
+    case 'oUnknown': devOrderCheck(true); break;
     case 'spick': staffPick(el); break;
     case 'staffDontKnow': staffDontKnow(); break;
     case 'sJump': staffJump(v); break;
@@ -3119,6 +3473,7 @@ async function onAction(el, ev){
     case 'setupAgain': {
       const o = state.round.origin, prev = stack[stack.length - 2];
       if (o.kind === 'staff') { if (prev && (prev.v === 'staff' || prev.v === 'unit')) uiBack(); else go({ v: 'unit', a: o.unit }, 'replace'); break; }
+      if (o.kind === 'dev') { if (prev && prev.v === 'dev') uiBack(); else go({ v: 'dev' }, 'replace'); break; }
       if (prev && prev.v === 'setup') uiBack(); else go({ v: 'setup', a: o.kind === 'sort' ? 'sort' : 'quiz', u: o.unit }, 'replace');
       break;
     }
