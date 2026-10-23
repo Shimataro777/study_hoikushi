@@ -901,19 +901,19 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.10.0"></script>
-<script src="hoiku-genri.js?v=1.10.0"></script>
-<script src="hoiku-shinri.js?v=1.10.0"></script>
-<script src="seido-nengo.js?v=1.10.0"></script>
-<script src="shokuin-haichi.js?v=1.10.0"></script>
-<script src="kodomo-hoken.js?v=1.10.0"></script>
-<script src="kodomo-hattatsu.js?v=1.10.0"></script>
-<script src="ruby.js?v=1.10.0"></script>
+<script src="kyoiku-genri.js?v=1.10.1"></script>
+<script src="hoiku-genri.js?v=1.10.1"></script>
+<script src="hoiku-shinri.js?v=1.10.1"></script>
+<script src="seido-nengo.js?v=1.10.1"></script>
+<script src="shokuin-haichi.js?v=1.10.1"></script>
+<script src="kodomo-hoken.js?v=1.10.1"></script>
+<script src="kodomo-hattatsu.js?v=1.10.1"></script>
+<script src="ruby.js?v=1.10.1"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.10.0';
+const APP_VERSION = '1.10.1';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -1919,9 +1919,9 @@ function renderQuizFeedback(first){
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('q', q.id)}</section>
   <section class="block"><h3>解説</h3><p class="prose">${rb(q.explanation)}</p></section>
   ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(q.point)}</p></section>` : ''}
-  ${q.termKey && tblOfTerm(termByKey.get(q.termKey)) ? tblBlocks([[tblOfTerm(termByKey.get(q.termKey))]], false) : ''}
+  ${q.termKey && tblOfTerm(termByKey.get(q.termKey)) ? tblBlocks([[tblOfTerm(termByKey.get(q.termKey))]], true) : ''}
   ${DV && q.unit === DV.unit ? `<div class="btnrow"><button class="textbtn" data-act="devTable" data-g="${esc(genreOf(q.cat))}">${I('book')}早見表（${esc(genreOf(q.cat))}）を開く</button></div>` : ''}
-  <details class="block" ${c.ok && !c.unknown ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
+  <details class="block" open><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
   ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${rb(t.term)}</button>`).join('')}</div></section>` : ''}
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   if (first) {
@@ -2175,7 +2175,7 @@ function renderStaffFeedback(first){
   <section class="block note"><h3>この施設のポイント</h3><p class="prose">${rb(f.point)}</p></section>
   ${sScaleTable(f)}
   ${f.memo ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(f.memo)}</p></section>` : ''}
-  <details class="block"><summary>どんな施設？${I('chevD')}</summary><p class="prose">${rb(f.purpose)}</p></details>
+  <details class="block" open><summary>どんな施設？${I('chevD')}</summary><p class="prose">${rb(f.purpose)}</p></details>
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('s', f.id)}</section>
   <div class="btnrow"><button class="textbtn" data-act="staffTable">${I('book')}早見表でほかの施設と比べる</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の施設へ')}`;
@@ -2259,7 +2259,7 @@ const tblTitle = spec => { const k = Array.isArray(spec) ? spec[0] : spec; retur
 /* 解答後の「比較の表」。最初の1つは開いておく */
 function tblBlocks(specs, openFirst = true){
   return (specs || []).filter(sp => dTbl(Array.isArray(sp) ? sp[0] : sp)).map((sp, i) =>
-    `<details class="block dref" ${openFirst && i === 0 ? 'open' : ''}><summary>表：${esc(tblTitle(sp))}${I('chevD')}</summary>${tblHTML(sp)}</details>`).join('');
+    `<details class="block dref" ${openFirst ? 'open' : ''}><summary>表：${esc(tblTitle(sp))}${I('chevD')}</summary>${tblHTML(sp)}</details>`).join('');
 }
 /* 4択の語句に付けた表（付属ファイルの tbl。すでに取り込んだ語句には、付属ファイルの同じ語句から補う） */
 let _bundleTbl = null;
