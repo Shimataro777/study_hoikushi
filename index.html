@@ -794,6 +794,45 @@ ruby{ruby-align:center}
 .al{font-size:var(--fs-micro);color:var(--muted)}
 .ad.today .al{color:var(--ink);font-weight:700}
 .amsg{margin:12px 0 0;font-size:var(--fs-caption);color:var(--muted)}
+/* 早見表：表の選び方 */
+.dtseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.dtseg button{min-height:38px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:700;color:var(--ink2);line-height:1.25}
+.dtseg button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.dtpick{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:6px;align-items:stretch}
+.dtnav{border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;place-items:center;color:var(--ink)}
+.dtnav:disabled{opacity:.3}
+.dtnav .i{width:18px;height:18px}
+.dtsel{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l n" "t t";gap:1px 8px;padding:8px 36px 8px 14px;min-height:56px;border:1.5px solid var(--primary);border-radius:12px;background:color-mix(in srgb,var(--primary) 6%,var(--surface));text-align:left;color:var(--ink)}
+.dtsel .dtsl{grid-area:l;font-size:var(--fs-micro);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dtsel .dtsn{grid-area:n;font-size:var(--fs-micro);color:var(--primary);font-weight:700;white-space:nowrap}
+.dtsel b{grid-area:t;font-size:var(--fs-body);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dtsel > .i{position:absolute;right:12px;top:50%;width:16px;height:16px;margin-top:-8px;color:var(--primary);transition:transform .15s}
+.dtsel.open > .i{transform:rotate(180deg)}
+.dtlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:4px}
+.dtlg{grid-column:1 / -1;margin:10px 0 0;font-size:var(--fs-label);color:var(--primary)}
+.dtlg:first-child{margin-top:0}
+.dtli{display:flex;flex-direction:column;gap:3px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:left;color:var(--ink)}
+.dtli b{font-size:var(--fs-body-sm)}
+.dtli span{font-size:var(--fs-micro);color:var(--muted);line-height:1.5}
+.dtli.on{border:2px solid var(--primary)}
+.dtcount{margin:4px 0 0;font-size:var(--fs-caption);color:var(--muted)}
+/* 表：スマホはカード、広い画面は表 */
+.ccards{display:none}
+@media (max-width:640px){
+  .ccards{display:grid;gap:8px}
+  .ccards + .ctw{display:none}
+  .cc{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 14px}
+  .cch{font-weight:700;color:var(--primary);font-size:var(--fs-body);line-height:1.5;padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .ccr{display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:8px;padding:5px 0;font-size:var(--fs-body-sm);line-height:1.65}
+  .ccr+.ccr{border-top:1px dashed var(--line)}
+  .ccl{font-size:var(--fs-micro);color:var(--muted);font-weight:700;line-height:1.9;word-break:keep-all;overflow-wrap:anywhere}
+  .ccv.solo{font-size:var(--fs-body-sm);line-height:1.7;padding:2px 0}
+  .dthead{padding-bottom:8px}
+  .dthead h2{font-size:var(--fs-title) !important;margin:2px 0 8px !important}
+  .dtgenre button{min-height:36px;font-size:var(--fs-caption)}
+  .dthead .dtabs button{font-size:var(--fs-caption);white-space:nowrap}
+  .ccr{grid-template-columns:6.5em minmax(0,1fr)}
+}
 /* 早見表 */
 .msheet.wide{max-width:min(1100px,100%)}
 @media (min-width:700px){.msheet.wide{max-width:min(1100px,94vw);max-height:92vh}}
@@ -951,19 +990,19 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.12.0"></script>
-<script src="hoiku-genri.js?v=1.12.0"></script>
-<script src="hoiku-shinri.js?v=1.12.0"></script>
-<script src="seido-nengo.js?v=1.12.0"></script>
-<script src="shokuin-haichi.js?v=1.12.0"></script>
-<script src="kodomo-hoken.js?v=1.12.0"></script>
-<script src="kodomo-hattatsu.js?v=1.12.0"></script>
-<script src="ruby.js?v=1.12.0"></script>
+<script src="kyoiku-genri.js?v=1.13.0"></script>
+<script src="hoiku-genri.js?v=1.13.0"></script>
+<script src="hoiku-shinri.js?v=1.13.0"></script>
+<script src="seido-nengo.js?v=1.13.0"></script>
+<script src="shokuin-haichi.js?v=1.13.0"></script>
+<script src="kodomo-hoken.js?v=1.13.0"></script>
+<script src="kodomo-hattatsu.js?v=1.13.0"></script>
+<script src="ruby.js?v=1.13.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.12.0';
+const APP_VERSION = '1.13.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -2390,7 +2429,11 @@ function tblHTML(spec, match){
   let rows = match ? t.rows.filter(match) : t.rows;
   if (from) { const a = rows.findIndex(r => r[0] === from), b = to ? rows.findIndex(r => r[0] === to) : rows.length - 1; if (a >= 0 && b >= a) rows = rows.slice(a, b + 1); }
   const wide = t.cols.length > 2;
-  return `<div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${t.cols.length}"><thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
+  /* スマホでは1行を1枚のカードにして、見出し（1列目）の下に列名つきで並べる */
+  const cards = `<div class="ccards">${rows.map(r => `<div class="cc"><div class="cch">${rbL(r[0])}</div>${r.slice(1).map((c, k) => c ? (t.cols.length > 2
+      ? `<div class="ccr"><span class="ccl">${esc(t.cols[k + 1])}</span><span class="ccv">${rbL(c)}</span></div>`
+      : `<div class="ccv solo">${rbL(c)}</div>`) : '').join('')}</div>`).join('')}</div>`;
+  return `${cards}<div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${t.cols.length}"><thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
     <tbody>${rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rbL(c)}</th>` : `<td>${c ? rbL(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${t.note ? `<p class="hint" style="margin-top:8px">${rbL(t.note)}</p>` : ''}`;
 }
 const tblTitle = spec => { const k = Array.isArray(spec) ? spec[0] : spec; return dTbl(k)?.title || ''; };
@@ -2708,35 +2751,52 @@ function dtItems(g, tab){
   if (tab === 'tables') return tableGroups(g).flatMap(x => x.keys.map(k => [k, dTbl(k).title, x.a.title]));
   return [];
 }
+function dtCur(){
+  const D = dtState(), g = state.devGenre, t = state.devTab, items = dtItems(g, t);
+  const key = D.sub[g + t] && items.some(x => x[0] === D.sub[g + t]) ? D.sub[g + t] : items[0] && items[0][0];
+  return { items, key, idx: items.findIndex(x => x[0] === key) };
+}
+const dtTitle = k => k === '@periods' ? '時期ごとの特徴' : (dTbl(k) || {}).title || '';
 function dtBody(){
   const D = dtState(), g = state.devGenre, t = state.devTab;
-  const sel = k => `<section class="dtcard">${k === '@periods'
-    ? `<h3 class="dtt">時期ごとの特徴</h3>${DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd><span>${rbL(x)}</span></dd></div>`).join('')}</dl></section>`).join('')}`
-    : `<h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k])}`}</section>`;
   if (t === 'tips') return `<ol class="stips">${tipsOf(g).map(x => `<li><span class="stx">${rbL(x.t)}</span></li>`).join('')}</ol>`;
-  const items = dtItems(g, t);
+  const { items, key } = dtCur();
+  /* 表の一覧（選ぶ画面） */
+  if (D.pick && t === 'tables') {
+    let last = null;
+    return `<div class="dtlist">${items.map(([k, l, grp]) => { const h = grp !== last ? `<h3 class="dtlg">${esc(grp)}</h3>` : ''; last = grp; const tb = dTbl(k);
+      return h + `<button type="button" class="dtli ${k === key ? 'on' : ''}" data-act="dtSub" data-v="${esc(k)}"><b>${esc(l)}</b><span>${esc(tb.rows.slice(0, 4).map(r => r[0]).join('・'))}${tb.rows.length > 4 ? ` ほか${tb.rows.length - 4}` : ''}</span></button>`; }).join('')}</div>`;
+  }
   if (t === 'tables' && D.q.trim()) {
     const ws = searchWords(D.q);
     const hit = r => { const txt = norm(r.join(' ')); return ws.every(w => txt.includes(w)); };
-    const res = items.filter(([k]) => dTbl(k).rows.some(hit));
-    return res.length ? res.map(([k]) => `<section class="dtcard"><h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k], hit)}</section>`).join('') : `<p class="empty">「${esc(D.q)}」を含む行はありません</p>`;
+    const titleHit = k => ws.every(w => norm(dTbl(k).title).includes(w));
+    const res = items.filter(([k]) => titleHit(k) || dTbl(k).rows.some(hit));
+    return res.length ? `<p class="dtcount">${res.length}つの表で見つかりました</p>` + res.map(([k]) => `<section class="dtcard"><h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k], titleHit(k) ? null : hit)}</section>`).join('') : `<p class="empty">「${esc(D.q)}」は見つかりません</p>`;
   }
-  const key = D.sub[g + t] && items.some(x => x[0] === D.sub[g + t]) ? D.sub[g + t] : items[0] && items[0][0];
-  return key ? sel(key) : '<p class="empty">表がありません</p>';
+  if (!key) return '<p class="empty">表がありません</p>';
+  return `<section class="dtcard">${key === '@periods'
+    ? DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd><span>${rbL(x)}</span></dd></div>`).join('')}</dl></section>`).join('')
+    : tblHTML([key])}</section>`;
 }
+/* 表の選び方：時期で見るは4つのボタン、比較の表は「表を選ぶ」ボタン（一覧が開く）と前後の矢印 */
 function dtChips(){
-  const D = dtState(), g = state.devGenre, t = state.devTab, items = dtItems(g, t);
-  if (!items.length || (t === 'tables' && D.q.trim())) return '';
-  const key = D.sub[g + t] && items.some(x => x[0] === D.sub[g + t]) ? D.sub[g + t] : items[0][0];
-  let last = null;
-  return `<div class="dtchips" role="tablist">${items.map(([k, l, grp]) => { const h = grp && grp !== last && t === 'tables' ? `<span class="dtcg">${esc(grp)}</span>` : ''; last = grp; return h + `<button type="button" role="tab" aria-selected="${k === key}" data-act="dtSub" data-v="${esc(k)}">${esc(l)}</button>`; }).join('')}</div>`;
+  const D = dtState(), t = state.devTab, { items, key, idx } = dtCur();
+  if (!items.length || t === 'tips') return '';
+  if (t === 'period') return `<div class="dtseg" role="tablist">${items.map(([k, l]) => `<button type="button" role="tab" aria-selected="${k === key}" data-act="dtSub" data-v="${esc(k)}">${esc(l)}</button>`).join('')}</div>`;
+  if (D.q.trim()) return '';
+  return `<div class="dtpick">
+    <button type="button" class="dtnav" data-act="dtStep" data-v="-1" ${idx <= 0 || D.pick ? 'disabled' : ''} aria-label="前の表">${I('chevL')}</button>
+    <button type="button" class="dtsel ${D.pick ? 'open' : ''}" data-act="dtPick" aria-expanded="${!!D.pick}"><span class="dtsl">${D.pick ? '表を選んでください' : esc(items[idx][2])}</span><b>${D.pick ? `${items.length}個の表` : esc(dtTitle(key))}</b><span class="dtsn">${D.pick ? '閉じる' : `${idx + 1} / ${items.length}　一覧`}</span>${I('chevD')}</button>
+    <button type="button" class="dtnav" data-act="dtStep" data-v="1" ${idx >= items.length - 1 || D.pick ? 'disabled' : ''} aria-label="次の表">${I('chev')}</button>
+  </div>`;
 }
 function redrawDt(){
   const c = document.getElementById('dtchipsBox'), b = document.getElementById('dtbody'); if (!b) return;
   if (c) c.innerHTML = dtChips(); b.innerHTML = dtBody();
-  dtChipFocus();
 }
-function dtChipFocus(){ const on = document.querySelector('.dtchips [aria-selected="true"]'), box = on && on.parentElement; if (box) box.scrollLeft = Math.max(0, on.offsetLeft - box.clientWidth / 2 + on.offsetWidth / 2); }
+function dtTop(){ const m = document.querySelector('#modal .msheet'); if (m) m.scrollTop = 0; }
+function dtChipFocus(){}
 function openDevTable(tab, jump, genre){
   if (!DV) return;
   const gs = DEV_GENRES(), D = dtState();
@@ -2745,15 +2805,16 @@ function openDevTable(tab, jump, genre){
   let t = tab || state.devTab || tabs[0][0]; if (!tabs.some(x => x[0] === t)) t = tabs[0][0];
   state.devTab = t;
   if (jump) D.sub[g + t] = jump;
+  D.pick = false;
   openModal(`
     <div class="dthead">
       <h2>早見表</h2>
       <div class="dtgenre" role="radiogroup" aria-label="分野">${gs.map(x => `<button type="button" role="radio" aria-checked="${x === g}" data-act="devGenreTab" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>
       <div class="dtabs" role="tablist" style="grid-template-columns:repeat(${tabs.length},1fr)">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === t}" data-act="devTab" data-v="${k}">${l}</button>`).join('')}</div>
-      ${t === 'tables' ? `<label class="dtsearch">${I('search')}<input id="dtq" type="search" placeholder="表の中を探す（例：潜伏、BCG）" value="${esc(D.q)}" autocomplete="off"></label>` : ''}
+      ${t === 'tables' ? `<label class="dtsearch">${I('search')}<input id="dtq" type="search" placeholder="表の名前・中身で探す（例：潜伏、BCG、登園）" value="${esc(D.q)}" autocomplete="off"></label>` : ''}
       <div id="dtchipsBox">${dtChips()}</div>
     </div>
-    <p class="dthint">点線の語句を押すと図鑑の説明が出ます${t !== 'tips' ? '。表は横に動かせます' : ''}</p>
+    <p class="dthint">点線の語句を押すと図鑑の説明が出ます</p>
     <div id="dtbody">${dtBody()}</div>`, { wide: true, noFocus: true });
   dtChipFocus();
 }
@@ -3955,7 +4016,9 @@ async function onAction(el, ev){
     case 'devAllOrd': devStart(DV.orders.map(x => x.id)); break;
     case 'devTable': openDevTable(null, null, el.dataset.g || genreNow()); break;
     case 'devTab': openDevTable(v, null, state.devGenre); break;
-    case 'dtSub': { dtState().sub[state.devGenre + state.devTab] = v; redrawDt(); const m = document.querySelector('#modal .msheet'), h = document.querySelector('.dthead'); if (m && h && m.scrollTop > h.offsetHeight) m.scrollTop = 0; break; }
+    case 'dtSub': { const D = dtState(); D.sub[state.devGenre + state.devTab] = v; D.pick = false; redrawDt(); dtTop(); break; }
+    case 'dtPick': { const D = dtState(); D.pick = !D.pick; redrawDt(); dtTop(); break; }
+    case 'dtStep': { const { items, idx } = dtCur(), n = items[idx + (+v)]; if (n) { dtState().sub[state.devGenre + state.devTab] = n[0]; redrawDt(); dtTop(); } break; }
     case 'devGenreTab': openDevTable(state.devTab, null, v); break;
     case 'tlink': {
       const fromSheet = modalOpen() && !!document.querySelector('#mbody .dthead'), back = fromSheet ? { tab: state.devTab, g: state.devGenre, y: document.querySelector('#modal .msheet').scrollTop } : null;
@@ -4177,7 +4240,7 @@ let sqTimer = null;
 document.addEventListener('input', ev => {
   const t = ev.target;
   if (t.matches && t.matches('textarea.ta:not(.big)') && !ev.isComposing) autoGrow(t);   // 変換中は高さを変えない（予測変換を妨げないように）
-  if (t.id === 'dtq') { dtState().q = t.value; clearTimeout(sqTimer); sqTimer = setTimeout(redrawDt, 200); return; }
+  if (t.id === 'dtq') { const D = dtState(); D.q = t.value; D.pick = false; clearTimeout(sqTimer); sqTimer = setTimeout(redrawDt, 200); return; }
   if (t.id === 'sq-list' || t.id === 'sq-dict') {   // 打つそばから絞る（少し待ってから）
     const ctx = t.id.slice(3); state.search[ctx].q = t.value;
     clearTimeout(sqTimer); sqTimer = setTimeout(() => { state.opened.clear(); ctx === 'list' ? drawList() : drawDict(); persistNav(); }, 220);
