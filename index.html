@@ -889,6 +889,9 @@ ruby{ruby-align:center}
 
 <!-- 学習データ（単元ごとのファイル。単元を増やすときはここに1行追加） -->
 <script>window.UNITS = []; window.addUnit = function (u) { window.UNITS.push(u); };</script>
+<script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
+window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
+</script>
 <script src="kyoiku-genri.js"></script>
 <script src="hoiku-genri.js"></script>
 <script src="hoiku-shinri.js"></script>
@@ -901,7 +904,7 @@ ruby{ruby-align:center}
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.7.1';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -979,12 +982,8 @@ const HELP = {
   units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
   import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
   sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
-  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。検索欄の下の帯で、単元や分野（例：病気・医療）をタップすると絞り込めます。細かい分野や振り分けで絞りたいときは「絞り込み」を使います。
-
-種類は件数の左のプルダウンで切り替えます（4択／○×・並べ替え／年号並べ替え）。項目を押すと解説と振り分けを確認・変更でき、○×はその場で記述と正解・表を見られます。「解く」で表示中の問題をまとめて解けます。'],
-  dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。検索欄の下の帯で、単元や分野をタップすると絞り込めます。
-
-件数の左のプルダウンで「用語・人物」「まとめ表」「年表」を切り替えます。まとめ表には、子どもの保健の比較の表（時期で見る・身長体重・感染症の潜伏期間や登園の目安・ワクチンなど）があり、表の中の言葉でも探せます。'],
+  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。検索欄の下の帯で、単元や分野（例：病気・医療）をタップすると絞り込めます。細かい分野や振り分けで絞りたいときは「絞り込み」を使います。\n\n種類は件数の左のプルダウンで切り替えます（4択／○×・並べ替え／年号並べ替え）。項目を押すと解説と振り分けを確認・変更でき、○×はその場で記述と正解・表を見られます。「解く」で表示中の問題をまとめて解けます。'],
+  dict: ['図鑑', 'キーワードを打つと、その場で絞り込まれます（例：くらはし）。検索欄の下の帯で、単元や分野をタップすると絞り込めます。\n\n件数の左のプルダウンで「用語・人物」「まとめ表」「年表」を切り替えます。まとめ表には、子どもの保健の比較の表（時期で見る・身長体重・感染症の潜伏期間や登園の目安・ワクチンなど）があり、表の中の言葉でも探せます。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
@@ -4119,8 +4118,9 @@ document.addEventListener('change', ev => {
   if (t.id === 'lkind') { state.list.kind = t.value; state.search.list.cat = ''; state.search.list.bucket = ''; state.opened.clear(); render(cur(), true); return; }
   if (t.id === 'dtab') { state.dict.tab = t.value; state.search.dict.cat = ''; render(cur(), true); return; }
   if (t.id === 'fUnit' && document.getElementById('fCat')) {
-    const yr = state.dict.tab === 'years', sel = document.getElementById('fCat');
-    sel.innerHTML = `<option value="">${yr ? 'すべての時代' : 'すべての分野'}</option>` + openFilterSheet.catList(t.value).map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    const ctx = t.closest('form')?.dataset.ctx || 'dict', { list, catOf } = scopeOf(ctx), sel = document.getElementById('fCat');
+    const cats = uniq(list.filter(x => !t.value || x.unit === t.value).map(catOf)).filter(Boolean);
+    sel.innerHTML = `<option value="">${sel.options[0] ? esc(sel.options[0].textContent) : 'すべて'}</option>` + catOptions(cats, '');
     return;
   }
   if (t.id === 'impUnit') { state.imp.unit = t.value; state.imp.items.forEach(x => { if (!x.unitPreset && !x.unitName) x.sel = !impDup(x); }); render(cur(), true); }
