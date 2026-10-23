@@ -901,19 +901,19 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.10.1"></script>
-<script src="hoiku-genri.js?v=1.10.1"></script>
-<script src="hoiku-shinri.js?v=1.10.1"></script>
-<script src="seido-nengo.js?v=1.10.1"></script>
-<script src="shokuin-haichi.js?v=1.10.1"></script>
-<script src="kodomo-hoken.js?v=1.10.1"></script>
-<script src="kodomo-hattatsu.js?v=1.10.1"></script>
-<script src="ruby.js?v=1.10.1"></script>
+<script src="kyoiku-genri.js?v=1.11.0"></script>
+<script src="hoiku-genri.js?v=1.11.0"></script>
+<script src="hoiku-shinri.js?v=1.11.0"></script>
+<script src="seido-nengo.js?v=1.11.0"></script>
+<script src="shokuin-haichi.js?v=1.11.0"></script>
+<script src="kodomo-hoken.js?v=1.11.0"></script>
+<script src="kodomo-hattatsu.js?v=1.11.0"></script>
+<script src="ruby.js?v=1.11.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.10.1';
+const APP_VERSION = '1.11.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -982,9 +982,9 @@ function toast(text){
  * 説明（？ボタンで表示）
  * ========================================================= */
 const HELP = {
-  home: ['使い方', '単元を選んで学習します。解いた問題は「正解・自信なし・不正解」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
-  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかをチェックで選びます。いくつでも組み合わせられます。右上の「すべて」「苦手」を押すと、まとめて切り替わります。「苦手」は不正解・わからない・自信なしをまとめたものです。'],
-  classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n「自信がない」をオンにして正解すると「自信なし」、「わからない」を選ぶと「わからない」になります。'],
+  home: ['使い方', '単元を選んで学習します。解いた問題は「正解・不正解・わからない」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
+  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかをチェックで選びます。いくつでも組み合わせられます。右上の「すべて」「苦手」を押すと、まとめて切り替わります。「苦手」は不正解・わからないをまとめたものです。'],
+  classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n答えがわからないときは「わからない」を選ぶと「わからない」に振り分けられます。'],
   resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
   dir: ['出題の向き', '「説明 → 答え」は説明を読んで人物・用語を選ぶ問題、「答え → 説明」は人物・用語を見て正しい説明を選ぶ問題です。「まぜる」で両方から出します。\n\n振り分けは向きごとに別々に記録されます。'],
@@ -1009,6 +1009,8 @@ const blankP = () => ({ q: {}, e: {}, s: {}, d: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP);
+/* 1.11.0：「自信なし」をやめた。以前「自信なし」に振り分けたものは「わからない」に移す */
+(() => { let ch = false; for (const k of Object.keys(P)) { const m = P[k]; if (m && typeof m === 'object') for (const r of Object.values(m)) if (r && r.b === 'unsure') { r.b = 'unknown'; ch = true; } } if (ch) try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) {} })();
 /* ---------- 問題の置き場（ひとつだけ） ----------
    アプリは空の枠。付属の問題ファイル（AIが作ったもの）も、自分で足した問題も、
    取り込んだあとは同じ置き場に入り、同じように直したり消したりできる */
@@ -1262,11 +1264,11 @@ const memoOfEvent = e => U.memos['e:' + e.id] || '';
 /* =========================================================
  * 振り分け
  * ========================================================= */
-const ORDER = ['new', 'unknown', 'wrong', 'unsure', 'correct'];
+const ORDER = ['new', 'unknown', 'wrong', 'correct'];
 const BL = { new: '未回答', unknown: 'わからない', wrong: '不正解', unsure: '自信なし', correct: '正解' };
-const WEAK = ['unknown', 'wrong', 'unsure'];
+const WEAK = ['unknown', 'wrong'];
 const isWeak = b => WEAK.includes(b);
-const bucket = (k, id) => (P[k][id] && P[k][id].b) || 'new';
+const bucket = (k, id) => { const b = (P[k] && P[k][id] && P[k][id].b) || 'new'; return b === 'unsure' ? 'unknown' : b; };
 function setBucket(k, id, b){ const r = P[k][id] || { n: 0, ok: 0 }; r.b = b; P[k][id] = r; saveP(); }
 function recordAnswer(k, id, ok, unsure, unknown){
   const r = P[k][id] || { n: 0, ok: 0 };
@@ -1637,7 +1639,7 @@ function stackBar(c){
 const legend = (c, keys = ORDER) => `<div class="legend" style="--n:${keys.length}">${keys.map(b => `<div class="lg"><span class="ll"><span class="dot b-${b}"></span>${BL[b]}</span><b>${c[b]}</b></div>`).join('')}</div>`;
 const sumC = (a, b) => { const c = {}; for (const k of [...ORDER, 'total']) c[k] = (a[k] || 0) + (b[k] || 0); return c; };
 function classifySeg(k, id, withNew = false){
-  const curB = bucket(k, id), opts = withNew ? ORDER : ['correct', 'unsure', 'wrong', 'unknown'];
+  const curB = bucket(k, id), opts = withNew ? ORDER : ['correct', 'wrong', 'unknown'];
   return `<div class="seg3 ${withNew ? 'sm' : ''}" role="radiogroup" aria-label="振り分け">${opts.map(b =>
     `<button class="b-${b}" role="radio" aria-checked="${curB === b}" data-act="classify" data-k="${k}" data-id="${esc(id)}" data-v="${b}" data-new="${withNew ? 1 : 0}"><span class="dot"></span>${BL[b]}</button>`).join('')}</div>`;
 }
@@ -1696,7 +1698,7 @@ function renderUnit(id){
       ${sf.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
       ${sf.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
       ${dv.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：分野ごとの比較の表・まちがえやすいポイント</span></span>${I('chev', 'mchev')}</button>` : ''}
-      ${reviewN && !dv.length ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
+      ${reviewN && !dv.length ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
   </section>
@@ -1855,7 +1857,7 @@ function renderItem(){
   if (it.type === 'quiz') renderQuiz(it); else if (it.type === 'staff') renderStaff(it); else if (it.type === 'dchk') renderDevCheck(it); else if (it.type === 'dmat') renderDevMatch(it); else if (it.type === 'dord') renderDevOrder(it); else renderSort(it);
 }
 const prevTag = (k, id) => { const b = bucket(k, id); return b === 'new' ? '' : `<span class="prev"><span class="dot b-${b}"></span>前回 ${BL[b]}</span>`; };
-const unsureToggle = () => `<label class="toggle"><input type="checkbox" id="unsure"><span class="sw" aria-hidden="true"></span><span>自信がない</span></label>`;
+const unsureToggle = () => '';
 const isLast = () => state.round.i + 1 >= state.round.items.length;
 const nextBar = label => `<div class="actionbar"><button class="btn primary block" data-act="next" id="nextBtn">${label}</button></div>`;
 
@@ -1876,7 +1878,7 @@ function choose(i){
   if (!c || c.type !== 'quiz' || c.picked !== null) return;
   const q = qById.get(c.id);
   const unknown = i === -1;
-  c.picked = i; c.unknown = unknown; c.ok = !unknown && c.choices[i] === q.answer; c.unsure = document.getElementById('unsure').checked;
+  c.picked = i; c.unknown = unknown; c.ok = !unknown && c.choices[i] === q.answer; c.unsure = false;
   recordAnswer('q', q.id, c.ok, c.unsure, unknown);
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
@@ -1891,7 +1893,7 @@ function choose(i){
     else if (k === i) { b.classList.add('is-ng'); b.querySelector('.cmark').innerHTML = I('x'); }
     else b.classList.add('is-dim');
   });
-  document.querySelector('.toggle').hidden = true;
+  { const tg = document.querySelector('.toggle'); if (tg) tg.hidden = true; }
   renderQuizFeedback(true);
 }
 function renderQuizFeedback(first){
@@ -1970,14 +1972,14 @@ function submitSort(){
   if (c.done) return;
   c.done = true; c.sel = null;
   const marks = sortMarks(c.order);
-  c.ok = marks.every(Boolean); c.unsure = document.getElementById('unsure').checked;
+  c.ok = marks.every(Boolean); c.unsure = false;
   c.order.forEach((id, i) => recordAnswer('e', id, marks[i], c.unsure));
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
   saveP(); persistNav();
   if (!c.ok) SFX.wrong(); else SFX.correct(state.streak);
   drawSortList();
-  document.querySelector('.toggle').hidden = true;
+  { const tg = document.querySelector('.toggle'); if (tg) tg.hidden = true; }
   renderSortFeedback(true);
 }
 function sortDontKnow(){
@@ -1988,7 +1990,7 @@ function sortDontKnow(){
   c.order.forEach(id => recordAnswer('e', id, false, false, true));
   state.streak = 0; saveP(); persistNav(); SFX.unknown();
   drawSortList();
-  document.querySelector('.toggle').hidden = true;
+  { const tg = document.querySelector('.toggle'); if (tg) tg.hidden = true; }
   renderSortFeedback(true);
 }
 function renderSortFeedback(first){
@@ -2141,13 +2143,13 @@ function staffComplete(){
   c.done = true;
   c.ok = !wrong.length && !unk.length;
   c.unknown = !wrong.length && unk.length > 0;
-  c.unsure = c.ok && document.getElementById('unsure').checked;
+  c.unsure = c.ok && false;
   recordAnswer('s', c.id, c.ok, c.unsure, c.unknown);
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
   saveP(); persistNav();
   if (c.ok) SFX.correct(state.streak);
-  document.querySelector('.toggle').hidden = true;
+  { const tg = document.querySelector('.toggle'); if (tg) tg.hidden = true; }
   renderStaffFeedback(true);
 }
 function sScaleTable(f){
@@ -2286,7 +2288,7 @@ function renderDevHome(){
   <p class="psub">試験と同じ「○×の組み合わせ」の形で練習します。答えると比較の表が出ます</p>
   <section class="sect"><div class="menu">
     ${mrow('devRandom', 'list', '○×をランダムに5セット', 'すべての分野からまぜて出題')}
-    ${weak.length ? mrow('devWeak', 'retry', '苦手を解く', `不正解・わからない・自信なし ${weak.length}問`) : ''}
+    ${weak.length ? mrow('devWeak', 'retry', '苦手を解く', `不正解・わからない ${weak.length}問`) : ''}
     ${mrow('devTable', 'book', '早見表', '時期で見る・比較の表・まちがえやすいポイント')}
   </div></section>
   ${(DV.areas || []).map(a => sect('○× ' + a.title, a.desc, DV.checks.filter(x => x.area === a.id), 'devArea', a.id)).join('')}
@@ -2362,7 +2364,7 @@ function devRecord(c, wrongN, unkN){
   c.done = true;
   c.ok = !wrongN && !unkN;
   c.unknown = !wrongN && unkN > 0;
-  c.unsure = c.ok && document.getElementById('unsure').checked;
+  c.unsure = c.ok && false;
   recordAnswer('d', c.id, c.ok, c.unsure, c.unknown);
   state.streak = c.ok ? state.streak + 1 : 0;
   if (state.streak > P.best) P.best = state.streak;
@@ -2643,7 +2645,7 @@ function renderResult(){
   <p class="psub" style="margin:0 0 4px">${esc(unitName(r.origin.unit))}</p>
   <h1 class="ptitle">おつかれさまでした</h1>
   <p class="score"><b>${ok}</b>/ ${total} ${eIds.length && !qIds.length ? 'セット' : '問'}正解</p>
-  <div class="panel" style="margin-top:18px">${stackBar(c)}${legend(c, ['correct', 'unsure', 'wrong', 'unknown'])}</div>
+  <div class="panel" style="margin-top:18px">${stackBar(c)}${legend(c, ['correct', 'wrong', 'unknown'])}</div>
   <div class="btns" style="margin-top:20px">
     ${review.length ? `<button class="btn primary block" data-act="retryReview">苦手をもう一度（${review.length}）</button>` : ''}
     <button class="btn block ${review.length ? '' : 'primary'}" data-act="retryAll">同じ問題をもう一度</button>
