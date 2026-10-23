@@ -261,7 +261,7 @@ details.block[open] > summary .i{transform:rotate(180deg)}
 .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.35);animation:fade .2s}
 .msheet{position:relative;width:100%;max-width:600px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px calc(28px + env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
 @media (min-width:700px){.modal{align-items:center}.msheet{border-radius:20px}}
-.mclose{position:sticky;top:0;float:right;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface2);display:grid;place-items:center;z-index:1}
+.mclose{position:sticky;top:0;float:right;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface2);display:grid;place-items:center;z-index:4}
 .mclose .i{width:16px;height:16px}
 .msheet h2{font-size:var(--fs-display);margin:4px 0 0;font-weight:700;line-height:1.3}
 .msheet .kana{color:var(--muted);font-size:var(--fs-label);margin:2px 0 0}
@@ -731,13 +731,43 @@ ruby{ruby-align:center}
 .stable td.merged{background:var(--surface)!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .stips{margin:0;padding:0;list-style:none;counter-reset:tip;display:grid;gap:8px}
-.stips li{counter-increment:tip;display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;background:var(--surface2);border-radius:12px;padding:12px 14px;font-size:var(--fs-body-sm);line-height:1.75}
-.stips li::before{content:counter(tip);width:24px;height:24px;border-radius:50%;background:var(--primary);color:var(--on-primary);font-size:var(--fs-micro);font-weight:700;display:grid;place-items:center;margin-top:2px}
+.stips li{counter-increment:tip;display:block !important;position:relative;padding-left:48px !important;background:var(--surface2);border-radius:12px;padding:12px 14px;font-size:var(--fs-body-sm);line-height:1.75}
+.stips li::before{content:counter(tip);position:absolute;left:14px;top:14px;width:24px;height:24px;border-radius:50%;background:var(--primary);color:var(--on-primary);font-size:var(--fs-micro);font-weight:700;display:grid;place-items:center}
 .sroles{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .sroles div{padding:11px 14px}
 .sroles div+div{border-top:1px solid var(--line)}
 .sroles dt{font-weight:600;font-size:var(--fs-body-sm);margin:0 0 2px}
 .sroles dd{margin:0;font-size:var(--fs-caption);color:var(--ink2);line-height:1.7}
+.tlink{display:inline;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;line-height:inherit;text-align:inherit;border-bottom:1.5px dotted var(--primary);cursor:pointer}
+.tlink:active{background:var(--tint2)}
+.gseg{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px}
+.gseg button{min-height:34px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:600;color:var(--ink2)}
+.gseg button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.dback{margin:-4px 0 10px}
+/* 早見表 */
+.msheet.wide{max-width:min(1100px,100%)}
+@media (min-width:700px){.msheet.wide{max-width:min(1100px,94vw);max-height:92vh}}
+.dthead{position:sticky;top:-20px;z-index:3;margin:-20px -20px 0;padding:20px 20px 10px;background:var(--surface);border-bottom:1px solid var(--line)}
+.dthead h2{margin:4px 0 12px !important;padding-right:48px}
+.dtgenre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
+.dtgenre button{min-height:40px;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-label);font-weight:700;color:var(--ink2);line-height:1.3}
+.dtgenre button[aria-checked="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.dthead .dtabs{margin:0 0 8px}
+.dtsearch{display:flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);margin-bottom:8px}
+.dtsearch .i{width:16px;height:16px;color:var(--muted);flex:none}
+.dtsearch input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);outline:none}
+.dtchips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:center}
+.dtchips::-webkit-scrollbar{display:none}
+.dtchips button{flex:none;min-height:34px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:600;color:var(--ink2);white-space:nowrap}
+.dtchips button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.dtcg{flex:none;font-size:var(--fs-micro);color:var(--muted);font-weight:700;padding:0 2px 0 8px}
+.dtcg:first-child{padding-left:0}
+.dthint{margin:10px 0 0;font-size:var(--fs-micro);color:var(--muted)}
+.dtcard{margin-top:12px}
+.dtt{font-size:var(--fs-subhead);margin:0 0 10px}
+.msheet.wide .ctbl{font-size:var(--fs-body-sm)}
+.msheet.wide .ctbl th,.msheet.wide .ctbl td{padding:10px 12px}
+.stips .stx{display:block}
 /* 分野の帯・見出し */
 .gbar{display:flex;gap:6px;overflow-x:auto;margin:2px -18px 12px;padding:2px 18px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .gbar::-webkit-scrollbar{display:none}
@@ -871,19 +901,19 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js"></script>
-<script src="hoiku-genri.js"></script>
-<script src="hoiku-shinri.js"></script>
-<script src="seido-nengo.js"></script>
-<script src="shokuin-haichi.js"></script>
-<script src="kodomo-hoken.js"></script>
-<script src="kodomo-hattatsu.js"></script>
-<script src="ruby.js"></script>
+<script src="kyoiku-genri.js?v=1.10.0"></script>
+<script src="hoiku-genri.js?v=1.10.0"></script>
+<script src="hoiku-shinri.js?v=1.10.0"></script>
+<script src="seido-nengo.js?v=1.10.0"></script>
+<script src="shokuin-haichi.js?v=1.10.0"></script>
+<script src="kodomo-hoken.js?v=1.10.0"></script>
+<script src="kodomo-hattatsu.js?v=1.10.0"></script>
+<script src="ruby.js?v=1.10.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.8.0';
+const APP_VERSION = '1.10.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -1027,7 +1057,7 @@ function ensureStaffUnit(db){
 }
 /* あとから足した付属の単元（子どもの保健など）を、すでにある置き場へ一度だけ入れる（あとで消した場合は足し直さない） */
 /*   「単元#番号」は、あとから付属ファイルに足した用語を一度だけ補う（単元を消していたら補わない） */
-const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4', 'kodomo-hoken#5'];
+const ADDED_UNITS = ['kodomo-hoken', 'kodomo-hoken#2', 'kodomo-hoken#3', 'kodomo-hoken#4', 'kodomo-hoken#5', 'kodomo-hoken#6'];
 /* 1.7.0：分野を「発育・発達／病気・医療／発達障害・心の健康」の3つの大分類にまとめる */
 const CAT_RENAME5 = {"心の健康：発達障害（DSM-5-TR）": "発達障害・心の健康：発達障害（DSM-5-TR）", "心の健康：発達障害（法律上の分類）": "発達障害・心の健康：発達障害（法律上の分類）", "心の健康：知的障害": "発達障害・心の健康：知的障害", "心の健康：神経症性障害と不適応": "発達障害・心の健康：神経症性障害と不適応", "発達：原始反射の種類": "発育・発達：原始反射の種類", "発達：反射と運動のしくみ": "発育・発達：反射と運動のしくみ", "発達：学童期以降": "発育・発達：学童期以降", "発達：成長の時期と体の変化": "発育・発達：成長の時期と体の変化", "発達：母親のメンタルヘルス": "発育・発達：母親のメンタルヘルス", "発達：生まれたときの状態": "発育・発達：生まれたときの状態", "発達：発達の原則": "発育・発達：発達の原則", "発達：社会性・愛着": "発育・発達：社会性・愛着", "発達：言葉": "発育・発達：言葉", "発達：認知": "発育・発達：認知", "病気：新生児": "病気・医療：新生児の病気", "病気：おなか・心臓・血液・腎臓": "病気・医療：病気（おなか・心臓・血液・腎臓）", "病気：脳・代謝・がん・その他": "病気・医療：病気（脳・代謝・がん・その他）", "アレルギー": "病気・医療：アレルギー", "感染症：感染経路": "病気・医療：感染経路", "感染症：主な感染症": "病気・医療：感染症", "予防接種": "病気・医療：予防接種", "看護・救急": "病気・医療：看護・救急", "衛生：消毒薬": "病気・医療：消毒薬"};
 /* 1.6.0：○×に移した「発達の時期」の4択と、分野名の変更 */
@@ -1480,6 +1510,7 @@ function openModal(html, opts = {}){
   m.hidden = false; m.classList.remove('closing'); document.body.style.overflow = 'hidden';
   if (!was) { m.classList.remove('opening'); void m.offsetWidth; m.classList.add('opening'); }
   if (!modalOv) modalOv = overlayOpen('modal', m);
+  m.querySelector('.msheet').classList.toggle('wide', !!opts.wide);
   m.querySelector('.msheet').scrollTop = 0;
   m.querySelectorAll('textarea.ta:not(.big)').forEach(autoGrow);
   const form = m.querySelector('form[data-guard]');
@@ -1657,14 +1688,15 @@ function renderUnit(id){
   <section class="sect">
     <h2 class="stitle">学習する</h2>
     <div class="menu">
-      ${qs.length ? (dv.length ? row('setupQuiz', 'list', '問題を解く', `4択 ${qs.filter(q => q.type !== 'rev').length}問・○× ${DV.checks.length}セット・並べ替え ${DV.orders.length}問　分野を選んでまとめて出題`)
+      ${qs.length ? (dv.length ? DEV_GENRES().map(g => { const nq = qs.filter(q => q.type !== 'rev' && genreOf(q.cat) === g).length, nd = dv.filter(x => devGenre(x) === g).length, wk = [...qs.filter(q => genreOf(q.cat) === g).map(q => bucket('q', q.id)), ...dv.filter(x => devGenre(x) === g).map(x => bucket('d', x.id))].filter(isWeak).length;
+          return `<button class="mrow" data-act="setupG" data-v="${esc(g)}"><span class="mi">${I('list')}</span><span class="mtx"><span class="mt">${esc(g)}</span><span class="ms">4択 ${nq}問・○× ${nd}問${wk ? `　苦手 ${wk}` : ''}</span></span>${I('chev', 'mchev')}</button>`; }).join('')
         : row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`)) : ''}
       ${evs.length ? row('setupSort', 'hourglass', '年号並べ替え', `${evs.length}件`) : ''}
       ${sf.length ? row('staffAll', 'building', '職員配置（全施設）', `${sf.length}問・職種ごとに必置か条件付きかを答える`) : ''}
       ${sf.length ? row('goStaff', 'list', '施設を選んで解く', `${sf.length}施設から1つ選ぶ`) : ''}
       ${sf.length ? row('staffTable', 'book', '職員配置の早見表', '全施設の一覧と覚えるコツ') : ''}
-      ${dv.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：時期で見る・比較の表・まちがえやすいポイント</span></span>${I('chev', 'mchev')}</button>` : ''}
-      ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
+      ${dv.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：分野ごとの比較の表・まちがえやすいポイント</span></span>${I('chev', 'mchev')}</button>` : ''}
+      ${reviewN && !dv.length ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない・自信なし ${reviewN}件`, 'accent') : ''}
       ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
     </div>
   </section>
@@ -1713,19 +1745,24 @@ function renderSetup(r){
   const hasRev = kind === 'quiz' && form !== 'ox' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev');
   const gCount = g => inUnit(QUESTIONS, unit).filter(q => genreOf(q.cat) === g && q.type !== 'rev').length + devIn(unit).filter(x => devGenre(x) === g).length;
   const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
-  const catVal = sel.size === cats.length ? '' : [...sel][0];
+  const single = hasDev && unit !== 'all' && cats.length > 1;
+  if (single && sel.size !== 1) { const f = [...sel][0] || cats[0]; sel.clear(); sel.add(f); }
+  const { pool: pool2, c: c2 } = single ? setupPool(kind, unit) : { pool, c };
+  const catVal = sel.size === cats.length && !single ? '' : [...sel][0];
   let n, can, label;
   if (kind === 'quiz') {
-    n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
+    n = S.count === 'all' ? pool2.length : Math.min(S.count, pool2.length);
     can = n > 0; label = can ? `${n}問をはじめる` : B.size ? '該当する問題がありません' : '出題する問題を選んでください';
   } else {
     can = pool.length > 0 && uniq(inUnit(EVENTS, unit).map(e => e.year)).length >= 3;
     label = can ? `${S.sets}セットをはじめる` : B.size ? '該当する出来事がありません' : '出題する問題を選んでください';
   }
   app.innerHTML = `
-  <h1 class="ptitle">${kind === 'quiz' ? (hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'} ${help('buckets')}</h1>
-  ${hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
-  ${cats.length > 1 && hasDev ? `<h2 class="stitle" style="margin:20px 0 8px">分野</h2><div class="gpick" role="radiogroup" aria-label="分野">${['', ...cats].map(g => `<button type="button" role="radio" aria-checked="${catVal === g}" data-act="sgenre" data-v="${esc(g)}"><b>${esc(g || 'すべての分野')}</b>${g ? `<small>${gCount(g)}問</small>` : ''}</button>`).join('')}</div>` : ''}
+  <h1 class="ptitle">${kind === 'quiz' ? (single ? esc(catVal) : hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'} ${help('buckets')}</h1>
+  ${single ? `<p class="psub">${esc(unitName(unit))}　この分野の4択と○×だけを出します</p>` : hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
+  ${single ? `<div class="gseg" role="radiogroup" aria-label="分野" style="margin-top:14px">${cats.map(g => `<button type="button" role="radio" aria-pressed="${catVal === g}" data-act="sgenre" data-v="${esc(g)}">${esc(g)}</button>`).join('')}</div>
+    <div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="devTable" data-g="${esc(catVal)}">${I('book')}${esc(catVal)}の早見表を見る</button></div>` : ''}
+  ${cats.length > 1 && hasDev && !single ? `<h2 class="stitle" style="margin:20px 0 8px">分野</h2><div class="gpick" role="radiogroup" aria-label="分野">${['', ...cats].map(g => `<button type="button" role="radio" aria-checked="${catVal === g}" data-act="sgenre" data-v="${esc(g)}"><b>${esc(g || 'すべての分野')}</b>${g ? `<small>${gCount(g)}問</small>` : ''}</button>`).join('')}</div>` : ''}
   <div class="flist" style="margin-top:16px">
     ${hasDev ? `<label class="frow"><span>問題の形式</span><select class="sel" id="sForm">${FORMS.map(([v, l]) => opt(v, l, form)).join('')}</select></label>` : ''}
     ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
@@ -1736,7 +1773,7 @@ function renderSetup(r){
           <button type="button" data-act="sreview" aria-pressed="${sameSet(B, WEAK)}">苦手</button>
         </div>
       </div>
-      <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c[b]}</span></button>`).join('')}</div>
+      <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c2[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c2[b]}</span></button>`).join('')}</div>
     </div>
     ${cats.length > 1 && !hasDev ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
     ${kind === 'quiz'
@@ -1883,6 +1920,7 @@ function renderQuizFeedback(first){
   <section class="block"><h3>解説</h3><p class="prose">${rb(q.explanation)}</p></section>
   ${q.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(q.point)}</p></section>` : ''}
   ${q.termKey && tblOfTerm(termByKey.get(q.termKey)) ? tblBlocks([[tblOfTerm(termByKey.get(q.termKey))]], false) : ''}
+  ${DV && q.unit === DV.unit ? `<div class="btnrow"><button class="textbtn" data-act="devTable" data-g="${esc(genreOf(q.cat))}">${I('book')}早見表（${esc(genreOf(q.cat))}）を開く</button></div>` : ''}
   <details class="block" ${c.ok && !c.unknown ? '' : 'open'}><summary>選択肢の解説${I('chevD')}</summary><div class="clist">${clist}</div></details>
   ${links.length ? `<section class="block"><h3>関連する用語</h3><div class="tchips">${links.map(t => `<button class="tchip" data-act="term" data-v="${esc(t.key)}">${rb(t.term)}</button>`).join('')}</div></section>` : ''}
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
@@ -2191,14 +2229,31 @@ const dItem = id => dMatch(id) || dCheck(id) || dOrder(id);
 const dType = id => dMatch(id) ? 'dmat' : dCheck(id) ? 'dchk' : 'dord';
 const dKind = x => x.rows ? 'まとめて答える' : x.items && Array.isArray(x.items[0]) ? '並べ替え' : '○× ' + ((DV.areas || []).find(a => a.id === x.area)?.title || '');
 const dTbl = key => DV && DV.tables && DV.tables[key];
+/* 表や解説の中の語句を図鑑につなぐ（子どもの保健の語句。押すと図鑑の説明が開く） */
+let _lk = null;
+function linkIndex(){
+  const T = DV ? TERMS.filter(t => t.unit === DV.unit && t.term.length >= 2) : [];
+  if (_lk && _lk.n === T.length && _lk.T === TERMS) return _lk;
+  const map = new Map();
+  for (const t of T) if (!map.has(t.term)) map.set(t.term, t.key);
+  const names = [...map.keys()].sort((a, b) => b.length - a.length).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  return (_lk = { n: T.length, T: TERMS, map, re: names.length ? new RegExp(names.join('|'), 'g') : null });
+}
+function rbL(text){
+  const s = String(text ?? ''), L = linkIndex();
+  if (!L.re || !s) return rb(s);
+  let out = '', last = 0;
+  s.replace(L.re, (m, off) => { out += rb(s.slice(last, off)) + `<button type="button" class="tlink" data-act="tlink" data-v="${esc(L.map.get(m))}">${rb(m)}</button>`; last = off + m.length; return m; });
+  return out + rb(s.slice(last));
+}
 /* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部） */
-function tblHTML(spec){
+function tblHTML(spec, match){
   const [key, from, to] = Array.isArray(spec) ? spec : [spec], t = dTbl(key); if (!t) return '';
-  let rows = t.rows;
+  let rows = match ? t.rows.filter(match) : t.rows;
   if (from) { const a = rows.findIndex(r => r[0] === from), b = to ? rows.findIndex(r => r[0] === to) : rows.length - 1; if (a >= 0 && b >= a) rows = rows.slice(a, b + 1); }
   const wide = t.cols.length > 2;
   return `<div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${t.cols.length}"><thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rb(c)}</th>` : `<td>${c ? rb(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${t.note ? `<p class="hint" style="margin-top:8px">${rb(t.note)}</p>` : ''}`;
+    <tbody>${rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rbL(c)}</th>` : `<td>${c ? rbL(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${t.note ? `<p class="hint" style="margin-top:8px">${rbL(t.note)}</p>` : ''}`;
 }
 const tblTitle = spec => { const k = Array.isArray(spec) ? spec[0] : spec; return dTbl(k)?.title || ''; };
 /* 解答後の「比較の表」。最初の1つは開いておく */
@@ -2281,8 +2336,8 @@ function dPaintRow(k, v){
   });
   const fb = li.querySelector('.sfb');
   fb.innerHTML = `<div class="sfb-h ${cls}">${I(cls === 'ok' ? 'check' : cls === 'ng' ? 'x' : 'book')}<b>${cls === 'ok' ? '正解' : cls === 'ng' ? '不正解' : '答え'}</b><span class="sfb-a">${x.ok ? '○ 適切' : '× 不適切'}</span></div>
-    ${x.ok ? '' : `<p class="dfix"><b>正しくは</b>${rb(x.fix || '')}</p>`}
-    ${x.why ? `<p class="sfb-w">${rb(x.why)}</p>` : ''}`;
+    ${x.ok ? '' : `<p class="dfix"><b>正しくは</b>${rbL(x.fix || '')}</p>`}
+    ${x.why ? `<p class="sfb-w">${rbL(x.why)}</p>` : ''}`;
   fb.hidden = false;
 }
 function devPick(el){
@@ -2337,10 +2392,10 @@ function renderDevCheckFeedback(first){
   <section class="block"><h3>試験の解答の形にすると</h3>
     <div class="dkey">${s.items.map((x, k) => { const ok = c.ans[k] === dCode(x); return `<button class="dkc ${ok ? 'ok' : 'ng'}" data-act="dJump" data-v="${k}"><span>${ABC[k]}</span><b>${mark(dCode(x))}</b>${ok ? '' : `<small>あなた ${mark(c.ans[k])}</small>`}</button>`; }).join('')}</div>
     <p class="hint" style="margin-top:8px">試験では「A○ B× C○ …」の組み合わせを選びます。記号を押すと、その記述の解説へ移動します。</p></section>
-  ${s.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rb(s.point)}</p></section>` : ''}
+  ${s.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rbL(s.point)}</p></section>` : ''}
   ${tblBlocks(s.tbl)}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', s.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表（${esc(genreNow())}）を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   if (first) setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
@@ -2403,10 +2458,10 @@ function devOrderCheck(unknown){
     const p = c.picks.indexOf(i), ok = p === i;
     return `<li class="${unknown ? '' : ok ? 'ok' : 'ng'}"><span class="onum">${i + 1}</span><span class="otx"><span>${rb(t)}</span><small>${esc(w)}${unknown || ok ? '' : `　あなた：${p + 1}番目`}</small></span></li>`;
   }).join('')}</ol></section>
-  ${o.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rb(o.point)}</p></section>` : ''}
+  ${o.point ? `<section class="block note"><h3>覚え方</h3><p class="prose">${rbL(o.point)}</p></section>` : ''}
   ${tblBlocks(o.tbl)}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', o.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表（${esc(genreNow())}）を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
@@ -2487,36 +2542,82 @@ function devMatComplete(){
   ${m.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rb(m.point)}</p></section>` : ''}
   ${tblBlocks(m.tbl || (m.ref || []).map(k => [k]))}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', m.id)}</section>
-  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表を開く</button></div>
+  <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表（${esc(genreNow())}）を開く</button></div>
   ${nextBar(isLast() ? '結果を見る' : '次の問題へ')}`;
   setTimeout(() => document.querySelector('.verdict')?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
 }
 
-/* ---------- 早見表 ---------- */
-/* 表を分野ごとに分ける（その表を使っている○×の分野） */
-function tableGroups(){
+/* ---------- 早見表（分野ごと） ---------- */
+const DEV_GENRES = () => DV ? uniq(DV.areas.map(a => a.genre)) : [];
+function tableGroups(genre){
   const areaOf = {};
   for (const x of [...DV.checks, ...DV.orders]) for (const sp of (x.tbl || [])) { const k = Array.isArray(sp) ? sp[0] : sp; if (!areaOf[k]) areaOf[k] = x.area; }
-  return (DV.areas || []).map(a => ({ a, keys: Object.keys(DV.tables).filter(k => (areaOf[k] || 'dev') === a.id) })).filter(g => g.keys.length);
+  return (DV.areas || []).filter(a => !genre || a.genre === genre).map(a => ({ a, keys: Object.keys(DV.tables).filter(k => (areaOf[k] || 'dev') === a.id) })).filter(g => g.keys.length);
 }
-function openDevTable(tab, jump){
+const tipsOf = genre => (DV.tips || []).map(x => typeof x === 'string' ? { g: 'all', t: x } : x).filter(x => !genre || x.g === 'all' || x.g === genre);
+/* 今解いている問題の分野（早見表をその分野だけにする） */
+function genreNow(){
+  const r = state.round, it = r && r.items && r.items[r.i];
+  if (it && it.type === 'quiz') { const q = qById.get(it.id); if (q && DV && q.unit === DV.unit) return genreOf(q.cat); }
+  if (it && it.id && dItem(it.id)) return devGenre(dItem(it.id));
+  const sel = DV && state.setup.cats[`${DV.unit}|quiz`];
+  return sel && sel.size === 1 ? [...sel][0] : (state.devGenre || DEV_GENRES()[0]);
+}
+/* 早見表の状態：分野・タブ・タブの中で選んでいる表・検索語 */
+function dtState(){ return state.dt || (state.dt = { sub: {}, q: '' }); }
+function dtItems(g, tab){
+  if (tab === 'period') return [['size', '身長・体重'], ['body-m', '体の発達'], ['mind-m', '心の発達'], ['@periods', '時期ごとの特徴']];
+  if (tab === 'tables') return tableGroups(g).flatMap(x => x.keys.map(k => [k, dTbl(k).title, x.a.title]));
+  return [];
+}
+function dtBody(){
+  const D = dtState(), g = state.devGenre, t = state.devTab;
+  const sel = k => `<section class="dtcard">${k === '@periods'
+    ? `<h3 class="dtt">時期ごとの特徴</h3>${DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd><span>${rbL(x)}</span></dd></div>`).join('')}</dl></section>`).join('')}`
+    : `<h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k])}`}</section>`;
+  if (t === 'tips') return `<ol class="stips">${tipsOf(g).map(x => `<li><span class="stx">${rbL(x.t)}</span></li>`).join('')}</ol>`;
+  const items = dtItems(g, t);
+  if (t === 'tables' && D.q.trim()) {
+    const ws = searchWords(D.q);
+    const hit = r => { const txt = norm(r.join(' ')); return ws.every(w => txt.includes(w)); };
+    const res = items.filter(([k]) => dTbl(k).rows.some(hit));
+    return res.length ? res.map(([k]) => `<section class="dtcard"><h3 class="dtt">${esc(dTbl(k).title)}</h3>${tblHTML([k], hit)}</section>`).join('') : `<p class="empty">「${esc(D.q)}」を含む行はありません</p>`;
+  }
+  const key = D.sub[g + t] && items.some(x => x[0] === D.sub[g + t]) ? D.sub[g + t] : items[0] && items[0][0];
+  return key ? sel(key) : '<p class="empty">表がありません</p>';
+}
+function dtChips(){
+  const D = dtState(), g = state.devGenre, t = state.devTab, items = dtItems(g, t);
+  if (!items.length || (t === 'tables' && D.q.trim())) return '';
+  const key = D.sub[g + t] && items.some(x => x[0] === D.sub[g + t]) ? D.sub[g + t] : items[0][0];
+  let last = null;
+  return `<div class="dtchips" role="tablist">${items.map(([k, l, grp]) => { const h = grp && grp !== last && t === 'tables' ? `<span class="dtcg">${esc(grp)}</span>` : ''; last = grp; return h + `<button type="button" role="tab" aria-selected="${k === key}" data-act="dtSub" data-v="${esc(k)}">${esc(l)}</button>`; }).join('')}</div>`;
+}
+function redrawDt(){
+  const c = document.getElementById('dtchipsBox'), b = document.getElementById('dtbody'); if (!b) return;
+  if (c) c.innerHTML = dtChips(); b.innerHTML = dtBody();
+  dtChipFocus();
+}
+function dtChipFocus(){ const on = document.querySelector('.dtchips [aria-selected="true"]'), box = on && on.parentElement; if (box) box.scrollLeft = Math.max(0, on.offsetLeft - box.clientWidth / 2 + on.offsetWidth / 2); }
+function openDevTable(tab, jump, genre){
   if (!DV) return;
-  state.devTab = tab || state.devTab || 'period';
-  const t = state.devTab, tabs = [['period', '時期で見る'], ['tables', '比較の表'], ['tips', 'まちがえやすい']];
-  let body = '';
-  if (t === 'period') body = `<p class="hint" style="margin:0 0 10px">月齢・年齢を軸に、体と心がどう育つかを並べています。表は横に動かせます。</p>
-      <section class="block" style="margin-top:0"><h3>${esc(dTbl('size').title)}</h3>${tblHTML(['size'])}</section>
-      <section class="block"><h3>${esc(dTbl('body-m').title)}</h3>${tblHTML(['body-m'])}</section>
-      <section class="block"><h3>${esc(dTbl('mind-m').title)}</h3>${tblHTML(['mind-m'])}</section>
-      <section class="block"><h3>時期ごとの特徴</h3>${DV.periods.map(p => `<section class="dper"><h3><b>${esc(p.name)}</b><span>${esc(p.age)}</span></h3><dl>${p.lines.map(([d, x]) => `<div><dt>${esc(d)}</dt><dd>${rb(x)}</dd></div>`).join('')}</dl></section>`).join('')}</section>`;
-  else if (t === 'tables') { const gs = tableGroups(); body = `<div class="dtoc">${gs.map(g => `<button class="chipbtn" data-act="dTo" data-v="g-${g.a.id}">${esc(g.a.title)}</button>`).join('')}</div>` +
-      gs.map(g => `<h3 class="tgh" id="dt-g-${g.a.id}">${esc(g.a.title)}</h3>` + g.keys.map(k => `<details class="block dref" id="dt-${k}"><summary>${esc(dTbl(k).title)}${I('chevD')}</summary>${tblHTML([k])}</details>`).join('')).join(''); }
-  else body = `<ol class="stips">${DV.tips.map(x => `<li>${rb(x)}</li>`).join('')}</ol>`;
+  const gs = DEV_GENRES(), D = dtState();
+  const g = state.devGenre = gs.includes(genre) ? genre : genreNow();
+  const tabs = [...(g === gs[0] ? [['period', '時期で見る']] : []), ['tables', '比較の表'], ['tips', 'まちがえやすい']];
+  let t = tab || state.devTab || tabs[0][0]; if (!tabs.some(x => x[0] === t)) t = tabs[0][0];
+  state.devTab = t;
+  if (jump) D.sub[g + t] = jump;
   openModal(`
-    <h2>子どもの保健の早見表</h2>
-    <div class="dtabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === t}" data-act="devTab" data-v="${k}">${l}</button>`).join('')}</div>
-    ${body}`);
-  if (jump) setTimeout(() => { const d = document.getElementById('dt-' + jump); if (d) { d.open = true; d.scrollIntoView({ block: 'start' }); } }, 60);
+    <div class="dthead">
+      <h2>早見表</h2>
+      <div class="dtgenre" role="radiogroup" aria-label="分野">${gs.map(x => `<button type="button" role="radio" aria-checked="${x === g}" data-act="devGenreTab" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+      <div class="dtabs" role="tablist" style="grid-template-columns:repeat(${tabs.length},1fr)">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === t}" data-act="devTab" data-v="${k}">${l}</button>`).join('')}</div>
+      ${t === 'tables' ? `<label class="dtsearch">${I('search')}<input id="dtq" type="search" placeholder="表の中を探す（例：潜伏、BCG）" value="${esc(D.q)}" autocomplete="off"></label>` : ''}
+      <div id="dtchipsBox">${dtChips()}</div>
+    </div>
+    <p class="dthint">点線の語句を押すと図鑑の説明が出ます${t !== 'tips' ? '。表は横に動かせます' : ''}</p>
+    <div id="dtbody">${dtBody()}</div>`, { wide: true, noFocus: true });
+  dtChipFocus();
 }
 
 /* =========================================================
@@ -3403,15 +3504,15 @@ function sheetItems(){
   const g = a => (D.areas.find(x => x.id === a) || {}).genre || 'その他';
   const out = [
     { id: '@period', unit: D.unit, genre: '早見表', title: '時期で見る（月齢・年齢ごとのまとめ）', text: D.periods.map(p => p.name + p.lines.map(l => l.join(' ')).join(' ')).join('\n'), sub: '早見表' },
-    { id: '@tips', unit: D.unit, genre: '早見表', title: 'まちがえやすいポイント', text: D.tips.join('\n'), sub: '早見表' }];
+    ...uniq(D.areas.map(a => a.genre)).map(gg => ({ id: '@tips:' + gg, unit: D.unit, genre: '早見表', title: `まちがえやすいポイント（${gg}）`, text: tipsOf(gg).map(x => x.t).join('\n'), sub: '早見表' }))];
   const tabs = Object.entries(D.tables).map(([k, t]) => ({ id: k, unit: D.unit, genre: g(areaOf[k] || 'dev'), title: t.title, text: [t.cols.join(' '), ...t.rows.map(r => r.join(' ')), t.note || ''].join('\n'), sub: t.cols.filter(Boolean).slice(1).join('・') }));
   const order = uniq(D.areas.map(a => a.genre));
   tabs.sort((a, b) => order.indexOf(a.genre) - order.indexOf(b.genre));
   return [...out, ...tabs];
 }
 function openSheet(id){
-  if (id === '@period') { openDevTable('period'); return; }
-  if (id === '@tips') { openDevTable('tips'); return; }
+  if (id === '@period') { openDevTable('period', null, DEV_GENRES()[0]); return; }
+  if (id.startsWith('@tips:')) { openDevTable('tips', null, id.slice(6)); return; }
   const D = window.DEVCHECK, t = dTbl(id); if (!t) return;
   const sets = [...D.checks, ...D.orders].filter(x => (x.tbl || []).some(sp => (Array.isArray(sp) ? sp[0] : sp) === id));
   const terms = TERMS.filter(x => tblOfTerm(x) === id);
@@ -3714,8 +3815,16 @@ async function onAction(el, ev){
     case 'devWeak': devStart(devOf(DV.unit).filter(x => isWeak(bucket('d', x.id))).map(x => x.id)); break;
     case 'devArea': devStart(DV.checks.filter(x => x.area === v).map(x => x.id)); break;
     case 'devAllOrd': devStart(DV.orders.map(x => x.id)); break;
-    case 'devTable': openDevTable(); break;
-    case 'devTab': openDevTable(v); break;
+    case 'devTable': openDevTable(null, null, el.dataset.g || genreNow()); break;
+    case 'devTab': openDevTable(v, null, state.devGenre); break;
+    case 'dtSub': { dtState().sub[state.devGenre + state.devTab] = v; redrawDt(); const m = document.querySelector('#modal .msheet'), h = document.querySelector('.dthead'); if (m && h && m.scrollTop > h.offsetHeight) m.scrollTop = 0; break; }
+    case 'devGenreTab': openDevTable(state.devTab, null, v); break;
+    case 'tlink': {
+      const fromSheet = modalOpen() && !!document.querySelector('#mbody .dthead'), back = fromSheet ? { tab: state.devTab, g: state.devGenre, y: document.querySelector('#modal .msheet').scrollTop } : null;
+      openTerm(v);
+      if (back && modalOpen()) { state.devBack = back; document.getElementById('mbody').insertAdjacentHTML('afterbegin', `<div class="dback"><button class="textbtn" data-act="devBack">${I('chevL')}早見表に戻る</button></div>`); }
+      break; }
+    case 'devBack': { const b = state.devBack; if (b) { openDevTable(b.tab, null, b.g); setTimeout(() => { const m = document.querySelector('#modal .msheet'); if (m) m.scrollTop = b.y; }, 30); } break; }
     case 'dTo': document.getElementById('dt-' + v)?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }); break;
     case 'dpick': devPick(el); break;
     case 'devDontKnow': devDontKnow(); break;
@@ -3750,6 +3859,7 @@ async function onAction(el, ev){
     case 'ssets': S.sets = +v; render(cur(), true); break;
     case 'ssize': S.size = +v; render(cur(), true); break;
     case 'startSetup': startFromSetup(); break;
+    case 'setupG': state.setup.cats[`${state.unit}|quiz`] = new Set([v]); go({ v: 'setup', a: 'quiz', u: state.unit }); break;
     case 'sgenre': { const cs = catsFor(cur().a, cur().u); state.setup.cats[`${cur().u}|${cur().a}`] = new Set(v ? [v] : cs); render(cur(), true); break; }
     case 'gpick': { const S2 = state.search[el.dataset.c]; S2[el.dataset.k] = v; if (el.dataset.k === 'unit') S2.cat = ''; state.opened.clear(); render(cur(), true); break; }
     case 'sheet': openSheet(v); break;
@@ -3929,6 +4039,7 @@ let sqTimer = null;
 document.addEventListener('input', ev => {
   const t = ev.target;
   if (t.matches && t.matches('textarea.ta:not(.big)') && !ev.isComposing) autoGrow(t);   // 変換中は高さを変えない（予測変換を妨げないように）
+  if (t.id === 'dtq') { dtState().q = t.value; clearTimeout(sqTimer); sqTimer = setTimeout(redrawDt, 200); return; }
   if (t.id === 'sq-list' || t.id === 'sq-dict') {   // 打つそばから絞る（少し待ってから）
     const ctx = t.id.slice(3); state.search[ctx].q = t.value;
     clearTimeout(sqTimer); sqTimer = setTimeout(() => { state.opened.clear(); ctx === 'list' ? drawList() : drawDict(); persistNav(); }, 220);
