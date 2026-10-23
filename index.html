@@ -1008,20 +1008,20 @@ ruby{ruby-align:center}
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.18.0"></script>
-<script src="hoiku-genri.js?v=1.18.0"></script>
-<script src="hoiku-shinri.js?v=1.18.0"></script>
-<script src="shokuin-haichi.js?v=1.18.0"></script>
-<script src="kodomo-hoken.js?v=1.18.0"></script>
-<script src="kodomo-hattatsu.js?v=1.18.0"></script>
-<script src="kodomo-yougo.js?v=1.18.0"></script>
-<script src="shakai-yogo.js?v=1.18.0"></script>
-<script src="ruby.js?v=1.18.0"></script>
+<script src="kyoiku-genri.js?v=1.19.0"></script>
+<script src="hoiku-genri.js?v=1.19.0"></script>
+<script src="hoiku-shinri.js?v=1.19.0"></script>
+<script src="shokuin-haichi.js?v=1.19.0"></script>
+<script src="kodomo-hoken.js?v=1.19.0"></script>
+<script src="kodomo-hattatsu.js?v=1.19.0"></script>
+<script src="kodomo-yougo.js?v=1.19.0"></script>
+<script src="shakai-yogo.js?v=1.19.0"></script>
+<script src="ruby.js?v=1.19.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.18.0';
+const APP_VERSION = '1.19.0';
 const APP_BUILD = '2026-10-23';
 
 /* =========================================================
@@ -3951,6 +3951,8 @@ async function checkUpdate(btn){
     if (sub) sub.textContent = `${m[1]} に更新しています…`;
     const urls = [page, new URL('index.html', page).href, ...[...document.scripts].filter(s => s.src).map(s => s.src.split('#')[0])];
     await Promise.all([...new Set(urls)].map(u => fetch(u, { cache: 'reload' }).catch(() => {})));
+    /* オフライン用の保存も新しい版に入れかえる */
+    try { const reg = 'serviceWorker' in navigator && await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); } catch (_) {}
     persistNav();
     location.reload();
     return;
@@ -4003,7 +4005,7 @@ function renderData(){
   <section class="sect">
     <h2 class="stitle">アプリ</h2>
     <div class="menu">
-      ${row('checkUpdate', 'refresh', '最新バージョンに更新', `今のバージョン ${APP_VERSION}`)}
+      ${row('checkUpdate', 'refresh', '最新バージョンに更新', `今のバージョン ${APP_VERSION}${'serviceWorker' in navigator && navigator.serviceWorker.controller ? '・オフラインでも使えます' : ''}`)}
     </div>
   </section>
   <p class="ver">暗記ノート　バージョン ${APP_VERSION}（${APP_BUILD}）<br>データ：用語 ${TERMS.length}件・出来事 ${EVENTS.length}件・ふりがな ${Object.keys(RUBY_MAP).length}語</p>`;
@@ -4475,6 +4477,10 @@ addEventListener('pagehide', persistNav);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') persistNav(); });
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 if (!restoreNav()) go({ v: 'home' }, 'tab');
+/* オフラインで使えるように、アプリのファイルを端末に保存する（sw.js）。Webで公開しているときだけ */
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
 })();
 
 </script>
