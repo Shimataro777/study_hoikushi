@@ -7,7 +7,7 @@
  *   ※ 版を上げるときは、下の VERSION を index.html の APP_VERSION と同じにし、
  *     .js を足したら FILES にも書き足してください（?v= も index.html とそろえる）。
  * ============================================================= */
-const VERSION = '1.22.0';
+const VERSION = '1.23.0';
 const CACHE = 'hoikushi-anki-' + VERSION;
 const FONT_CACHE = 'hoikushi-anki-fonts';
 const JS = ['kyoiku-genri.js', 'hoiku-genri.js', 'hoiku-shinri.js', 'shokuin-haichi.js', 'kodomo-hoken.js',
