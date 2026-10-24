@@ -790,6 +790,12 @@ ruby{ruby-align:center}
 .plegend i{display:inline-block;width:10px;height:10px;border-radius:3px}
 .plegend .p-new{background:var(--line)}
 .upct{float:right;font-size:var(--fs-label);color:var(--b-correct);font-variant-numeric:tabular-nums;margin-left:8px}
+.lg{padding:10px 0;border-top:1px solid var(--line)}
+.lg:first-child{border-top:0;padding-top:0}
+.lg-n{margin:0 0 6px;font-weight:700;display:flex;align-items:center;gap:6px}
+.lg-n .i{width:16px;height:16px;color:var(--primary)}
+.lg-w{margin:4px 0 0;line-height:1.7}
+.lg-l{display:inline-block;font-size:var(--fs-micro);font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-right:6px;vertical-align:1px}
 /* 早見表：表の選び方 */
 .dtseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .dtseg button{min-height:38px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:700;color:var(--ink2);line-height:1.25}
@@ -1318,26 +1324,27 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.25.2"></script>
-<script src="hoiku-genri.js?v=1.25.2"></script>
-<script src="hoiku-shinri.js?v=1.25.2"></script>
-<script src="shokuin-haichi.js?v=1.25.2"></script>
-<script src="kodomo-hoken.js?v=1.25.2"></script>
-<script src="kodomo-hattatsu.js?v=1.25.2"></script>
-<script src="kodomo-yougo.js?v=1.25.2"></script>
-<script src="shakai-yogo.js?v=1.25.2"></script>
-<script src="ruby.js?v=1.25.2"></script>
+<script src="kyoiku-genri.js?v=1.26.0"></script>
+<script src="hoiku-genri.js?v=1.26.0"></script>
+<script src="hoiku-shinri.js?v=1.26.0"></script>
+<script src="shokuin-haichi.js?v=1.26.0"></script>
+<script src="kodomo-hoken.js?v=1.26.0"></script>
+<script src="kodomo-hattatsu.js?v=1.26.0"></script>
+<script src="kodomo-yougo.js?v=1.26.0"></script>
+<script src="shakai-yogo.js?v=1.26.0"></script>
+<script src="law-guide.js?v=1.26.0"></script>
+<script src="ruby.js?v=1.26.0"></script>
 <!-- くわしい解説（なぜ・その結果・条文）。単元のファイルのあとに読み込む -->
-<script src="kaisetsu-kyoiku.js?v=1.25.2"></script>
-<script src="kaisetsu-hoiku.js?v=1.25.2"></script>
-<script src="kaisetsu-shinri.js?v=1.25.2"></script>
-<script src="kaisetsu-hoken.js?v=1.25.2"></script>
-<script src="kaisetsu-shakai.js?v=1.25.2"></script>
+<script src="kaisetsu-kyoiku.js?v=1.26.0"></script>
+<script src="kaisetsu-hoiku.js?v=1.26.0"></script>
+<script src="kaisetsu-shinri.js?v=1.26.0"></script>
+<script src="kaisetsu-hoken.js?v=1.26.0"></script>
+<script src="kaisetsu-shakai.js?v=1.26.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.25.2';
+const APP_VERSION = '1.26.0';
 const APP_BUILD = '2026-10-25';
 
 /* =========================================================
@@ -3105,6 +3112,7 @@ function renderDevCheckFeedback(first){
     <p class="hint" style="margin-top:8px">試験では「A○ B× C○ …」の組み合わせを選びます。記号を押すと、その記述の解説へ移動します。</p></section>
   ${s.point ? `<section class="block note"><h3>この分野の整理</h3><p class="prose">${rbL(s.point)}</p></section>` : ''}
   ${lawList(s).length ? `<section class="block"><h3>${I('book')}条文</h3>${lawHTML(lawList(s))}</section>` : ''}
+  ${(gs => gs.length ? `<section class="block"><h3>${I('book')}法令と保育のつながり</h3>${lawGuideHTML(gs)}</section>` : '')((a => [...a, ...lawGuidesIn([s.items.map(x => [x.fix, x.why]), s.point]).filter(g => !a.includes(g))].slice(0, 6))(lawGuidesIn([s.title, s.items.map(x => x.s)], 6)))}
   ${tblBlocks(s.tbl)}
   <section class="block"><h3 class="stitle">振り分け ${help('classify')}</h3>${classifySeg('d', s.id)}</section>
   <div class="btnrow"><button class="textbtn" data-act="devTable">${I('book')}早見表（${esc(genreNow())}）を開く</button></div>
@@ -4870,6 +4878,26 @@ const lawList = x => (Array.isArray(x && x.law) ? x.law : []).filter(l => l && l
 function lawHTML(laws, unit){
   return laws.map(l => `<figure class="law"><blockquote>${rb(l.text)}</blockquote><figcaption>${I('book')}${esc(l.src || '')}</figcaption></figure>`).join('');
 }
+/* ---------- 法令と保育のつながり（law-guide.js）----------
+ *   文の中に出てくる法令名を見つけ、その法令が何を定めるか・保育の仕事とのつながりを出す */
+const LAW_G = (window.LAW_GUIDE || []).map(g => ({ ...g, names: [g.name, ...(g.alias || [])].sort((a, b) => b.length - a.length) }));
+function lawGuidesIn(texts, max = 4){
+  let s = texts.flat().filter(Boolean).join('\n');
+  const hits = [];
+  /* 長い名前から順に探し、見つけた部分は消す（「日本国憲法」の中の「憲法」を二重に数えない） */
+  const all = LAW_G.flatMap(g => g.names.map(n => [n, g])).sort((a, b) => b[0].length - a[0].length);
+  for (const [n, g] of all) { let i; while ((i = s.indexOf(n)) >= 0) { if (!hits.some(h => h.g === g)) hits.push({ g, at: i }); else { const h = hits.find(h => h.g === g); h.at = Math.min(h.at, i); } s = s.slice(0, i) + '\u0000'.repeat(n.length) + s.slice(i + n.length); } }
+  return hits.sort((a, b) => a.at - b.at).slice(0, max).map(h => h.g);
+}
+function lawGuideHTML(gs){
+  return gs.map(g => `<div class="lg"><p class="lg-n">${I('book')}${rb(g.name)}</p><p class="lg-w"><span class="lg-l">何を定める</span>${rbL(g.what)}</p><p class="lg-w"><span class="lg-l">保育とのつながり</span>${rbL(g.hoiku)}</p></div>`).join('');
+}
+/* 語句の解説に出す法令：法令そのものの語句ならその法令だけ。ほかの語句は要約・内容・問題文に出てくる法令 */
+function lawGuidesForTerm(x){
+  const own = LAW_G.find(g => g.names.includes(x.term));
+  if (own) return [own];
+  return lawGuidesIn([x.summary, x.detail, qList(x.q)], 3);
+}
 function explainHTML(x, opts = {}){
   const unit = opts.unit || x.unit, self = opts.self, f = s => hl(s, { unit, self });
   const row = (label, body, cls = '') => body ? `<div class="ex-r ${cls}"><span class="ex-l">${label}</span><div class="ex-b">${body}</div></div>` : '';
@@ -4881,6 +4909,7 @@ function explainHTML(x, opts = {}){
     ${row('その結果', x.effect ? `<p>${f(x.effect)}</p>` : '')}
     ${row('条文', laws.length ? lawHTML(laws, unit) : '', 'ex-law')}
     ${row('覚え方', x.point ? `<p>${f(x.point)}</p>` : '', 'ex-pt')}
+    ${x.term ? row('法令と保育', lawGuideHTML(lawGuidesForTerm(x)), 'ex-lg') : ''}
   </div>`;
 }
 /* 出来事（年号）の解説 */
