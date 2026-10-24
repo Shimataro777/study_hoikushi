@@ -1096,7 +1096,7 @@ ruby{ruby-align:center}
 .dsm .cntline{font-size:var(--fs-caption);color:var(--muted);margin:10px 2px 0}
 
 /* =========================================================
- * 1.22.0：整理（色・解説・表・一覧・下のボタン）
+ * 1.22.4：整理（色・解説・表・一覧・下のボタン）
  *   色は「振り分けの色」と、大事なことばの2色（語句＝あお、年号＝こはく）だけ
  * ========================================================= */
 :root{ --hk:#2E6A8C; --hy:#9A6A2E; --hk-line:#BFD9E8; --law:#F7F8FA; --law-line:#DCE1E7 }
@@ -1108,7 +1108,7 @@ ruby{ruby-align:center}
   text-decoration:underline;text-decoration-color:var(--hk-line);text-decoration-thickness:1.5px;text-underline-offset:3px}
 .tlink:active{background:var(--tint2);border-radius:3px}
 
-/* 解説（要点・内容・なぜ・その結果・条文・覚え方） */
+/* 解説（要点・解説・条文・覚え方） */
 .expl{margin-top:12px}
 .ex-sum{margin:0 0 4px;font-size:var(--fs-subhead);font-weight:500;line-height:1.85;color:var(--ink)}
 .ex-r{display:grid;grid-template-columns:4.6em minmax(0,1fr);gap:4px 12px;padding:10px 0;border-top:1px solid var(--line)}
@@ -1229,7 +1229,7 @@ ruby{ruby-align:center}
 .sa-law{display:flex;align-items:center;gap:5px;margin:4px 0 0 26px;font-size:var(--fs-micro);color:var(--muted);font-weight:600}
 .sa-law .i{width:12px;height:12px}
 
-/* 覚えるカード（1.22.0） */
+/* 覚えるカード（1.22.4） */
 .lc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .lc-top .lc-kind{margin:0}
 .lcard .expl{margin-top:14px}
@@ -1252,7 +1252,7 @@ ruby{ruby-align:center}
 .lnav .lpos small{color:var(--muted);font-weight:500}
 body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 
-/* 語呂合わせ（1.22.0：落ち着いた色に。登録は小さなボタン） */
+/* 語呂合わせ（1.22.4：落ち着いた色に。登録は小さなボタン） */
 .goro{background:#FAF8F4;border:1px solid #ECE6DB;border-radius:12px;padding:10px 12px 12px;margin-top:14px}
 .goro.mini{padding:8px 10px 10px;margin-top:8px}
 .goro-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1311,6 +1311,9 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 .more > summary .i{width:16px;height:16px;transition:transform .2s}
 .more[open] > summary .i{transform:rotate(180deg)}
 .more .flist{margin-top:6px}
+.cpt{margin:6px 0 0;font-size:var(--fs-caption);color:var(--ink2);line-height:1.6}
+.cpt b{display:inline-block;margin-right:8px;font-size:var(--fs-micro);color:var(--primary)}
+.ex-b p + p{margin-top:.8em}
 </style>
 </head>
 <body>
@@ -1347,28 +1350,28 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.22.0"></script>
-<script src="kyoiku-hoki.js?v=1.22.0"></script>
-<script src="kyoiku-seido.js?v=1.22.0"></script>
-<script src="hoiku-genri.js?v=1.22.0"></script>
-<script src="hoiku-shinri.js?v=1.22.0"></script>
-<script src="shokuin-haichi.js?v=1.22.0"></script>
-<script src="kodomo-hoken.js?v=1.22.0"></script>
-<script src="kodomo-hattatsu.js?v=1.22.0"></script>
-<script src="kodomo-yougo.js?v=1.22.0"></script>
-<script src="shakai-yogo.js?v=1.22.0"></script>
-<script src="ruby.js?v=1.22.0"></script>
-<!-- くわしい解説（なぜ・その結果・条文）。単元のファイルのあとに読み込む -->
-<script src="kaisetsu-kyoiku.js?v=1.22.0"></script>
-<script src="kaisetsu-hoiku.js?v=1.22.0"></script>
-<script src="kaisetsu-shinri.js?v=1.22.0"></script>
-<script src="kaisetsu-hoken.js?v=1.22.0"></script>
-<script src="kaisetsu-shakai.js?v=1.22.0"></script>
+<script src="kyoiku-genri.js?v=1.22.4"></script>
+<script src="kyoiku-hoki.js?v=1.22.4"></script>
+<script src="kyoiku-seido.js?v=1.22.4"></script>
+<script src="hoiku-genri.js?v=1.22.4"></script>
+<script src="hoiku-shinri.js?v=1.22.4"></script>
+<script src="shokuin-haichi.js?v=1.22.4"></script>
+<script src="kodomo-hoken.js?v=1.22.4"></script>
+<script src="kodomo-hattatsu.js?v=1.22.4"></script>
+<script src="kodomo-yougo.js?v=1.22.4"></script>
+<script src="shakai-yogo.js?v=1.22.4"></script>
+<script src="ruby.js?v=1.22.4"></script>
+<!-- くわしい解説（解説・条文）。単元のファイルのあとに読み込む -->
+<script src="kaisetsu-kyoiku.js?v=1.22.4"></script>
+<script src="kaisetsu-hoiku.js?v=1.22.4"></script>
+<script src="kaisetsu-shinri.js?v=1.22.4"></script>
+<script src="kaisetsu-hoken.js?v=1.22.4"></script>
+<script src="kaisetsu-shakai.js?v=1.22.4"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.22.0';
+const APP_VERSION = '1.22.4';
 const APP_BUILD = '2026-10-24';
 
 /* =========================================================
@@ -1452,7 +1455,7 @@ const HELP = {
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n答えがわからないときは「わからない」を選ぶと「わからない」に振り分けられます。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
   learn: ['覚える', '単元・分野ごとに、語句や人物・年号の流れ・○×の要点をまとめたカードを出します。\n\n読んだら「覚えた」か「自信がない」を押して振り分けます。「自信がない」だけをあとから見返せます。「答えをかくして覚える」をオンにすると、答えをかくしたカードが出て、タップでめくれます。\n\nカードの下の「語呂合わせを登録」で、語呂合わせの文と、指で描いたイラストを残せます。'],
-  dict: ['図鑑', '同じ人物・語句が複数の単元に出てくるときは1つにまとめ、開くと単元ごとの説明（要点・なぜ・その結果・条文・覚え方）を並べて見られます（名前の横に「2単元」などと出ます）。\n\nキーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。件数の左のプルダウンで「用語・人物」と「年表」を切り替えます。比較の表・早見表は、下のタブの「表」にあります。'],
+  dict: ['図鑑', '同じ人物・語句が複数の単元に出てくるときは1つにまとめ、開くと単元ごとの説明（要点・解説・条文・覚え方）を並べて見られます（名前の横に「2単元」などと出ます）。\n\nキーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。件数の左のプルダウンで「用語・人物」と「年表」を切り替えます。比較の表・早見表は、下のタブの「表」にあります。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
   dev: ['○×チェック', '保育士試験で多い「適切な記述に○、不適切な記述に×」の形で練習します（子どもの保健・社会的養護）。\n\n○×：1セット5つの記述（試験のA〜E）に、○・×・？を選びます。不適切な記述は、別の時期・別の病気・別の施設・別の数字を入れて作ってあり、選ぶとその場で正しい形と解説が出ます。5つすべて合っていれば正解です。答え終わると「試験の解答の形（A○ B×…）」と、その分野の比較の表が出ます。\n\n並べ替え：問題に書かれた順（早い時期から、古い年から、数字の小さい順など）にタップして番号をつけ、「答え合わせ」を押します。'],
@@ -1480,7 +1483,7 @@ function bundleData(){
   const units = [], terms = [], events = [];
   for (const u of (window.UNITS || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0))) {
     units.push({ id: u.id, name: u.name, desc: u.desc || '', icon: u.icon || 'book' });
-    /* 付属の解説（kaisetsu-*.js：なぜ・その結果・条文、直した問題文）を重ねる */
+    /* 付属の解説（kaisetsu-*.js：解説・条文、直した問題文）を重ねる */
     const K = (window.KAISETSU || {})[u.id] || {}, pk = k => { const o = {}; for (const f of ['why', 'effect', 'law', 'q', 'summary', 'detail']) if (k && k[f]) o[f] = k[f]; return o; };
     for (const t of (u.terms || [])) terms.push({ ...t, ...pk((K.terms || {})[t.term]), key: u.id + '::' + t.term, unit: u.id });
     for (const e of (u.events || [])) events.push({ ...e, ...pk((K.events || {})[e.id]), unit: u.id });
@@ -2398,7 +2401,7 @@ function renderSetup(r){
   const { pool, c } = setupPool(kind, unit);
   const catVal = sel.size === cats.length && !single ? '' : [...sel][0];
   const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
-  const nOf = { all: c.total, weak: c.unknown + c.wrong, new: c.new };
+  const nOf2 = { new: c.new, unknown: c.unknown, wrong: c.wrong, correct: (c.correct || 0) + (c.unsure || 0) };
   const scopeNow = (SCOPES.find(s => sameSet(B, s[2])) || [])[0] || '';
   let n, can, label;
   if (kind === 'quiz') {
@@ -2419,14 +2422,14 @@ function renderSetup(r){
   <p class="psub" style="margin:0 0 4px">${esc(unitName(unit))}</p>
   <h1 class="ptitle">${kind === 'quiz' ? (single ? esc(catVal) : hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'}</h1>
   <section class="sect" style="margin-top:22px">
-    <h2 class="stitle">出題する問題</h2>
-    <div class="seg" role="radiogroup" aria-label="出題する問題">${SCOPES.map(([v, l]) => segBtn('sscope', v, l, scopeNow === v, nOf[v])).join('')}</div>
+    <div class="bpick-h" style="padding-left:0"><span class="stitle" style="margin:0">出題する問題</span>
+      <div class="bquick" role="group" aria-label="まとめて選ぶ">${SCOPES.map(([v, l]) => segBtn('sscope', v, l, scopeNow === v)).join('')}</div></div>
+    <div class="blist" role="group" aria-label="出題する問題" style="margin:0 -16px">${ORDER.map(k => `<button type="button" role="checkbox" aria-checked="${B.has(k)}" class="bopt b-${k}${nOf2[k] ? '' : ' zero'}" data-act="sbk" data-v="${k}"><span class="bx">${I('check')}</span><span class="bl">${BL[k]}</span><span class="bn">${nOf2[k]}${kind === 'quiz' ? '問' : '件'}</span></button>`).join('')}</div>
   </section>
   <section class="sect" style="margin-top:20px">
-    <h2 class="stitle">${kind === 'quiz' ? '問題数' : 'セット数'}</h2>
-    <div class="seg" role="radiogroup" aria-label="${kind === 'quiz' ? '問題数' : 'セット数'}">${kind === 'quiz'
-      ? [10, 20, 'all'].map(v => segBtn('scount', v, v === 'all' ? 'すべて' : `${v}問`, String(S.count) === String(v))).join('')
-      : [3, 5, 10].map(v => segBtn('ssets', v, `${v}セット`, S.sets === v)).join('')}</div>
+    <label class="frow" style="padding-left:0;padding-right:0"><span class="stitle" style="margin:0">${kind === 'quiz' ? '問題数' : 'セット数'}</span>${kind === 'quiz'
+      ? `<select class="sel" id="sCount">${[5, 10, 15, 20, 30, 50, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select>`
+      : `<select class="sel" id="sSets">${[1, 3, 5, 10].map(v => opt(v, `${v}セット`, S.sets)).join('')}</select>`}</label>
   </section>
   ${more ? `<details class="more"><summary>くわしい設定${I('chevD')}</summary><div class="flist">${more}</div></details>` : ''}
   <div class="actionbar static" style="margin-top:28px"><button class="btn primary block" data-act="startSetup" ${can ? '' : 'disabled'}>${label}</button></div>
@@ -2608,7 +2611,9 @@ function renderQuizFeedback(first){
       <div class="ct"><div class="cn">${q.type === 'rev' ? (info.name ? rb(info.name) : '') : rb(ch)}${isAns ? '<small>正解</small>' : picked ? '<small>あなたの解答</small>' : ''}</div>
       ${info.life ? `<p class="lifeln sm">${I('clock')}${esc(info.life)}</p>` : ''}
       ${q.type === 'rev' ? `<p class="cs">${hl(ch, { unit: q.unit })}</p>` : info.text ? `<p class="cs">${hl(info.text, { unit: q.unit, self: ch })}</p>` : ''}
-      ${info.key && !isAns ? `<button class="textbtn" data-act="term" data-v="${esc(info.key)}">${I('book')}図鑑で見る</button>` : ''}</div></li>`;
+      ${(() => { const ot = info.key ? termByKey.get(info.key) : null; return ot && ot.point ? `<p class="cpt"><b>覚え方</b>${hl(ot.point, { unit: q.unit, self: ot.term })}</p>` : ''; })()}
+      ${info.key ? goroBlock('t:' + info.key, { mini: true }) : ''}
+      ${info.key ? `<button class="textbtn" data-act="term" data-v="${esc(info.key)}">${I('book')}図鑑で見る</button>` : ''}</div></li>`;
   }).join('');
   const links = q.type === 'term' ? linkedTerms(q.unit, [q.question, q.explanation, q.point || ''], c.choices) : [];
   const vb = c.unknown ? 'unknown' : c.ok ? 'correct' : 'wrong';
@@ -2713,11 +2718,10 @@ function renderSortFeedback(first){
   ${nextBar(isLast() ? '結果を見る' : '次のセットへ')}`;
   if (first) document.getElementById('nextBtn').focus({ preventScroll: true });
 }
-/* 出来事の説明（年表・並べ替えの答え）：解説・なぜ・その結果・条文・語呂合わせ */
+/* 出来事の説明（年表・並べ替えの答え）：解説・条文・語呂合わせ */
 function eventDetailHTML(e){
   return `${e.explanation ? `<p class="x">${hl(e.explanation, { unit: e.unit })}</p>` : ''}
-    ${e.why ? `<p class="x"><span class="lx-l">なぜ</span>${hl(e.why, { unit: e.unit })}</p>` : ''}
-    ${e.effect ? `<p class="x"><span class="lx-l">その結果</span>${hl(e.effect, { unit: e.unit })}</p>` : ''}
+    ${e.why || e.effect ? `<p class="x">${hl([e.why, e.effect].filter(Boolean).join(''), { unit: e.unit })}</p>` : ''}
     ${lawList(e).length ? lawHTML(lawList(e)) : ''}
     ${goroBlock('e:' + e.id, { mini: true })}`;
 }
@@ -2974,7 +2978,7 @@ const unitTables = () => _uTbl || (_uTbl = Object.fromEntries((window.UNITS || [
 const unitTblKeys = id => Object.keys(unitTables()).filter(k => unitTables()[k].unit === id && unitById.has(id));
 const bundleUnit = id => (window.UNITS || []).find(u => u.id === id) || {};
 const dTbl = key => { for (const d of DVS) if (d.tables[key]) return d.tables[key]; return unitTables()[key]; };
-/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.22.0〜 hl に統一） */
+/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.22.4〜 hl に統一） */
 function rbL(text){ return hl(text); }
 /* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部）
  *   スマホで見比べやすいように：
@@ -3432,9 +3436,7 @@ function openEditTerm(key){
       ${fld('国・地域', 'country', t.country || '', 'inp', false, null, '人物のとき 例：フランス')}
       ${fld('生没年・時期', 'life', t.life || '', 'inp', false, null, '人物のとき 例：1712–1778')}
       ${fld('要約', 'summary', t.summary || '', 'ta', true)}
-      ${fld('内容（くわしく）', 'detail', t.detail || '', 'ta')}
-      ${fld('なぜ', 'why', t.why || '', 'ta', false, null, 'なぜそう考えたのか・なぜそうなるのか')}
-      ${fld('その結果', 'effect', t.effect || '', 'ta', false, null, 'これによって、どうなったか・どうなるか')}
+      ${fld('解説', 'detail', t.detail || '', 'ta', false, null, '考え方・具体例・キーワードの説明など（必要なときだけ）')}
       ${fld('条文', 'law', lawToText(t.law), 'ta', false, null, '出典｜本文　の形で1行ずつ（例：児童福祉法 第37条｜乳児院は、…）')}
       ${fld('覚え方', 'point', t.point || '', 'ta')}
       ${fld('分野', 'cat', t.cat || '', 'inp', false, catsOfUnit(t.unit))}
@@ -3459,8 +3461,6 @@ function openEditEvent(id){
       ${fld('年（西暦）', 'year', String(e.year), 'num', true)}
       ${fld('和暦', 'era', e.era || '', 'inp', false, null, '例：明治5')}
       ${fld('解説', 'explanation', e.explanation || '', 'ta')}
-      ${fld('なぜ', 'why', e.why || '', 'ta')}
-      ${fld('その結果', 'effect', e.effect || '', 'ta')}
       ${fld('条文', 'law', lawToText(e.law), 'ta', false, null, '出典｜本文　の形で1行ずつ')}
       ${fld('時代', 'group', e.group || '', 'inp', false, groupsOfUnit(e.unit))}
       <div class="fld"><label for="f_unit">単元</label><select class="sel" id="f_unit" data-f="unit">${unitOptions(e.unit, false)}</select></div>
@@ -3484,7 +3484,7 @@ function saveEdit(form){
   if (form.dataset.kind === 'term') {
     const key = form.dataset.key, t = termByKey.get(key);
     const qs = f.q.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
-    const vals = { why: (f.why || '').trim(), effect: (f.effect || '').trim(), law: textToLaw(f.law), q: qs.length > 1 ? qs : (qs[0] || ''), term: f.term.trim(), kana: f.kana.trim(), master: (f.master || '').trim(), country: f.country.trim(), life: f.life.trim(), cat: f.cat.trim() || t.cat, summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), unit: f.unit || t.unit };
+    const vals = { law: textToLaw(f.law), q: qs.length > 1 ? qs : (qs[0] || ''), term: f.term.trim(), kana: f.kana.trim(), master: (f.master || '').trim(), country: f.country.trim(), life: f.life.trim(), cat: f.cat.trim() || t.cat, summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), unit: f.unit || t.unit };
     if (!vals.term || !vals.summary) { toast('答えと要約は必須です'); return false; }
     if (vals.term !== t.term || vals.unit !== t.unit) { if (termByName.has(vals.unit + '::' + vals.term) && termByName.get(vals.unit + '::' + vals.term) !== t) { toast('同じ単元に同じ用語があります'); return false; } }
     for (const k of ['q', 'term', 'kana', 'master', 'country', 'life', 'cat', 'summary', 'detail', 'point', 'why', 'effect', 'law']) delete t[k];
@@ -3494,7 +3494,7 @@ function saveEdit(form){
   } else {
     const id = form.dataset.id, e = eById.get(id);
     const year = parseInt(toHalf(f.year), 10);
-    const vals = { title: f.title.trim(), year, era: f.era.trim(), explanation: f.explanation.trim(), why: (f.why || '').trim(), effect: (f.effect || '').trim(), law: textToLaw(f.law), group: f.group.trim(), unit: f.unit || e.unit };
+    const vals = { title: f.title.trim(), year, era: f.era.trim(), explanation: f.explanation.trim(), law: textToLaw(f.law), group: f.group.trim(), unit: f.unit || e.unit };
     if (!vals.title || !year) { toast('出来事と年は必須です'); return false; }
     for (const k of ['title', 'era', 'explanation', 'group', 'why', 'effect', 'law']) delete e[k];
     Object.assign(e, clean({ ...vals }));
@@ -4129,8 +4129,7 @@ function cardBody(cd){
         <div class="lt-h"><span class="ly">${e.year}年<small>${esc(e.era || '')}</small></span>${goroBtn(gk, true)}</div>
         <p class="lt">${hlS(e.title, e.unit)}</p>
         ${e.explanation ? `<p class="lx">${hl(e.explanation, { unit: e.unit })}</p>` : ''}
-        ${e.why ? `<p class="lx"><span class="lx-l">なぜ</span>${hl(e.why, { unit: e.unit })}</p>` : ''}
-        ${e.effect ? `<p class="lx"><span class="lx-l">その結果</span>${hl(e.effect, { unit: e.unit })}</p>` : ''}
+        ${e.why || e.effect ? `<p class="lx">${hl([e.why, e.effect].filter(Boolean).join(''), { unit: e.unit })}</p>` : ''}
         ${lawList(e).length ? lawHTML(lawList(e)) : ''}
         ${goroBlock(gk, { mini: true })}</li>`; }).join('')}</ol>`;
   }
@@ -4389,7 +4388,7 @@ function afterGoro(){
 }
 
 /* =========================================================
- * 1.22.0：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
+ * 1.22.4：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
  * ========================================================= */
 
 /* ---------- 大事なことばに色をつける ----------
@@ -4430,8 +4429,8 @@ function hl(text, opts = {}){
 const hlUnit = () => itemUnitNow() || (state.deck && cardByKey(state.deck.keys[state.deck.i] || '')?.unit) || (state.unit !== 'all' ? state.unit : '') || (DV && DV.unit) || '';
 const hlS = (text, unit) => hl(text, { unit, link: false });   // ボタンの中など、押せない形
 
-/* ---------- くわしい解説（要点・内容・なぜ・その結果・条文・覚え方） ----------
- *   語句・出来事の欄：summary（要点）／detail（内容）／why（なぜ）／effect（その結果・影響）／law（条文：[{ src, text }]）／point（覚え方）
+/* ---------- くわしい解説（要点・解説・条文・覚え方） ----------
+ *   語句・出来事の欄：summary（要点）／detail（解説：考え方・具体例・キーワード。必要なときだけ。以前の why・effect も、ラベルなしで続けて表示）／law（条文：[{ src, text }]）／point（覚え方）
  *   付属の解説は kaisetsu-*.js（window.KAISETSU）にあり、置き場へ一度だけ補う（自分で書いた欄は変えない） */
 const lawList = x => (Array.isArray(x && x.law) ? x.law : []).filter(l => l && l.text);
 function lawHTML(laws, unit){
@@ -4443,9 +4442,7 @@ function explainHTML(x, opts = {}){
   const laws = lawList(x);
   return `<div class="expl">
     ${opts.noSum || !x.summary ? '' : `<p class="ex-sum">${f(x.summary)}</p>`}
-    ${row('内容', x.detail ? `<p>${f(x.detail)}</p>` : '')}
-    ${row('なぜ', x.why ? `<p>${f(x.why)}</p>` : '')}
-    ${row('その結果', x.effect ? `<p>${f(x.effect)}</p>` : '')}
+    ${row('解説', [x.detail, [x.why, x.effect].filter(Boolean).join('')].filter(Boolean).map(t => `<p>${f(t)}</p>`).join(''))}
     ${row('条文', laws.length ? lawHTML(laws, unit) : '', 'ex-law')}
     ${row('覚え方', x.point ? `<p>${f(x.point)}</p>` : '', 'ex-pt')}
   </div>`;
@@ -4762,7 +4759,7 @@ function renderSselFeedback(first){
 }
 
 /* ---------- 付属の解説（kaisetsu-*.js）を置き場へ補う ----------
- *   なぜ・その結果・条文が空の語句・出来事にだけ入れる。問題文の直し（q）は、問題文を自分で直していないときだけ */
+ *   解説・条文が空の語句・出来事にだけ入れる。問題文の直し（q）は、問題文を自分で直していないときだけ */
 function enrichDB(db){
   const K = window.KAISETSU || {}, KAISETSU_VER = 1;
   if ((db.kaisetsu || 0) >= KAISETSU_VER || !Object.keys(K).length) return false;
@@ -4836,6 +4833,7 @@ async function onAction(el, ev){
       startRound(QUESTIONS.filter(q => ks.has(q.termKey) && q.type !== 'rev').map(q => ({ type: 'quiz', id: q.id })), { unit: (t && t.unit) || state.unit, kind: 'quiz' }); break; }
     case 'setupSort': go({ v: 'setup', a: 'sort', u: state.unit }); break;
     case 'quickReview': quickReview(); break;
+    case 'sbk': { const Bk = S.buckets[cur().a]; Bk.has(v) ? Bk.delete(v) : Bk.add(v); render(cur(), true); break; }
     case 'sscope': { const sc = SCOPES.find(x => x[0] === v); if (sc) S.buckets[cur().a] = new Set(sc[2]); render(cur(), true); break; }
     case 'scat': { const s = selectedCats(cur().a, cur().u); s.has(v) ? s.delete(v) : s.add(v); render(cur(), true); break; }
     case 'scount': S.count = v === 'all' ? 'all' : +v; render(cur(), true); break;
