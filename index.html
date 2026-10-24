@@ -790,19 +790,6 @@ ruby{ruby-align:center}
 .plegend i{display:inline-block;width:10px;height:10px;border-radius:3px}
 .plegend .p-new{background:var(--line)}
 .upct{float:right;font-size:var(--fs-label);color:var(--b-correct);font-variant-numeric:tabular-nums;margin-left:8px}
-.act .acth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.act .acth div{display:flex;flex-direction:column;gap:2px}
-.act .acth span{font-size:var(--fs-caption);color:var(--muted)}
-.act .acth b{font-size:26px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
-.act .acth b small{font-size:var(--fs-caption);color:var(--muted);font-weight:500;margin-left:2px}
-.aweek{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px;align-items:end}
-.ad{display:flex;flex-direction:column;align-items:center;gap:4px}
-.ab{display:flex;align-items:flex-end;width:100%;max-width:28px;height:44px;background:var(--surface2);border-radius:6px;overflow:hidden}
-.ab i{display:block;width:100%;background:var(--primary);opacity:.55;border-radius:6px 6px 0 0}
-.ad.today .ab i{opacity:1}
-.al{font-size:var(--fs-micro);color:var(--muted)}
-.ad.today .al{color:var(--ink);font-weight:700}
-.amsg{margin:12px 0 0;font-size:var(--fs-caption);color:var(--muted)}
 /* 早見表：表の選び方 */
 .dtseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .dtseg button{min-height:38px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:700;color:var(--ink2);line-height:1.25}
@@ -825,22 +812,11 @@ ruby{ruby-align:center}
 .dtli span{font-size:var(--fs-micro);color:var(--muted);line-height:1.5}
 .dtli.on{border:2px solid var(--primary)}
 .dtcount{margin:4px 0 0;font-size:var(--fs-caption);color:var(--muted)}
-/* 表：スマホはカード、広い画面は表 */
-.ccards{display:none}
 @media (max-width:640px){
-  .ccards{display:grid;gap:8px}
-  .ccards + .ctw{display:none}
-  .cc{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 14px}
-  .cch{font-weight:700;color:var(--primary);font-size:var(--fs-body);line-height:1.5;padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid var(--line)}
-  .ccr{display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:8px;padding:5px 0;font-size:var(--fs-body-sm);line-height:1.65}
-  .ccr+.ccr{border-top:1px dashed var(--line)}
-  .ccl{font-size:var(--fs-micro);color:var(--muted);font-weight:700;line-height:1.9;word-break:keep-all;overflow-wrap:anywhere}
-  .ccv.solo{font-size:var(--fs-body-sm);line-height:1.7;padding:2px 0}
   .dthead{padding-bottom:8px}
   .dthead h2{font-size:var(--fs-title) !important;margin:2px 0 8px !important}
   .dtgenre button{min-height:36px;font-size:var(--fs-caption)}
   .dthead .dtabs button{font-size:var(--fs-caption);white-space:nowrap}
-  .ccr{grid-template-columns:6.5em minmax(0,1fr)}
 }
 .gloss h3{display:flex;align-items:center;gap:6px}
 .gloss h3 .i{width:16px;height:16px}
@@ -1120,7 +1096,7 @@ ruby{ruby-align:center}
 .dsm .cntline{font-size:var(--fs-caption);color:var(--muted);margin:10px 2px 0}
 
 /* =========================================================
- * 1.21.0：整理（色・解説・表・一覧・下のボタン）
+ * 1.22.0：整理（色・解説・表・一覧・下のボタン）
  *   色は「振り分けの色」と、大事なことばの2色（語句＝あお、年号＝こはく）だけ
  * ========================================================= */
 :root{ --hk:#2E6A8C; --hy:#9A6A2E; --hk-line:#BFD9E8; --law:#F7F8FA; --law-line:#DCE1E7 }
@@ -1201,15 +1177,6 @@ ruby{ruby-align:center}
 .tnav .btn .i{width:16px;height:16px;flex:none}
 .tnav-n{font-size:var(--fs-caption);color:var(--muted);font-variant-numeric:tabular-nums}
 .stwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-/* 表：スマホのカード（見出しの下に、列名と中身を縦に並べる） */
-@media (max-width:640px){
-  .cc{border-radius:14px;padding:12px 14px 10px}
-  .cch{color:var(--ink);font-size:var(--fs-body);border-bottom:0;padding-bottom:2px;margin-bottom:2px}
-  .ccr{display:block;padding:7px 0}
-  .ccr+.ccr{border-top:1px solid var(--line)}
-  .ccl{display:block;line-height:1.5;margin-bottom:1px;letter-spacing:.04em}
-  .ccv{display:block;font-size:var(--fs-body-sm);line-height:1.75}
-}
 .ctbl tbody th{color:var(--ink)}
 .ctbl tbody tr:nth-child(even) > *{background:var(--surface2)}
 .ctw{border-radius:14px}
@@ -1262,7 +1229,7 @@ ruby{ruby-align:center}
 .sa-law{display:flex;align-items:center;gap:5px;margin:4px 0 0 26px;font-size:var(--fs-micro);color:var(--muted);font-weight:600}
 .sa-law .i{width:12px;height:12px}
 
-/* 覚えるカード（1.21.0） */
+/* 覚えるカード（1.22.0） */
 .lc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .lc-top .lc-kind{margin:0}
 .lcard .expl{margin-top:14px}
@@ -1285,7 +1252,7 @@ ruby{ruby-align:center}
 .lnav .lpos small{color:var(--muted);font-weight:500}
 body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 
-/* 語呂合わせ（1.21.0：落ち着いた色に。登録は小さなボタン） */
+/* 語呂合わせ（1.22.0：落ち着いた色に。登録は小さなボタン） */
 .goro{background:#FAF8F4;border:1px solid #ECE6DB;border-radius:12px;padding:10px 12px 12px;margin-top:14px}
 .goro.mini{padding:8px 10px 10px;margin-top:8px}
 .goro-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1303,6 +1270,47 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 .goro-mini:active,.goro-btn:active{color:var(--ink2)}
 .goro-add{display:none}
 .lmeta .lhide{display:none}
+
+/* ---------- 表：項目名を左に固定。列を絞る・行を選んで比べる ---------- */
+.tcols{display:flex;align-items:center;gap:6px;overflow-x:auto;margin:0 -2px 8px;padding:0 2px 2px;scrollbar-width:none}
+.tcols::-webkit-scrollbar{display:none}
+.tcols .tcl{flex:none;font-size:var(--fs-micro);color:var(--muted);font-weight:700}
+.tcols button{flex:none;min-height:34px;padding:4px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--fs-caption);font-weight:600;color:var(--ink2)}
+.tcols button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+@media (min-width:700px){.tcols{display:none}}
+.ctbl tbody th,.ctbl thead th:first-child{position:sticky;left:0;z-index:1;box-shadow:1px 0 0 var(--line)}
+.ctbl thead th:first-child{background:var(--surface2)}
+.ctbl tbody tr.sel > *{background:color-mix(in srgb,var(--primary) 10%,var(--surface))}
+.rph{display:flex;align-items:flex-start;gap:8px}
+.rpick{flex:none;width:22px;height:22px;margin-top:2px;padding:0;border-radius:6px;border:1.5px solid var(--b-new);background:var(--surface);color:transparent;display:grid;place-items:center}
+.rpick .i{width:14px;height:14px;stroke-width:3}
+.rpick[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:#fff}
+.tcmpbar{display:flex;align-items:center;gap:12px;margin:0 0 8px;padding:8px 12px;border-radius:12px;background:var(--tint);border:1px solid var(--tint-line)}
+.tcmpbar .tcn{flex:1;font-size:var(--fs-label);font-weight:600;color:var(--ink2)}
+.tcmpbar .btn.sm{min-height:36px;padding:4px 18px}
+.tview.comparing > .ctw,.tview.comparing > .tcols,.tview.comparing > .tcmpbar{display:none}
+.tview:not(.comparing) > .tcmpview{display:none}
+.ctbl.cmp{min-width:calc(var(--n) * 7.5em)}
+.ctbl.cmp tbody th{font-size:var(--fs-micro);color:var(--muted);white-space:nowrap}
+.ctbl.cmp thead th{white-space:normal;color:var(--primary);font-size:var(--fs-caption)}
+.tview[data-show="1"] .ctbl [data-c]:not([data-c="0"]):not([data-c="1"]){display:none}
+.tview[data-show="2"] .ctbl [data-c]:not([data-c="0"]):not([data-c="2"]){display:none}
+.tview[data-show="3"] .ctbl [data-c]:not([data-c="0"]):not([data-c="3"]){display:none}
+.tview[data-show="4"] .ctbl [data-c]:not([data-c="0"]):not([data-c="4"]){display:none}
+.tview[data-show="5"] .ctbl [data-c]:not([data-c="0"]):not([data-c="5"]){display:none}
+.tview[data-show="6"] .ctbl [data-c]:not([data-c="0"]):not([data-c="6"]){display:none}
+.tview[data-show="7"] .ctbl [data-c]:not([data-c="0"]):not([data-c="7"]){display:none}
+.tview[data-show="8"] .ctbl [data-c]:not([data-c="0"]):not([data-c="8"]){display:none}
+.tview:not([data-show="all"]) .ctw.wide .ctbl{min-width:0}
+.ctbl tbody th{min-width:6.6em;word-break:keep-all}
+.rph > :not(.rpick){min-width:3.4em}
+/* 設定・図鑑のタブ */
+.more{margin-top:20px}
+.more > summary{list-style:none;display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 0;color:var(--ink2);font-size:var(--fs-body-sm);font-weight:600}
+.more > summary::-webkit-details-marker{display:none}
+.more > summary .i{width:16px;height:16px;transition:transform .2s}
+.more[open] > summary .i{transform:rotate(180deg)}
+.more .flist{margin-top:6px}
 </style>
 </head>
 <body>
@@ -1325,30 +1333,42 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 </div>
 
 <!-- 学習データ（単元ごとのファイル。単元を増やすときはここに1行追加） -->
-<script>window.UNITS = []; window.addUnit = function (u) { window.UNITS.push(u); };</script>
+<script>window.UNITS = []; window.addUnit = function (u) {
+  /* 同じ id の単元をもう一度 addUnit すると、あとから足したものが合体します（terms・events・tables など）。
+     単元の内容を別のファイルに分けて書き足せます */
+  var e = window.UNITS.find(function (x) { return x.id === u.id; });
+  if (!e) { window.UNITS.push(u); return; }
+  Object.keys(u).forEach(function (k) {
+    if (Array.isArray(u[k])) e[k] = (e[k] || []).concat(u[k]);
+    else if (u[k] && typeof u[k] === 'object') e[k] = Object.assign(e[k] || {}, u[k]);
+    else if (e[k] == null) e[k] = u[k];
+  });
+};</script>
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.21.0"></script>
-<script src="hoiku-genri.js?v=1.21.0"></script>
-<script src="hoiku-shinri.js?v=1.21.0"></script>
-<script src="shokuin-haichi.js?v=1.21.0"></script>
-<script src="kodomo-hoken.js?v=1.21.0"></script>
-<script src="kodomo-hattatsu.js?v=1.21.0"></script>
-<script src="kodomo-yougo.js?v=1.21.0"></script>
-<script src="shakai-yogo.js?v=1.21.0"></script>
-<script src="ruby.js?v=1.21.0"></script>
+<script src="kyoiku-genri.js?v=1.22.0"></script>
+<script src="kyoiku-hoki.js?v=1.22.0"></script>
+<script src="kyoiku-seido.js?v=1.22.0"></script>
+<script src="hoiku-genri.js?v=1.22.0"></script>
+<script src="hoiku-shinri.js?v=1.22.0"></script>
+<script src="shokuin-haichi.js?v=1.22.0"></script>
+<script src="kodomo-hoken.js?v=1.22.0"></script>
+<script src="kodomo-hattatsu.js?v=1.22.0"></script>
+<script src="kodomo-yougo.js?v=1.22.0"></script>
+<script src="shakai-yogo.js?v=1.22.0"></script>
+<script src="ruby.js?v=1.22.0"></script>
 <!-- くわしい解説（なぜ・その結果・条文）。単元のファイルのあとに読み込む -->
-<script src="kaisetsu-kyoiku.js?v=1.21.0"></script>
-<script src="kaisetsu-hoiku.js?v=1.21.0"></script>
-<script src="kaisetsu-shinri.js?v=1.21.0"></script>
-<script src="kaisetsu-hoken.js?v=1.21.0"></script>
-<script src="kaisetsu-shakai.js?v=1.21.0"></script>
+<script src="kaisetsu-kyoiku.js?v=1.22.0"></script>
+<script src="kaisetsu-hoiku.js?v=1.22.0"></script>
+<script src="kaisetsu-shinri.js?v=1.22.0"></script>
+<script src="kaisetsu-hoken.js?v=1.22.0"></script>
+<script src="kaisetsu-shakai.js?v=1.22.0"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.21.0';
+const APP_VERSION = '1.22.0';
 const APP_BUILD = '2026-10-24';
 
 /* =========================================================
@@ -1426,23 +1446,16 @@ function toast(text){
  * ========================================================= */
 const HELP = {
   home: ['使い方', '単元を選んで学習します。解いた問題は「正解・不正解・わからない」に自動で振り分けられ、あとから好きな組み合わせで何度でも解き直せます。\n\n問題の文章は解答後の「編集・メモ」から直せます。問題の追加やバックアップは「データ」タブで行います。'],
-  buckets: ['出題の設定', '「出題する問題」で、どの振り分けから出すかをチェックで選びます。いくつでも組み合わせられます。右上の「すべて」「苦手」を押すと、まとめて切り替わります。「苦手」は不正解・わからないをまとめたものです。'],
+  sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
+  resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存されます。'],
   progress: ['進み具合', '覚えることを1件ずつ数えています。\n\n4択は語句ごと（「説明→答え」と「答え→説明」の両方があっても1件）。解いた向きが全部正解なら「正解」、1つでも不正解・わからないなら「苦手」です。○×は1セット（5つの記述）で1件、並べ替えは1問で1件、年号は出来事ごと、職員配置は1施設で1件です。\n\n円の%は、全体のうち正解している割合です。「解いた」は一度でも答えたもの、「苦手」は不正解・わからないの数です。'],
   classify: ['振り分け', '解答の結果から自動で振り分けています。変えたいときはタップしてください。\n\n答えがわからないときは「わからない」を選ぶと「わからない」に振り分けられます。'],
-  resume: ['中断', '問題の途中で × を押すと、そこで終わります。解いた分の振り分けはそのまま保存され、残りの問題は出題されません。'],
   ruby: ['ふりがなの辞書', '登録されているふりがなの一覧です。行を押すと読みを直したり削除したりできます。「追加」で新しい語を登録できます。\n\n問題の「読み」に書いた読みも、ここに登録されます。'],
-  dir: ['出題の向き', '「説明 → 答え」は説明を読んで人物・用語を選ぶ問題、「答え → 説明」は人物・用語を見て正しい説明を選ぶ問題です。「まぜる」で両方から出します。\n\n振り分けは向きごとに別々に記録されます。'],
-  units: ['単元', '上の欄に名前を入れて「作る」で単元を追加します。右端のつまみを押さえて上下に動かすと、並び順を変えられます。\n\n調整ボタンから、名前・説明・アイコンの変更や削除ができます。'],
-  import: ['取り込む内容の確認', '取り込むものにチェックを付けます。項目を押すと、取り込む前に中身を直せます。\n\nすでに同じものがある項目は、最初はチェックが外れています。'],
-  sort: ['年号並べ替え', '上が古くなるように並べます。右端のつまみを押さえて上下に動かしてください。\n\nわからないときは「わからない」で正しい順序と解説を確認できます。'],
-  list: ['振り分け', 'キーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。検索欄の下の帯で、単元や分野（例：病気・医療）をタップすると絞り込めます。細かい分野や振り分けで絞りたいときは「絞り込み」を使います。\n\n種類は件数の左のプルダウンで切り替えます（4択／○×・並べ替え／年号並べ替え）。項目を押すと解説と振り分けを確認・変更でき、○×はその場で記述と正解・表を見られます。「解く」で表示中の問題をまとめて解けます。'],
   learn: ['覚える', '単元・分野ごとに、語句や人物・年号の流れ・○×の要点をまとめたカードを出します。\n\n読んだら「覚えた」か「自信がない」を押して振り分けます。「自信がない」だけをあとから見返せます。「答えをかくして覚える」をオンにすると、答えをかくしたカードが出て、タップでめくれます。\n\nカードの下の「語呂合わせを登録」で、語呂合わせの文と、指で描いたイラストを残せます。'],
   dict: ['図鑑', '同じ人物・語句が複数の単元に出てくるときは1つにまとめ、開くと単元ごとの説明（要点・なぜ・その結果・条文・覚え方）を並べて見られます（名前の横に「2単元」などと出ます）。\n\nキーワードを打つと、その場で絞り込まれます（読みをひらがなで打っても探せます）。件数の左のプルダウンで「用語・人物」と「年表」を切り替えます。比較の表・早見表は、下のタブの「表」にあります。'],
   data: ['データ', '問題・メモ・ふりがな・学習記録は、この端末のブラウザに保存されます。機種変更や念のための保存に「バックアップを書き出す」を使ってください。\n\n最初に入っている問題も、自分で足した問題と同じように直したり消したりできます。'],
-  bulk: ['まとめて追加の手順', '1. 「AIへの指示をコピー」を押す\n2. ChatGPTなどのAIに貼り付け、【テーマ】と【作る数】を書き換えて送る\n3. AIの出力をそのまま下の欄に貼り付ける（テキストファイルの読み込みも可）\n4. 読み取り結果を確認して「追加する」を押す\n\n「用語」と「要約」があれば図鑑に、「問題」があれば4択問題にもなります。「年」と「出来事」を書いた項目は年号並べ替えに使われます。'],
   staff: ['施設の職員配置', '施設ごとに、すべての職種について次から選びます。\n● 必置（必ず置く）\n○ 条件によって配置される（例：心理療法の対象が10人以上）\n△ 条件によって配置しないことができる（例：調理業務を全部委託）\n－ 規定なし\n？ わからない\n\n選ぶとその場で正誤と理由が出ます。すべての職種に答えると施設のまとめが出て、全職種が合っていれば正解です。'],
   dev: ['○×チェック', '保育士試験で多い「適切な記述に○、不適切な記述に×」の形で練習します（子どもの保健・社会的養護）。\n\n○×：1セット5つの記述（試験のA〜E）に、○・×・？を選びます。不適切な記述は、別の時期・別の病気・別の施設・別の数字を入れて作ってあり、選ぶとその場で正しい形と解説が出ます。5つすべて合っていれば正解です。答え終わると「試験の解答の形（A○ B×…）」と、その分野の比較の表が出ます。\n\n並べ替え：問題に書かれた順（早い時期から、古い年から、数字の小さい順など）にタップして番号をつけ、「答え合わせ」を押します。'],
-  one: ['1件ずつ追加', '「答え」と「要約」は必須です。「問題文」を書くと4択問題になります。誤りの選択肢は、同じ単元・同じ分野の用語から自動で選ばれます。']
 };
 const help = key => `<button class="help" data-act="help" data-v="${key}" aria-label="説明を見る">?</button>`;
 
@@ -1454,9 +1467,6 @@ const blankP = () => ({ q: {}, e: {}, s: {}, d: {}, m: {}, best: 0 });
 const blankU = () => ({ units: [], terms: [], events: [], edits: {}, memos: {} });
 const loadJSON = (k, f) => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return o ? { ...f(), ...o } : f(); } catch (_) { return f(); } };
 let P = loadJSON(PKEY, blankP);
-/* 1.12.0：日ごとの記録がまだないときは、これまでの最後に解いた日から作る */
-if (!P.days) { P.days = {}; for (const k of ['q', 'e', 's', 'd']) for (const r of Object.values(P[k] || {})) if (r && r.t) { const d = dayKeyEarly(r.t); P.days[d] = (P.days[d] || 0) + 1; } }
-function dayKeyEarly(t){ const x = new Date(t); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; }
 /* 1.11.0：「自信なし」をやめた。以前「自信なし」に振り分けたものは「わからない」に移す */
 (() => { let ch = false; for (const k of Object.keys(P)) { const m = P[k]; if (m && typeof m === 'object') for (const r of Object.values(m)) if (r && r.b === 'unsure') { r.b = 'unknown'; ch = true; } } if (ch) try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch (_) {} })();
 /* ---------- 問題の置き場（ひとつだけ） ----------
@@ -1585,10 +1595,66 @@ function tidyUnits(db){
   db.tidy = 1;
   return true;
 }
+/* ---------- 付属データの自動同期（Claude が単元・用語・年号を足したり直したりしたとき、前から使っている端末へも届ける） ----------
+ *   新しい単元・用語・年号 … 付属のデータファイルに書き足すだけ。次に開いたときに自動で入る（一度入れたものは、あとで消しても足し直さない）
+ *   直す                  … 用語や年号に rev: 1 を書く（直すたびに数字を上げる）。置き場の内容が付属のものに置きかわる
+ *   やめる                … 単元に removeTerms: ["用語"]、removeEvents: ["年号のid"] を書く
+ *   ○×・並べ替え・表・図解は、置き場に入れず、いつもファイルから直接読むので、直せばすぐ変わる */
+const SYNC_TERM = ['cat', 'summary', 'detail', 'q', 'point', 'tbl', 'country', 'life', 'kana', 'why', 'effect', 'law', 'exclude'];
+const SYNC_EVENT = ['year', 'era', 'group', 'title', 'explanation', 'why', 'effect', 'law'];
+function syncBundle(db){
+  const b = bundleData();
+  let changed = false;
+  const kt = new Set(db.known || db.terms.map(t => t.key)), ke = new Set(db.knownE || db.events.map(e => e.id));
+  const ku = new Set(db.knownU || [...db.units.map(u => u.id), ...(db.addedUnits || []).map(t => t.split('#')[0]), 'seido-nengo']);
+  if (!db.known || !db.knownE || !db.knownU) changed = true;
+  for (const u of b.units) {
+    if (db.units.some(x => x.id === u.id)) { ku.add(u.id); continue; }
+    if (ku.has(u.id)) continue;
+    db.units.push({ ...u }); ku.add(u.id); changed = true;
+  }
+  db.ruby = db.ruby || {};
+  for (const t of b.terms) {
+    const have = db.terms.find(x => x.key === t.key || (x.unit === t.unit && x.term === t.term));
+    if (!have) {
+      if (kt.has(t.key)) continue;
+      if (!db.units.some(x => x.id === t.unit)) continue;
+      db.terms.push({ ...t }); kt.add(t.key); changed = true;
+      if (kanaOk(t) && !(t.term in db.ruby)) db.ruby[t.term] = t.kana.replace(/\s+/g, '');
+      continue;
+    }
+    kt.add(t.key);
+    if (t.rev && (have.rev || 0) < t.rev) {
+      for (const f of SYNC_TERM) { if (f in t) have[f] = t[f]; else delete have[f]; }
+      have.rev = t.rev; changed = true;
+    }
+  }
+  for (const e of b.events) {
+    const have = db.events.find(x => x.id === e.id);
+    if (!have) {
+      if (ke.has(e.id)) continue;
+      if (!db.units.some(x => x.id === e.unit)) continue;
+      db.events.push({ ...e }); ke.add(e.id); changed = true; continue;
+    }
+    ke.add(e.id);
+    if (e.rev && (have.rev || 0) < e.rev) {
+      for (const f of SYNC_EVENT) { if (f in e) have[f] = e[f]; else delete have[f]; }
+      have.rev = e.rev; changed = true;
+    }
+  }
+  for (const u of (window.UNITS || [])) {
+    const rt = new Set(u.removeTerms || []), re = new Set(u.removeEvents || []);
+    if (rt.size) { const n = db.terms.length; db.terms = db.terms.filter(x => !(x.unit === u.id && rt.has(x.term) && x.key === u.id + '::' + x.term)); if (db.terms.length !== n) changed = true; }
+    if (re.size) { const n = db.events.length; db.events = db.events.filter(x => !(x.unit === u.id && re.has(x.id))); if (db.events.length !== n) changed = true; }
+  }
+  for (const [k, r] of Object.entries(b.ruby)) if (!(k in db.ruby)) { db.ruby[k] = r; changed = true; }
+  db.known = [...kt]; db.knownE = [...ke]; db.knownU = [...ku];
+  return changed;
+}
 let U = (() => {
-  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db) | ensureAddedUnits(db) | tidyUnits(db) | enrichDB(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
+  try { const o = JSON.parse(localStorage.getItem(DBKEY) || 'null'); if (o && Array.isArray(o.terms)) { const db = { ...blankDB(), ...o }; if (backfillFromBundle(db) | ensureStaffUnit(db) | ensureAddedUnits(db) | tidyUnits(db) | enrichDB(db) | syncBundle(db)) try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {} return db; } } catch (_) {}
   let old = null; try { old = JSON.parse(localStorage.getItem(UKEY) || 'null'); } catch (_) {}
-  const db = seedDB(old); db.filled = 1; db.tidy = 1; ensureStaffUnit(db); ensureAddedUnits(db); enrichDB(db);
+  const db = seedDB(old); db.filled = 1; db.tidy = 1; ensureStaffUnit(db); ensureAddedUnits(db); enrichDB(db); syncBundle(db);
   try { localStorage.setItem(DBKEY, JSON.stringify(db)); } catch (_) {}
   return db;
 })();
@@ -1772,10 +1838,7 @@ function recordAnswer(k, id, ok, unsure, unknown){
   const r = P[k][id] || { n: 0, ok: 0 };
   r.n++; if (ok) r.ok++;
   r.b = unknown ? 'unknown' : ok ? (unsure ? 'unsure' : 'correct') : 'wrong'; r.t = Date.now(); P[k][id] = r;
-  const d = dayKey(); P.days = P.days || {}; P.days[d] = (P.days[d] || 0) + 1;
 }
-/* 学習した日の記録（日付ごとの解いた数）。日付は端末の時刻で数える */
-function dayKey(t = Date.now()){ const x = new Date(t); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; }
 function countB(k, list){ const c = { new: 0, unknown: 0, wrong: 0, unsure: 0, correct: 0, total: list.length }; list.forEach(x => c[bucket(k, x.id)]++); return c; }
 const inUnit = (list, unit) => unit === 'all' ? list : list.filter(x => x.unit === unit);
 
@@ -1907,7 +1970,7 @@ function tabTap(v){
   const atRoot = stack.length === (v === 'home' ? 1 : 2) && cur().v === v;
   if (!atRoot) { go({ v }, 'tab'); return; }
   if (scrollY > 8) { scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' }); return; }
-  if (v === 'tables') state.tbl = { unit: '', genre: '', q: '' };
+  if (v === 'tables') state.search.tbl = blankSearchState();
   if (v === 'dict') { state.dict.tab = 'terms'; state.search.dict = blankSearchState(); }
 
   render(cur(), true);
@@ -1924,7 +1987,7 @@ function persistNav(){
     localStorage.setItem(NAVKEY, JSON.stringify({
       t: Date.now(), stack: stack.map(({ y, ...x }) => x), y: scrollY,
       round: r ? { items: r.items, i: r.i, results: r.results, origin: r.origin, answered: answered ? { ok: c.ok } : null } : null,
-      search: state.search, list: state.list, dict: state.dict, unit: state.unit, imp: state.imp, bulkText: state.bulk.text, deck: state.deck, learn: state.learn, tbl: state.tbl, qf: state.qf,
+      search: state.search, list: state.list, dict: state.dict, unit: state.unit, deck: state.deck, qf: state.qf,
       setup: { dir: state.setup.dir, form: state.setup.form, count: state.setup.count, sets: state.setup.sets, size: state.setup.size }
     }));
   } catch (_) {}
@@ -1933,7 +1996,7 @@ function restoreNav(){
   let s = null;
   try { s = JSON.parse(localStorage.getItem(NAVKEY) || 'null'); } catch (_) {}
   if (!s || !Array.isArray(s.stack) || Date.now() - s.t > 12 * 3600e3) return false;
-  const known = ['home', 'staff', 'dev', 'unit', 'setup', 'round', 'result', 'cards', 'tables', 'table', 'qlist', 'dict', 'data', 'bulk', 'one', 'mine', 'ruby', 'units', 'import'];
+  const known = ['home', 'staff', 'dev', 'unit', 'setup', 'round', 'result', 'cards', 'tables', 'table', 'qlist', 'dict', 'data', 'mine', 'ruby'];
   const ok = r => r && known.includes(r.v) && (r.v !== 'unit' || r.a === 'all' || unitById.has(r.a)) && (r.v !== 'setup' || r.u === 'all' || unitById.has(r.u));
   let st = s.stack.filter(ok);
   if (s.round && Array.isArray(s.round.items)) {
@@ -1943,17 +2006,13 @@ function restoreNav(){
     if (r.i >= r.items.length) st = st.map(x => x.v === 'round' ? { v: 'result' } : x);
   } else st = st.filter(x => x.v !== 'round' && x.v !== 'result');
   if (s.deck && Array.isArray(s.deck.keys)) state.deck = s.deck; else st = st.filter(x => x.v !== 'cards');
-  if (s.learn) Object.assign(state.learn, s.learn);
-  if (s.tbl) Object.assign(state.tbl, s.tbl);
   if (typeof s.qf === 'string') state.qf = s.qf;
-  if (s.imp) state.imp = s.imp; else { const i = st.findIndex(x => x.v === 'import'); if (i >= 0) st = st.slice(0, i); }
   if (!st.length || st[0].v !== 'home') st.unshift({ v: 'home' });
   for (const k of ['list', 'dict']) if (s[k]) Object.assign(state[k], s[k]);
-  for (const c of ['list', 'dict']) { const o = s.search && s.search[c]; if (o && typeof o.q === 'string' && 'unit' in o) state.search[c] = { ...blankSearchState(), ...o }; }
+  for (const c of ['list', 'dict', 'tbl']) { const o = s.search && s.search[c]; if (o && typeof o.q === 'string' && 'unit' in o) state.search[c] = { ...blankSearchState(), ...o }; }
   if (s.unit) state.unit = s.unit;
   if (s.setup) Object.assign(state.setup, s.setup);
   state.setup.size = Math.min(10, Math.max(5, +state.setup.size || 5));   // 1セットの数は5〜10個（以前の4個などは5個に直す）
-  if (typeof s.bulkText === 'string') state.bulk.text = s.bulkText;
   stack.length = 0; stack.push(...st);
   render(cur(), true);
   scrollTo(0, s.y || 0);
@@ -1974,12 +2033,8 @@ function render(r, keep){
     case 'qlist': renderQList(r); break;
     case 'dict': renderDict(); break;
     case 'data': renderData(); break;
-    case 'bulk': renderBulk(); break;
-    case 'one': renderOne(); break;
     case 'mine': renderMine(); break;
     case 'ruby': renderRuby(); break;
-    case 'units': renderUnits(); break;
-    case 'import': renderImport(); break;
     default: renderHome();
   }
   renderTop();
@@ -2126,13 +2181,10 @@ const state = {
   setup: { custom: {}, dir: 'fwd', buckets: { quiz: new Set(ORDER), sort: new Set(ORDER) }, cats: {}, count: 10, sets: 5, size: 5 },
   list: { kind: 'quiz' },
   dict: { tab: 'terms' },
-  search: { list: { q: '', unit: '', cat: '', bucket: '' }, dict: { q: '', unit: '', cat: '', bucket: '' } },
+  search: { list: { q: '', unit: '', cat: '', bucket: '' }, dict: { q: '', unit: '', cat: '', bucket: '' }, tbl: { q: '', unit: '', cat: '', bucket: '' } },
   mine: { q: '' },
   ruby: { q: '' },
-  imp: null,
-  bulk: { unit: null, newName: '', text: '', done: null },
-  one: { kind: 'term', unit: null, newName: '', f: {} },
-  learn: { filter: 'all', shuffle: false }, tbl: { unit: '', genre: '', q: '' }, qf: '', qsheet: null, deck: null, dm: null, mview: null, goroBack: null,
+  learn: {}, qf: '', qsheet: null, deck: null, dm: null, mview: null, goroBack: null,
   opened: new Set(), round: null, streak: 0
 };
 /* 分野は「大分類：小分類」と書ける（例：病気・医療：感染症）。出題の設定では大分類でまとめて出す */
@@ -2218,25 +2270,6 @@ function progressPanel(items, rows){
   </div>`;
 }
 const kindRows = items => uniq(items.map(x => x.kind)).map(k => { const its = items.filter(x => x.kind === k); return { label: k === '語句' ? '4択（語句）' : k, items: its, unitWord: UNIT_KIND[k] }; });
-/* 学習の記録（今日・連続日数・この7日） */
-function streakDays(){
-  const days = P.days || {}; let n = 0, t = new Date();
-  if (!days[dayKey(t)]) t.setDate(t.getDate() - 1);
-  while (days[dayKey(t)]) { n++; t.setDate(t.getDate() - 1); }
-  return n;
-}
-function activityCard(){
-  const days = P.days || {}; if (!Object.keys(days).length) return '';
-  const today = days[dayKey()] || 0, st = streakDays();
-  const w = [...Array(7)].map((_, i) => { const t = new Date(); t.setDate(t.getDate() - 6 + i); return { d: t, n: days[dayKey(t)] || 0 }; });
-  const max = Math.max(1, ...w.map(x => x.n)), WD = '日月火水木金土';
-  const total7 = w.reduce((a, x) => a + x.n, 0);
-  return `<section class="sect"><div class="panel act">
-    <div class="acth"><div><span>今日</span><b>${today}<small>問</small></b></div><div><span>連続</span><b>${st}<small>日</small></b></div><div><span>この7日</span><b>${total7}<small>問</small></b></div></div>
-    <div class="aweek">${w.map((x, i) => `<div class="ad ${i === 6 ? 'today' : ''}"><span class="ab"><i style="height:${x.n ? Math.max(8, Math.round(x.n / max * 100)) : 0}%"></i></span><span class="al">${WD[x.d.getDay()]}</span></div>`).join('')}</div>
-    <p class="amsg">${today ? (st >= 3 ? `${st}日続けて学習しています。` : '今日も学習しました。') + 'この調子で続けましょう' : st ? `今日はまだです。解くと ${st + 1}日連続になります` : '今日の1問から始めましょう'}</p>
-  </div></section>`;
-}
 function stackBar(c){
   const segs = ['correct', 'unsure', 'wrong', 'unknown', 'new'].filter(b => c[b]).map(b => `<i class="b-${b}" style="flex:${c[b]}"></i>`).join('');
   return `<div class="sbar" role="img" aria-label="${ORDER.map(b => BL[b] + c[b]).join('、')}">${segs}</div>`;
@@ -2270,13 +2303,17 @@ function renderHome(){
   app.innerHTML = `
   <div class="brandrow"><img class="applogo" src="icon.svg" alt="" width="44" height="44">
     <div><h1 class="ptitle">暗記ノート ${help('home')}</h1><p class="psub">保育士試験の人物・用語・年号</p></div></div>
-  ${activityCard()}
   <section class="sect">
     <h2 class="stitle">単元</h2>
     <div class="menu">${UNITS.map(u => unitRow(u.id)).join('')}</div>
   </section>
   <section class="sect"><div class="menu">${unitRow('all')}</div></section>
-  ${(() => { const n = cardCount(cardsOf('all')).unsure; return n ? `<section class="sect"><h2 class="stitle">覚える</h2><div class="menu"><button class="mrow accent" data-act="learnUnsure" data-v="all"><span class="mi">${I('retry')}</span><span class="mtx"><span class="mt">「自信がない」カードを見返す</span><span class="ms">すべての単元から ${n}枚</span></span>${I('chev', 'mchev')}</button></div></section>` : ''; })()}`;
+`;
+
+}
+
+/* =========================================================
+ * 単元ページ`;
 
 }
 
@@ -2285,17 +2322,8 @@ function renderHome(){
  * ========================================================= */
 function renderUnit(id){
   state.unit = id; state.round = null; state.opened.clear(); useDV(id);
-  const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
-  const cq = countB('q', qs), ce = countB('e', evs), cs = countB('s', [...sf, ...sselOf(id)]), cd = countB('d', dv);
-  const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b] + cs[b] + cd[b], 0);
-  const ut = unitTblKeys(id), GS = id === 'all' ? [] : catsFor('quiz', id), byGenre = qs.length && (dv.length || GS.length > 1);
-  const bar = x => `<span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span>`;
-  /* 単元の中の行は、子どもの保健と同じ形：名前・％・中身の数・正解数・棒 */
-  const progRow = (act, v, icon, title, parts, its) => { const x = progC(its);
-    return `<button class="mrow urow" data-act="${act}" data-v="${esc(v)}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${esc(title)}<span class="upct">${x.pct}%</span></span><span class="ms">${parts}　正解 ${x.correct}／${x.total}${x.weak ? `　苦手 ${x.weak}` : ''}</span>${bar(x)}</span>${I('chev', 'mchev')}</button>`; };
-  const partsOf = its => uniq(its.map(i => i.kind)).map(k => `${k === '語句' ? '4択' : k} ${its.filter(i => i.kind === k).length}`).join('・');
-  const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
   const mode = SET.umode === 'quiz' ? 'quiz' : 'learn';
+  const hasTbl = id !== 'all' && tableItems().some(x => x.unit === id);
   app.innerHTML = `
   <span class="uicon" >${I(unitIcon(id))}</span>
   <h1 class="ptitle">${esc(unitName(id))}</h1>
@@ -2304,33 +2332,38 @@ function renderUnit(id){
     <button role="tab" data-act="umode" data-v="learn" aria-pressed="${mode === 'learn'}" aria-selected="${mode === 'learn'}">${I('cards')}覚える</button>
     <button role="tab" data-act="umode" data-v="quiz" aria-pressed="${mode === 'quiz'}" aria-selected="${mode === 'quiz'}">${I('list')}問題を解く</button>
   </div>
-  ${mode === 'learn' ? learnSection(id) : `
-  <section class="sect">
-    <h2 class="stitle">問題を解く</h2>
+  ${mode === 'learn' ? learnSection(id) : quizSection(id)}
+  <div class="foot btnrow" style="justify-content:center">
+    <button class="textbtn" data-act="unitDict">${I('book')}図鑑</button>
+    ${hasTbl ? `<button class="textbtn" data-act="tablesFor" data-u="${esc(id)}">${I('grid')}表</button>` : ''}
+  </div>`;
+}
+/* 単元ページの「問題を解く」：分野ごとの行だけを並べる（分野を選ぶと出題の設定へ） */
+function quizSection(id){
+  const qs = inUnit(QUESTIONS, id), evs = inUnit(EVENTS, id), sf = staffOf(id), dv = devOf(id);
+  const cq = countB('q', qs), ce = countB('e', evs), cs = countB('s', [...sf, ...sselOf(id)]), cd = countB('d', dv);
+  const reviewN = WEAK.reduce((n, b) => n + cq[b] + ce[b] + cs[b] + cd[b], 0);
+  const GS = id === 'all' ? [] : catsFor('quiz', id), byGenre = qs.length && (dv.length || GS.length > 1);
+  const bar = x => `<span class="mbar"><span class="pbar sm">${x.correct ? `<i class="p-ok" style="flex:${x.correct}"></i>` : ''}${x.weak ? `<i class="p-weak" style="flex:${x.weak}"></i>` : ''}${x.new ? `<i class="p-new" style="flex:${x.new}"></i>` : ''}</span></span>`;
+  const progRow = (act, v, icon, title, parts, its) => { const x = progC(its);
+    return `<button class="mrow urow" data-act="${act}" data-v="${esc(v)}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${esc(title)}<span class="upct">${x.pct}%</span></span><span class="ms">${parts}${x.weak ? `　苦手 ${x.weak}` : ''}</span>${bar(x)}</span>${I('chev', 'mchev')}</button>`; };
+  const partsOf = its => uniq(its.map(i => i.kind)).map(k => `${k === '語句' ? '4択' : k} ${its.filter(i => i.kind === k).length}`).join('・');
+  const row = (act, icon, title, sub, cls = '') => `<button class="mrow ${cls}" data-act="${act}"><span class="mi">${I(icon)}</span><span class="mtx"><span class="mt">${title}</span><span class="ms">${sub}</span></span>${I('chev', 'mchev')}</button>`;
+  if (!qs.length && !evs.length && !sf.length && !dv.length) return `<section class="sect"><p class="empty">まだ問題がありません</p></section>`;
+  const items = progressItems(id), c = progC(items);
+  return `<section class="sect">
     <div class="menu">
       ${byGenre ? GS.map(g => { const its = progressItems(id, g); return progRow('setupG', g, 'list', g, partsOf(its), its); }).join('')
         : qs.length ? row('setupQuiz', 'list', '4択問題', qs.some(q => q.type === 'rev') ? `説明→答え ${qs.filter(q => q.type !== 'rev').length}問・答え→説明 ${qs.filter(q => q.type === 'rev').length}問` : `${qs.length}問`) : ''}
       ${evs.length ? progRow('setupSort', '', 'hourglass', '年号並べ替え', `出来事 ${evs.length}`, evs.map(e => ({ b: bucket('e', e.id) }))) : ''}
       ${sf.length ? progRow('goStaff', '', 'building', '職員配置', `施設 ${sf.length}・施設を選ぶ ${sselOf(id).length}`, [...sf.map(f => ({ b: bucket('s', f.id) })), ...sselOf(id).map(x => ({ b: bucket('s', x.id) }))]) : ''}
-      ${dv.length || ut.length ? `<button class="mrow" data-act="goSheets" data-v="${esc(id)}"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">まとめ表を見る</span><span class="ms">図鑑の「まとめ表」：分野ごとの比較の表${dv.length ? '・まちがえやすいポイント' : ''}</span></span>${I('chev', 'mchev')}</button>` : ''}
-      ${reviewN && !byGenre ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない ${reviewN}件`, 'accent') : ''}
-      ${!qs.length && !evs.length && !sf.length && !dv.length ? `<p class="empty">まだ問題がありません</p>` : ''}
+      ${reviewN ? row('quickReview', 'retry', '苦手を復習', `不正解・わからない ${reviewN}件`, 'accent') : ''}
     </div>
   </section>
-  ${qs.length || evs.length || sf.length || dv.length ? `<section class="sect">
-    <div class="shead"><h2 class="stitle">進み具合 ${help('progress')}</h2>${qs.length || evs.length || dv.length ? `<button class="textbtn" data-act="unitList">振り分けを見る${I('chev')}</button>` : ''}</div>
-    ${(() => {
-      const items = progressItems(id);
-      if (id === 'all') return progressPanel(items, UNITS.map(u => ({ label: u.name, items: progressItems(u.id), unitWord: '件' })).filter(r => r.items.length));
-      if (byGenre) return progressPanel(items, GS.map(g => { const its = progressItems(id, g); const sub = uniq(its.map(x => x.kind)).map(k => { const x = progC(its.filter(i => i.kind === k)); return `${k === '語句' ? '4択' : k} ${x.correct}/${x.total}`; }).join('・'); return { label: g, items: its, unitWord: '件', sub }; }).concat(evs.length ? [{ label: '年号並べ替え', items: items.filter(i => i.kind === '年号'), unitWord: '件', sub: '' }] : [], sf.length ? [{ label: '職員配置', items: items.filter(i => i.kind === '職員配置'), unitWord: '施設', sub: '' }] : []));
-      return progressPanel(items, kindRows(items));
-    })()}
-  </section>` : ''}`}
-  <div class="foot btnrow" style="justify-content:center">
-    <button class="textbtn" data-act="unitDict">${I('book')}図鑑</button>
-    ${id !== 'all' ? `<button class="textbtn" data-act="unitAdd">${I('plus')}問題を追加</button>` : ''}
-    ${id !== 'all' ? `<button class="textbtn" data-act="unitEdit" data-v="${esc(id)}">${I('pen')}単元を編集</button>` : ''}
-  </div>`;
+  <section class="sect">
+    <div class="shead"><h2 class="stitle">進み具合 ${help('progress')}</h2><button class="textbtn" data-act="unitList">問題の一覧${I('chev')}</button></div>
+    ${progressPanel(items, [])}
+  </section>`;
 }
 
 /* =========================================================
@@ -2352,55 +2385,55 @@ function setupPool(kind, unit){
     ...ds.filter(x => B.has(bucket('d', x.id))).map(x => ({ type: dType(x.id), id: x.id }))];
   return { pool, c: sumC(countB('q', qs), countB('d', ds)), qn: qs.length, dn: ds.length };
 }
-/* 出題の設定：項目名とプルダウンを1行ずつ並べる。出題する問題だけは、振り分けをチェックで組み合わせる */
+/* 出題の設定：「どれを出すか」「何問か」の2つだけを前に出し、形式・向き・分野は「くわしい設定」にしまう */
 const sameSet = (B, bs) => bs.length === B.size && bs.every(b => B.has(b));
+const SCOPES = [['all', 'すべて', ORDER], ['weak', '苦手', WEAK], ['new', '未回答', ['new']]];
 function renderSetup(r){
   const kind = r.a, unit = r.u; state.unit = unit; useDV(unit);
   const S = state.setup, B = S.buckets[kind], cats = catsFor(kind, unit), sel = selectedCats(kind, unit);
-  const { pool, c } = setupPool(kind, unit);
-  const hasDev = kind === 'quiz' && devIn(unit).length > 0, form = hasDev ? (S.form || 'mix') : 'quiz';
-  const gCount = g => inUnit(QUESTIONS, unit).filter(q => genreOf(q.cat) === g && q.type !== 'rev').length + devIn(unit).filter(x => devGenre(x) === g).length;
-  const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
   const single = kind === 'quiz' && unit !== 'all' && cats.length > 1;
   if (single && sel.size !== 1) { const f = [...sel][0] || cats[0]; sel.clear(); sel.add(f); }
+  const hasDev = kind === 'quiz' && devIn(unit).length > 0, form = hasDev ? (S.form || 'mix') : 'quiz';
   const hasRev = kind === 'quiz' && form !== 'ox' && inUnit(QUESTIONS, unit).some(q => q.type === 'rev' && sel.has(genreOf(q.cat)));
-  const { pool: pool2, c: c2 } = single ? setupPool(kind, unit) : { pool, c };
+  const { pool, c } = setupPool(kind, unit);
   const catVal = sel.size === cats.length && !single ? '' : [...sel][0];
+  const opt = (v, l, cur) => `<option value="${esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(l)}</option>`;
+  const nOf = { all: c.total, weak: c.unknown + c.wrong, new: c.new };
+  const scopeNow = (SCOPES.find(s => sameSet(B, s[2])) || [])[0] || '';
   let n, can, label;
   if (kind === 'quiz') {
-    n = S.count === 'all' ? pool2.length : Math.min(S.count, pool2.length);
+    n = S.count === 'all' ? pool.length : Math.min(S.count, pool.length);
     can = n > 0; label = can ? `${n}問をはじめる` : B.size ? '該当する問題がありません' : '出題する問題を選んでください';
   } else {
     can = pool.length > 0 && uniq(inUnit(EVENTS, unit).map(e => e.year)).length >= 3;
     label = can ? `${S.sets}セットをはじめる` : B.size ? '該当する出来事がありません' : '出題する問題を選んでください';
   }
+  const segBtn = (act, v, l, on, n) => `<button type="button" role="radio" aria-pressed="${on}" data-act="${act}" data-v="${v}">${l}${n != null ? `<span class="segn">${n}</span>` : ''}</button>`;
+  const more = [
+    hasDev ? `<label class="frow"><span>問題の形式</span><select class="sel" id="sForm">${FORMS.map(([v, l]) => opt(v, l, form)).join('')}</select></label>` : '',
+    hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : '',
+    cats.length > 1 && !single ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : '',
+    kind === 'sort' ? `<label class="frow"><span>1セットの数</span><select class="sel" id="sSize">${[5, 6, 7, 8, 9, 10].map(v => opt(v, `${v}個`, S.size)).join('')}</select></label>` : ''
+  ].filter(Boolean).join('');
   app.innerHTML = `
-  <h1 class="ptitle">${kind === 'quiz' ? (single ? esc(catVal) : hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'} ${help('buckets')}</h1>
-  ${single ? `<p class="psub">${esc(unitName(unit))}　この分野の4択${hasDev ? 'と○×' : ''}だけを出します</p>` : hasDev ? `<p class="psub">${esc(unitName(unit))}　分野を選ぶと、その分野の4択と○×をまとめて出します</p>` : ''}
-  ${single ? `<div class="gseg" role="radiogroup" aria-label="分野" style="margin-top:14px">${cats.map(g => `<button type="button" role="radio" aria-pressed="${catVal === g}" data-act="sgenre" data-v="${esc(g)}">${esc(g)}</button>`).join('')}</div>
-    ${hasDev ? `<div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="devTable" data-g="${esc(catVal)}">${I('book')}${esc(catVal)}の早見表を見る</button></div>`
-      : unitTblKeys(unit).some(k => unitTables()[k].genre === catVal) ? `<div class="btnrow" style="justify-content:flex-start"><button class="textbtn" data-act="goSheets" data-v="${esc(unit)}">${I('book')}${esc(catVal)}のまとめ表を見る</button></div>` : ''}` : ''}
-  ${cats.length > 1 && hasDev && !single ? `<h2 class="stitle" style="margin:20px 0 8px">分野</h2><div class="gpick" role="radiogroup" aria-label="分野">${['', ...cats].map(g => `<button type="button" role="radio" aria-checked="${catVal === g}" data-act="sgenre" data-v="${esc(g)}"><b>${esc(g || 'すべての分野')}</b>${g ? `<small>${gCount(g)}問</small>` : ''}</button>`).join('')}</div>` : ''}
-  <div class="flist" style="margin-top:16px">
-    ${hasDev ? `<label class="frow"><span>問題の形式</span><select class="sel" id="sForm">${FORMS.map(([v, l]) => opt(v, l, form)).join('')}</select></label>` : ''}
-    ${hasRev ? `<label class="frow"><span>出題の向き</span><select class="sel" id="sDir">${DIRS.map(([v, l]) => opt(v, l, S.dir)).join('')}</select></label>` : ''}
-    <div class="bpick" role="group" aria-labelledby="bpickL">
-      <div class="bpick-h"><span id="bpickL">出題する問題</span>
-        <div class="bquick">
-          <button type="button" data-act="sall" aria-pressed="${sameSet(B, ORDER)}">すべて</button>
-          <button type="button" data-act="sreview" aria-pressed="${sameSet(B, WEAK)}">苦手</button>
-        </div>
-      </div>
-      <div class="blist">${ORDER.map(b => `<button type="button" class="bopt b-${b}${c2[b] ? '' : ' zero'}" role="checkbox" aria-checked="${B.has(b)}" data-act="sbucket" data-v="${b}"><span class="bx">${I('check')}</span><span class="bl">${BL[b]}</span><span class="bn">${c2[b]}</span></button>`).join('')}</div>
-    </div>
-    ${cats.length > 1 && !hasDev && !single ? `<label class="frow"><span>${kind === 'quiz' ? '分野' : '時代'}</span><select class="sel" id="sCat">${opt('', kind === 'quiz' ? 'すべての分野' : 'すべての時代', catVal)}${cats.map(x => opt(x, x, catVal)).join('')}</select></label>` : ''}
-    ${kind === 'quiz'
-      ? `<label class="frow"><span>問題数</span><select class="sel" id="sCount">${[10, 20, 30, 'all'].map(v => opt(v, v === 'all' ? 'すべて' : `${v}問`, S.count)).join('')}</select></label>`
-      : `<label class="frow"><span>セット数</span><select class="sel" id="sSets">${[3, 5, 10].map(v => opt(v, `${v}セット`, S.sets)).join('')}</select></label>
-         <label class="frow"><span>1セットの数</span><select class="sel" id="sSize">${[5, 6, 7, 8, 9, 10].map(v => opt(v, `${v}個`, S.size)).join('')}</select></label>`}
-  </div>
-  <div class="actionbar static"><button class="btn primary block" data-act="startSetup" ${can ? '' : 'disabled'}>${label}</button>
-    <button class="btn block ql-btn" data-act="goQList" data-k="${kind}" data-u="${esc(unit)}">${I('list')}解く問題を一覧で見る</button></div>`;
+  <p class="psub" style="margin:0 0 4px">${esc(unitName(unit))}</p>
+  <h1 class="ptitle">${kind === 'quiz' ? (single ? esc(catVal) : hasDev ? '問題を解く' : '4択問題') : '年号並べ替え'}</h1>
+  <section class="sect" style="margin-top:22px">
+    <h2 class="stitle">出題する問題</h2>
+    <div class="seg" role="radiogroup" aria-label="出題する問題">${SCOPES.map(([v, l]) => segBtn('sscope', v, l, scopeNow === v, nOf[v])).join('')}</div>
+  </section>
+  <section class="sect" style="margin-top:20px">
+    <h2 class="stitle">${kind === 'quiz' ? '問題数' : 'セット数'}</h2>
+    <div class="seg" role="radiogroup" aria-label="${kind === 'quiz' ? '問題数' : 'セット数'}">${kind === 'quiz'
+      ? [10, 20, 'all'].map(v => segBtn('scount', v, v === 'all' ? 'すべて' : `${v}問`, String(S.count) === String(v))).join('')
+      : [3, 5, 10].map(v => segBtn('ssets', v, `${v}セット`, S.sets === v)).join('')}</div>
+  </section>
+  ${more ? `<details class="more"><summary>くわしい設定${I('chevD')}</summary><div class="flist">${more}</div></details>` : ''}
+  <div class="actionbar static" style="margin-top:28px"><button class="btn primary block" data-act="startSetup" ${can ? '' : 'disabled'}>${label}</button></div>
+  <div class="foot btnrow" style="justify-content:center">
+    <button class="textbtn" data-act="goQList" data-k="${kind}" data-u="${esc(unit)}">${I('list')}問題を一覧で見る</button>
+    ${tableItems().some(x => x.unit === unit) ? `<button class="textbtn" data-act="tablesFor" data-u="${esc(unit)}" data-g="${esc(catVal)}">${I('grid')}表を見る</button>` : ''}
+  </div>`;
 }
 
 /* =========================================================
@@ -2750,11 +2783,9 @@ function renderStaffHome(){
       <button class="mrow" data-act="staffTable"><span class="mi">${I('book')}</span><span class="mtx"><span class="mt">早見表</span><span class="ms">全施設の一覧と覚えるコツ</span></span>${I('chev', 'mchev')}</button>
     </div>
   </section>
-  ${sselAll().length ? `<section class="sect">
-    <div class="shead"><h2 class="stitle">職種から施設を選ぶ</h2><button class="textbtn" data-act="sselAll">まとめて解く${I('chev')}</button></div>
-    <p class="hint" style="margin:-4px 0 8px">例：「嘱託医」を必ず置く施設をすべて選ぶ。すべての施設が並びます</p>
-    <div class="menu">${sselAll().map(x => { const b = bucket('s', x.id); return `<button class="mrow" data-act="qiSolve" data-k="ssel" data-v="${esc(x.id)}"><span class="mtx"><span class="mt">${rb(x.s.name)}<small class="sscale">${{ must: '必置', cond: '条件によって配置', opt: '置かなくてもよい' }[x.code]}</small></span><span class="ms"><span class="dot b-${b}"></span> ${BL[b]}</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>
-  </section>` : ''}
+  ${sselAll().length ? `<section class="sect"><div class="menu">
+      <button class="mrow" data-act="sselAll"><span class="mi">${I('check')}</span><span class="mtx"><span class="mt">職種から施設を選ぶ</span><span class="ms">例：「嘱託医」を必ず置く施設をすべて選ぶ・${sselAll().length}問まとめて</span></span>${I('chev', 'mchev')}</button>
+    </div></section>` : ''}
   <section class="sect">
     <h2 class="stitle">施設を選んで解く</h2>
     <div class="menu">${fs.map(f => { const b = bucket('s', f.id); return `<button class="mrow" data-act="staffOne" data-v="${esc(f.id)}"><span class="mtx"><span class="mt">${rb(f.name)}${f.scale ? `<small class="sscale">${esc(f.scale)}</small>` : ''}</span><span class="ms"><span class="dot b-${b}"></span> ${BL[b]}</span></span>${I('chev', 'mchev')}</button>`; }).join('')}</div>
@@ -2892,18 +2923,42 @@ try { indexedDB.deleteDatabase('hoikushi-anki-photos'); } catch (_) {}
  * ========================================================= */
 /* ○×チェックのデータは単元ごと（子どもの保健＝kodomo-hattatsu.js の DEVCHECK、社会的養護＝shakai-yogo.js の DEVCHECKS など）。
  *   DV は「いま開いている単元」のデータ。単元ページ・出題・早見表を開くときに useDV / syncDV で切り替える */
-const DVS = [window.DEVCHECK, ...(window.DEVCHECKS || [])].filter(Boolean);
+/* 同じ単元の DEVCHECKS を複数のファイルに分けて書いても、1つに合体させる（areas・checks・orders・matches・tips は足し、tables は合わせる） */
+const DVS = (() => {
+  const out = [];
+  for (const d of [window.DEVCHECK, ...(window.DEVCHECKS || [])].filter(Boolean)) {
+    const e = out.find(x => x.unit === d.unit);
+    if (!e) { out.push(d); continue; }
+    for (const k of ['areas', 'checks', 'orders', 'matches', 'tips', 'periods']) if (d[k]) e[k] = (e[k] || []).concat(d[k]);
+    if (d.tables) e.tables = Object.assign(e.tables || {}, d.tables);
+  }
+  return out;
+})();
 for (const d of DVS) { d.checks = d.checks || []; d.orders = d.orders || []; d.matches = d.matches || []; d.tables = d.tables || {}; d.areas = d.areas || []; d.tips = d.tips || []; }
 let DV = DVS[0] || null;
 const dvOf = u => DVS.find(d => d.unit === u) || null;
 const useDV = u => { const d = dvOf(u); if (d) DV = d; return d; };
 const dvItems = d => [...d.matches, ...d.checks, ...d.orders];
+/* 一覧○×：rows（名前・正しい値・まちがいの候補）から、出題のたびに正誤をランダムに組み直す。
+ *   { id, area, title, list:true, fmt:'{n}の接種回数は{v}', lrows:[{n, v, x:[誤りの候補...], why}] } */
+function relist(x){
+  const rows = x.lrows, n = rows.length;
+  let flags;
+  do { flags = rows.map(() => Math.random() < 0.5); } while (n > 1 && (flags.every(Boolean) || !flags.some(Boolean)));
+  x.items = rows.map((r, i) => {
+    const ok = flags[i] || !(r.x && r.x.length);
+    const val = ok ? r.v : r.x[Math.floor(Math.random() * r.x.length)];
+    return { s: x.fmt.replace('{n}', r.n).replace('{v}', val), ok, fix: ok ? '' : (x.fixFmt || '{n}は{v}').replace('{n}', r.n).replace('{v}', r.v), why: r.why || '' };
+  });
+  return x;
+}
+for (const d of DVS) for (const x of d.checks) if (x.list) relist(x);
 /* ○×・並べ替えにも付属の解説（条文など）を重ねる */
 for (const d of DVS) { const K = ((window.KAISETSU || {})[d.unit] || {}).checks || {}; for (const x of dvItems(d)) if (K[x.id]) { const { items, ...rest } = K[x.id]; Object.assign(x, rest); if (items) items.forEach((it, i) => { if (it && x.items[i]) Object.assign(x.items[i], it); }); } }
 let _dvIdx = null;
 const dvOfItem = id => { if (!_dvIdx) { _dvIdx = new Map(); for (const d of DVS) for (const x of dvItems(d)) _dvIdx.set(x.id, { d, x }); } return (_dvIdx.get(id) || {}).d || null; };
 const dUnitOf = id => (dvOfItem(id) || {}).unit || '';
-const ABC = 'ABCDEFGHIJ';
+const ABC = 'ABCDEFGHIJKLMNOPQRST';
 const isDevUnit = id => !!dvOf(id) && unitById.has(id);
 const devOf = id => isDevUnit(id) ? dvItems(dvOf(id)) : [];
 const dFind = (id, k) => { const d = dvOfItem(id); return d ? d[k].find(x => x.id === id) : undefined; };
@@ -2919,20 +2974,66 @@ const unitTables = () => _uTbl || (_uTbl = Object.fromEntries((window.UNITS || [
 const unitTblKeys = id => Object.keys(unitTables()).filter(k => unitTables()[k].unit === id && unitById.has(id));
 const bundleUnit = id => (window.UNITS || []).find(u => u.id === id) || {};
 const dTbl = key => { for (const d of DVS) if (d.tables[key]) return d.tables[key]; return unitTables()[key]; };
-/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.21.0〜 hl に統一） */
+/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.22.0〜 hl に統一） */
 function rbL(text){ return hl(text); }
-/* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部） */
+/* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部）
+ *   スマホで見比べやすいように：
+ *   ・1列目（項目名）を左に固定して、表のまま横にそろえる
+ *   ・「見る列」のボタンで、比べたい列だけを残せる（項目名＋その列の2列になるので、スマホでも読みやすい）
+ *   ・行の左のチェックを2〜4つ入れて「比べる」を押すと、選んだ項目を横並びにして、特徴ごとに比べられる */
 function tblHTML(spec, match){
   const [key, from, to] = Array.isArray(spec) ? spec : [spec], t = dTbl(key); if (!t) return '';
-  let rows = match ? t.rows.filter(match) : t.rows;
-  if (from) { const a = rows.findIndex(r => r[0] === from), b = to ? rows.findIndex(r => r[0] === to) : rows.length - 1; if (a >= 0 && b >= a) rows = rows.slice(a, b + 1); }
-  const wide = t.cols.length > 2;
-  /* スマホでは1行を1枚のカードにして、見出し（1列目）の下に列名つきで並べる */
-  const cards = `<div class="ccards">${rows.map(r => `<div class="cc"><div class="cch">${rbL(r[0])}</div>${r.slice(1).map((c, k) => c ? (t.cols.length > 2
-      ? `<div class="ccr"><span class="ccl">${esc(t.cols[k + 1])}</span><span class="ccv">${rbL(c)}</span></div>`
-      : `<div class="ccv solo">${rbL(c)}</div>`) : '').join('')}</div>`).join('')}</div>`;
-  return `${cards}<div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${t.cols.length}"><thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rbL(c)}</th>` : `<td>${c ? rbL(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${t.note ? `<p class="hint" style="margin-top:8px">${rbL(t.note)}</p>` : ''}`;
+  let idx = t.rows.map((_, i) => i);
+  if (match) idx = idx.filter(i => match(t.rows[i]));
+  if (from) { const a = idx.findIndex(i => t.rows[i][0] === from), b = to ? idx.findIndex(i => t.rows[i][0] === to) : idx.length - 1; if (a >= 0 && b >= a) idx = idx.slice(a, b + 1); }
+  const nc = t.cols.length, wide = nc > 2, pick = wide && idx.length >= 3;
+  const colBtns = wide ? `<div class="tcols" role="group" aria-label="見る列"><span class="tcl">見る列</span><button type="button" data-act="tcol" data-v="all" aria-pressed="true">すべて</button>${t.cols.slice(1).map((c, k) => `<button type="button" data-act="tcol" data-v="${k + 1}" aria-pressed="false">${esc(c)}</button>`).join('')}</div>` : '';
+  const head = t.cols.map((c, k) => `<th scope="col" data-c="${k}">${esc(c)}</th>`).join('');
+  const body = idx.map(i => { const r = t.rows[i];
+    return `<tr data-r="${i}">${r.map((c, k) => k === 0
+      ? `<th scope="row" data-c="0">${pick ? `<span class="rph"><button type="button" class="rpick" data-act="trow" aria-pressed="false" aria-label="比べる項目に入れる"><svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS.check}</svg></button><span>${rbL(c)}</span></span>` : rbL(c)}</th>`
+      : `<td data-c="${k}">${c ? rbL(c) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`; }).join('');
+  return `<div class="tview" data-tk="${esc(key)}" data-show="all">
+    ${colBtns}
+    ${pick ? `<div class="tcmpbar" hidden><span class="tcn"></span><button type="button" class="btn sm primary" data-act="tcmp">比べる</button><button type="button" class="textbtn" data-act="tclr">解除</button></div>` : ''}
+    <div class="ctw ${wide ? 'wide' : ''}"><table class="ctbl" style="--n:${nc}"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>
+    <div class="tcmpview" hidden></div>
+    ${t.note ? `<p class="hint" style="margin-top:8px">${rbL(t.note)}</p>` : ''}
+  </div>`;
+}
+/* 表の操作（列を絞る・行を選ぶ・比べる） */
+function tviewOf(el){ return el.closest('.tview'); }
+function tviewSync(v){
+  const sel = [...v.querySelectorAll('tbody tr.sel')], bar = v.querySelector('.tcmpbar');
+  if (!bar) return;
+  bar.hidden = sel.length === 0;
+  bar.querySelector('.tcn').textContent = `${sel.length}つ選択中`;
+  bar.querySelector('[data-act="tcmp"]').disabled = sel.length < 2;
+}
+function tviewCompare(v){
+  const t = dTbl(v.dataset.tk), sel = [...v.querySelectorAll('tbody tr.sel')].map(tr => t.rows[+tr.dataset.r]);
+  if (sel.length < 2) { toast('比べる項目を2つ以上選んでください'); return; }
+  const cols = t.cols.map((c, k) => k).slice(1);
+  v.querySelector('.tcmpview').innerHTML = `<div class="ctw"><table class="ctbl cmp" style="--n:${sel.length + 1}"><thead><tr><th scope="col"></th>${sel.map(r => `<th scope="col">${rbL(r[0])}</th>`).join('')}</tr></thead>
+    <tbody>${cols.map(k => `<tr><th scope="row">${esc(t.cols[k])}</th>${sel.map(r => `<td>${r[k] ? rbL(r[k]) : '<span class="nil">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <button type="button" class="btn block" style="margin-top:10px" data-act="tclr">${I('chevL')}表にもどる</button>`;
+  v.classList.add('comparing');
+  v.querySelector('.tcmpview').hidden = false;
+}
+function tviewAction(act, el){
+  const v = tviewOf(el); if (!v) return;
+  if (act === 'tcol') { v.dataset.show = el.dataset.v; v.querySelectorAll('.tcols button').forEach(b => b.setAttribute('aria-pressed', String(b === el))); }
+  else if (act === 'trow') {
+    const tr = el.closest('tr'), on = !tr.classList.contains('sel');
+    if (on && v.querySelectorAll('tbody tr.sel').length >= 4) { toast('比べられるのは4つまでです'); return; }
+    tr.classList.toggle('sel', on); el.setAttribute('aria-pressed', String(on)); tviewSync(v);
+  }
+  else if (act === 'tcmp') tviewCompare(v);
+  else if (act === 'tclr') {
+    v.classList.remove('comparing'); v.querySelector('.tcmpview').hidden = true; v.querySelector('.tcmpview').innerHTML = '';
+    v.querySelectorAll('tbody tr.sel').forEach(tr => { tr.classList.remove('sel'); const b = tr.querySelector('.rpick'); if (b) b.setAttribute('aria-pressed', 'false'); });
+    tviewSync(v);
+  }
 }
 const tblTitle = spec => { const k = Array.isArray(spec) ? spec[0] : spec; return dTbl(k)?.title || ''; };
 /* 解答後の「比較の表」。最初の1つは開いておく */
@@ -2978,7 +3079,7 @@ function renderDevHome(){
 
 /* ---------- ○× ---------- */
 function renderDevCheck(it){
-  const s = dCheck(it.id);
+  const s = dCheck(it.id); if (s.list) relist(s);
   state.round.cur = { type: 'dchk', id: s.id, ans: {}, done: false, ok: null, unsure: false };
   app.innerHTML = `
   <p class="meta"><span>${esc(unitName(dUnitOf(s.id)))}／${dKind(s)}</span>${prevTag('d', s.id)}</p>
@@ -3417,415 +3518,6 @@ function afterDataChange(){
  * ========================================================= */
 const unitOptions = (val, withNew = true) => `${UNITS.map(u => `<option value="${esc(u.id)}" ${val === u.id ? 'selected' : ''}>${esc(u.name)}</option>`).join('')}${withNew ? `<option value="__new" ${val === '__new' ? 'selected' : ''}>＋ 新しい単元を作る</option>` : ''}`;
 
-/* ---------- まとめて追加 ---------- */
-const TEMPLATE = `あなたは保育士試験の学習教材を作るアシスタントです。
-次のテーマについて、暗記アプリに取り込む問題を作ってください。
-
-【テーマ】ここに範囲を書く（例：保育所保育指針の「養護」に関する用語）
-【作る数】10件
-
-# ルール
-・下の【形式】のとおりに出力し、1件ごとに「---」だけの行で区切る
-・前置きやまとめなど、形式以外の文章は書かない
-・「問題」は答えの名前を含めず、意味や特徴から答えを導ける文にする
-・「要約」は1〜2文。ほかの問題で誤りの選択肢として表示されるので、それだけで意味が分かるように書く
-・同じ「分野」の用語が4つ以上になるようにする（誤りの選択肢に使うため）
-・「読み」には用語のよみがなをひらがなで書く（アプリでふりがなとして表示される）
-・人物のときは「国」に活動した国・地域、「生没年」に生まれた年と亡くなった年（例：1712–1778）を書く。はっきりしないときは「明治期」「1970年代に提唱」のように時期で書く
-・事実に自信がない内容は書かない
-
-# 形式（用語・人物）
-用語:
-読み:
-国:
-生没年:
-分野:
-要約:
-解説:
-問題:
-覚え方:
----
-
-# 形式（年号の出来事。年号並べ替え用。必要なときだけ）
-年:
-和暦:
-時代:
-出来事:
-解説:
----
-
-# 出力例
-用語: ルソー
-読み: るそー
-国: フランス
-生没年: 1712–1778
-分野: 西洋の人物
-要約: 18世紀フランスの思想家。『エミール』で消極教育を説き、「子どもの発見者」と呼ばれる。
-解説: 子どもを「小さな大人」ではなく独自の存在と捉えた。「自然に還れ」。
-問題: 『エミール』で、子どもの自然な成長を妨げるものから守る「消極教育」を説いた人物は？
-覚え方: エミール→ルソー→消極教育
----
-年: 1872
-和暦: 明治5
-時代: 明治
-出来事: 「学制」の制定
-解説: わが国初の近代的な学校制度。「国民皆学」を目指した。
----`;
-const KEYMAP = { '国': 'country', '国・地域': 'country', '地域': 'country', '生没年': 'life', '時期': 'life', '活動時期': 'life', '単元': 'unit', '用語': 'term', '人物': 'term', '見出し': 'term', '答え': 'term', '読み': 'kana', '分野': 'cat', '要約': 'summary', '解説': 'detail', '問題': 'q', '問題文': 'q', '覚え方': 'point', 'ポイント': 'point', '除外': 'exclude', 'メモ': 'memo', '年': 'year', '西暦': 'year', '和暦': 'era', '時代': 'group', '出来事': 'title' };
-const toHalf = s => String(s || '').replace(/[０-９]/g, d => String('０１２３４５６７８９'.indexOf(d)));
-function parseText(text){
-  const blocks = [[]];
-  for (const ln of String(text || '').replace(/\r\n?/g, '\n').split('\n')) {
-    if (/^\s*([-ー―=＝]\s*){3,}\s*$/.test(ln)) blocks.push([]); else blocks[blocks.length - 1].push(ln);
-  }
-  const items = [], errors = [];
-  blocks.forEach((bl, bi) => {
-    const o = {}; let last = null;
-    for (const raw of bl) {
-      if (/^\s*```/.test(raw) || /^\s*#/.test(raw)) continue;
-      const ln = raw.replace(/\*\*/g, '').replace(/^\s*(?:[-*・]\s+)/, '');
-      const m = ln.match(/^\s*[【\[]?\s*([^:：\]】\s]{1,5})\s*[\]】]?\s*[:：]\s*(.*)$/);
-      if (m && KEYMAP[m[1]]) {
-        const k = KEYMAP[m[1]], v = m[2].trim();
-        if (k === 'q') o.q = [...(o.q || []), v]; else o[k] = v;
-        last = k; continue;
-      }
-      const t = ln.trim();
-      if (!t || !last) continue;
-      if (last === 'q') o.q[o.q.length - 1] = (o.q[o.q.length - 1] ? o.q[o.q.length - 1] + '\n' : '') + t;
-      else o[last] = (o[last] ? o[last] + '\n' : '') + t;
-    }
-    if (o.q) o.q = o.q.map(s => s.trim()).filter(Boolean);
-    clean(o);
-    if (!Object.keys(o).length) return;
-    const no = items.length + errors.length + 1;
-    if (o.year || o.title) {
-      const y = parseInt((toHalf(o.year).match(/\d{3,4}/) || [])[0], 10);
-      if (!y || !o.title) { errors.push(`${no}件目：年号の出来事には「年」と「出来事」が必要です`); return; }
-      items.push(clean({ kind: 'event', year: y, era: o.era, group: o.group, title: o.title, explanation: o.detail || o.summary, unitName: o.unit, memo: o.memo }));
-    } else {
-      if (!o.term || !o.summary) { errors.push(`${no}件目${o.term ? `（${o.term}）` : ''}：「用語」と「要約」が必要です`); return; }
-      items.push(clean({ kind: 'term', term: o.term, kana: o.kana, country: o.country, life: o.life, cat: o.cat || 'その他', summary: o.summary, detail: o.detail,
-        q: o.q ? (o.q.length === 1 ? o.q[0] : o.q) : undefined, point: o.point,
-        exclude: o.exclude ? o.exclude.split(/[、,，]/).map(s => s.trim()).filter(Boolean) : undefined, unitName: o.unit, memo: o.memo }));
-    }
-  });
-  return { items, errors };
-}
-/* 取り込み（まとめて・1件ずつ・付属ファイル、どれもここを通る） */
-function addItems(items, target, newName){
-  const created = {};
-  const unitFor = (name, preset) => {
-    if (preset) {   // 付属ファイルの単元
-      if (!U.units.some(u => u.id === preset.id)) U.units.push({ id: preset.id, name: preset.name, desc: preset.desc || '', icon: preset.icon || 'book' });
-      return preset.id;
-    }
-    if (!name) return targetUnit();
-    const u = U.units.find(x => x.name === name);
-    if (u) return u.id;
-    if (!created[name]) { const id = 'u' + uid(); U.units.push({ id, name, desc: '', icon: 'book' }); created[name] = id; }
-    return created[name];
-  };
-  let tgt = target;
-  const targetUnit = () => { if (tgt === '__new') tgt = unitFor((newName || '').trim() || '新しい単元'); return tgt; };
-  const haveT = new Set(U.terms.map(t => t.unit + '::' + t.term)), haveK = new Set(U.terms.map(t => t.key));
-  const haveE = new Set(U.events.map(e => e.unit + '::' + e.year + e.title)), haveId = new Set(U.events.map(e => e.id));
-  let added = 0, skipped = 0;
-  for (const it of items) {
-    const unit = unitFor(it.unitName, it.unitPreset);
-    const { kind, memo, unitName: _n, unitPreset: _p, sel: _s, key: k0, id: i0, ...rest } = it;
-    if (kind === 'term') {
-      if (haveT.has(unit + '::' + it.term)) { skipped++; continue; }
-      const key = k0 && !haveK.has(k0) ? k0 : unit + '::@' + uid();
-      U.terms.push(clean({ ...rest, key, unit })); haveT.add(unit + '::' + it.term); haveK.add(key);
-      if (kanaOk(it) && !U.ruby[it.term]) U.ruby[it.term] = it.kana.replace(/\s+/g, '');
-      if (memo) U.memos['k:' + key] = memo;
-    } else {
-      if (haveE.has(unit + '::' + it.year + it.title)) { skipped++; continue; }
-      const id = i0 && !haveId.has(i0) ? i0 : 'ue' + uid();
-      U.events.push(clean({ ...rest, id, unit })); haveE.add(unit + '::' + it.year + it.title); haveId.add(id);
-      if (memo) U.memos['e:' + id] = memo;
-    }
-    added++;
-  }
-  saveU(); buildData();
-  return { added, skipped, unit: tgt };
-}
-function bulkPreviewHTML(){
-  const B = state.bulk;
-  if (!B.text.trim()) return '';
-  const { items, errors } = parseText(B.text);
-  const nT = items.filter(x => x.kind === 'term').length, nE = items.length - nT;
-  return `<div class="pv"><b>読み取れた内容</b>
-    <p style="margin:4px 0 0">用語・問題 ${nT}件／年号 ${nE}件</p>
-    ${errors.length ? `<ul class="err">${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : ''}</div>`;
-}
-function renderBulk(){
-  const B = state.bulk;
-  const n = B.text.trim() ? parseText(B.text).items.length : 0;
-  app.innerHTML = `
-  <h1 class="ptitle">まとめて追加 ${help('bulk')}</h1>
-  <div class="btns" style="margin-top:20px">
-    <button class="btn block" data-act="copyTpl">${I('copy')}AIへの指示をコピー</button>
-  </div>
-  <section class="fgroup">
-    <h2 class="stitle">AIの出力・テキスト</h2>
-    <textarea class="ta big" id="bulkText" placeholder="ここに貼り付け">${esc(B.text)}</textarea>
-    <div class="btnrow">
-      <label class="textbtn filebtn">${I('file')}テキストファイルを読み込む<input type="file" id="bulkFile" accept=".txt,.md,text/plain"></label>
-      <button class="textbtn" data-act="bulkClear">${I('x')}消去</button>
-    </div>
-    <div id="bulkPv">${bulkPreviewHTML()}</div>
-  </section>
-  <div class="actionbar static"><button class="btn primary block" id="bulkAdd" data-act="bulkCheck" ${n ? '' : 'disabled'}>${n ? `${n}件の内容を確認する` : '内容を確認する'}</button></div>`;
-}
-let bulkTimer = null;
-function onBulkInput(){
-  clearTimeout(bulkTimer);
-  bulkTimer = setTimeout(() => {
-    document.getElementById('bulkPv').innerHTML = bulkPreviewHTML();
-    const n = state.bulk.text.trim() ? parseText(state.bulk.text).items.length : 0;
-    const b = document.getElementById('bulkAdd');
-    b.disabled = !n; b.textContent = n ? `${n}件の内容を確認する` : '内容を確認する';
-  }, 250);
-}
-async function copyTemplate(){
-  try { await navigator.clipboard.writeText(TEMPLATE); toast('AIへの指示をコピーしました'); }
-  catch (_) {
-    openModal(`<h2 class="sheet-t">AIへの指示</h2><p class="hint">全体を選択してコピーしてください</p><textarea class="ta big" readonly id="tplArea">${esc(TEMPLATE)}</textarea>`);
-    const ta = document.getElementById('tplArea'); ta.focus(); ta.select();
-  }
-}
-
-/* ---------- 1件ずつ追加 ---------- */
-function renderOne(){
-  const O = state.one;
-  if (!O.unit || (O.unit !== '__new' && !unitById.has(O.unit))) O.unit = UNITS[0]?.id || '__new';
-  const f = O.f, cats = O.unit === '__new' ? [] : catsOfUnit(O.unit), groups = O.unit === '__new' ? [] : groupsOfUnit(O.unit);
-  app.innerHTML = `
-  <h1 class="ptitle">1件ずつ追加 ${help('one')}</h1>
-  <div class="seg" style="margin-top:20px">
-    <button data-act="oneKind" data-v="term" aria-pressed="${O.kind === 'term'}">用語・問題</button>
-    <button data-act="oneKind" data-v="event" aria-pressed="${O.kind === 'event'}">年号の出来事</button>
-  </div>
-  <form id="oneForm">
-    <div class="fld"><label for="oneUnit">追加先</label><select class="sel" id="oneUnit" data-f="unit">${unitOptions(O.unit)}</select>
-      ${O.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="oneNew" value="${esc(O.newName)}" placeholder="新しい単元の名前">` : ''}</div>
-    ${O.kind === 'term' ? `
-      ${fld('答え（用語・人物）', 'term', f.term || '', 'inp', true)}
-      ${fld('読み', 'kana', f.kana || '', 'inp', false, null, 'ひらがな（ふりがなになります）')}
-      ${fld('国・地域', 'country', f.country || '', 'inp', false, null, '人物のとき 例：フランス')}
-      ${fld('生没年・時期', 'life', f.life || '', 'inp', false, null, '人物のとき 例：1712–1778')}
-      ${fld('問題文', 'q', f.q || '', 'ta', false, null, '答えの名前を含めずに書く')}
-      ${fld('要約', 'summary', f.summary || '', 'ta', true, null, '誤りの選択肢になったときにも表示されます')}
-      ${fld('解説', 'detail', f.detail || '', 'ta')}
-      ${fld('覚え方', 'point', f.point || '', 'ta')}
-      ${fld('分野', 'cat', f.cat || '', 'inp', false, cats, cats[0] || '例：西洋の人物')}` : `
-      ${fld('出来事', 'title', f.title || '', 'ta', true)}
-      ${fld('年（西暦）', 'year', f.year || '', 'num', true, null, '例：1872')}
-      ${fld('和暦', 'era', f.era || '', 'inp', false, null, '例：明治5')}
-      ${fld('解説', 'explanation', f.explanation || '', 'ta')}
-      ${fld('時代', 'group', f.group || '', 'inp', false, groups)}`}
-    <div class="actionbar static"><button type="submit" class="btn primary block">追加する</button></div>
-  </form>`;
-}
-function submitOne(){
-  const O = state.one, f = O.f;
-  let item;
-  if (O.kind === 'term') {
-    if (!(f.term || '').trim() || !(f.summary || '').trim()) { toast('答えと要約は必須です'); return; }
-    const qs = (f.q || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
-    item = clean({ kind: 'term', term: f.term.trim(), kana: (f.kana || '').trim(), country: (f.country || '').trim(), life: (f.life || '').trim(), cat: (f.cat || '').trim() || 'その他', summary: f.summary.trim(),
-      detail: (f.detail || '').trim(), point: (f.point || '').trim(), q: qs.length > 1 ? qs : qs[0] });
-  } else {
-    const y = parseInt(toHalf(f.year), 10);
-    if (!(f.title || '').trim() || !y) { toast('出来事と年は必須です'); return; }
-    item = clean({ kind: 'event', title: f.title.trim(), year: y, era: (f.era || '').trim(), explanation: (f.explanation || '').trim(), group: (f.group || '').trim() });
-  }
-  const r = addItems([item], O.unit, O.newName);
-  if (!r.added) { toast('同じ内容がすでにあります'); return; }
-  if (O.unit === '__new') O.unit = r.unit;
-  O.f = O.kind === 'term' ? { cat: f.cat } : { group: f.group };
-  render(cur(), true); toast('追加しました');
-}
-
-/* ---------- 追加・編集・メモした問題 ---------- */
-
-/* ---------- ふりがなの辞書 ---------- */
-
-/* =========================================================
- * つまんで並べ替え（参考：My手帳のタグの編集）
- *   右端のつまみを押さえて上下に動かす。動かしている行は指について影が付き、
- *   またぐことになる行はその場でひとつぶん寄る。離したところで並びが決まる
- * ========================================================= */
-const REORDER = {
-  sort: (from, to) => { const o = state.round.cur.order; const [m] = o.splice(from, 1); o.splice(to, 0, m); drawSortList(); },
-  units: (from, to) => { const [m] = U.units.splice(from, 1); U.units.splice(to, 0, m); saveU(); buildData(); render(cur(), true); }
-};
-let drag = null;
-document.addEventListener('pointerdown', e => {
-  const h = e.target.closest('.grip'), list = h && h.closest('[data-reorder]');
-  if (!list || e.button > 0) return;
-  e.preventDefault();
-  const rows = [...list.children], row = h.closest('[data-reorder] > *'), from = rows.indexOf(row);
-  if (from < 0) return;
-  const rects = rows.map(r => r.getBoundingClientRect());
-  const step = from + 1 < rects.length ? rects[from + 1].top - rects[from].top : (from > 0 ? rects[from].top - rects[from - 1].top : rects[from].height);
-  drag = { list, rows, row, from, to: from, y0: e.clientY, sy0: scrollY, y: e.clientY, rects, step, raf: 0 };
-  try { h.setPointerCapture(e.pointerId); } catch (_) {}
-  row.classList.add('lifting'); list.classList.add('reordering');
-  navigator.vibrate?.(8);
-  const loop = () => {   // 端に近づいたら画面を送る
-    if (!drag) return;
-    const edge = 72; let v = 0;
-    if (drag.y < edge) v = -Math.ceil((edge - drag.y) / 6); else if (drag.y > innerHeight - edge) v = Math.ceil((drag.y - innerHeight + edge) / 6);
-    if (v) { scrollBy(0, v); moveDrag(); }
-    drag.raf = requestAnimationFrame(loop);
-  };
-  drag.raf = requestAnimationFrame(loop);
-});
-function moveDrag(){
-  const d = drag, dy = d.y - d.y0 + (scrollY - d.sy0);
-  const mid = d.rects[d.from].top + d.rects[d.from].height / 2 + dy;
-  let to = d.from;
-  d.rects.forEach((r, k) => {
-    if (k === d.from) return;
-    const m = r.top + r.height / 2;
-    if (k < d.from && mid < m) to = Math.min(to, k);
-    if (k > d.from && mid > m) to = Math.max(to, k);
-  });
-  d.to = to;
-  d.row.style.transform = `translateY(${dy}px)`;
-  d.rows.forEach((r, k) => {
-    if (k === d.from) return;
-    let shift = 0;
-    if (to > d.from && k > d.from && k <= to) shift = -d.step;
-    if (to < d.from && k >= to && k < d.from) shift = d.step;
-    r.style.transform = shift ? `translateY(${shift}px)` : '';
-  });
-}
-document.addEventListener('pointermove', e => { if (!drag) return; drag.y = e.clientY; moveDrag(); });
-function endDrag(apply){
-  const d = drag; if (!d) return;
-  drag = null; cancelAnimationFrame(d.raf);
-  d.rows.forEach(r => { r.style.transform = ''; });
-  d.row.classList.remove('lifting'); d.list.classList.remove('reordering');
-  if (apply && d.to !== d.from) REORDER[d.list.dataset.reorder](d.from, d.to);
-}
-document.addEventListener('pointerup', () => endDrag(true));
-document.addEventListener('pointercancel', () => endDrag(false));
-/* キーボードでも動かせる（つまみで上下の矢印） */
-document.addEventListener('keydown', e => {
-  const h = e.target.closest?.('.grip'), list = h && h.closest('[data-reorder]');
-  if (!list || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
-  e.preventDefault();
-  const rows = [...list.children], from = rows.indexOf(h.closest('[data-reorder] > *')), to = from + (e.key === 'ArrowUp' ? -1 : 1);
-  if (to < 0 || to >= rows.length) return;
-  const name = list.dataset.reorder;
-  REORDER[name](from, to);
-  document.querySelectorAll(`[data-reorder="${name}"] > *`)[to]?.querySelector('.grip')?.focus();
-});
-
-/* ---------- 取り込む内容の確認 ----------
-   AIが作った問題も、付属の問題ファイルも、必ずこの画面を通してから取り込む。
-   チェックで選び、押すと中身を直せる */
-function startImport(items, source, errors = []){
-  const I0 = { source, errors, unit: state.bulk.unit && unitById.has(state.bulk.unit) ? state.bulk.unit : (UNITS[0]?.id || '__new'), newName: '' };
-  I0.items = items.map(x => ({ ...x }));
-  state.imp = I0;
-  for (const it of I0.items) it.sel = !impDup(it);
-  go({ v: 'import' });
-}
-function impUnitId(it){
-  const I0 = state.imp;
-  if (it.unitPreset) return it.unitPreset.id;
-  if (it.unitName) { const u = U.units.find(x => x.name === it.unitName); return u ? u.id : null; }
-  return I0.unit === '__new' ? null : I0.unit;
-}
-function impDup(it){
-  const u = impUnitId(it);
-  if (!u) return false;
-  return it.kind === 'term' ? U.terms.some(t => t.unit === u && t.term === it.term) : U.events.some(e => e.unit === u && e.year === it.year && e.title === it.title);
-}
-function impUnitLabel(it){
-  if (it.unitPreset) return it.unitPreset.name;
-  if (it.unitName) return it.unitName;
-  return null;
-}
-function renderImport(){
-  const I0 = state.imp;
-  if (!I0) { renderData(); return; }
-  const n = I0.items.length, sel = I0.items.filter(x => x.sel).length;
-  const needUnit = I0.items.some(x => !x.unitPreset && !x.unitName);
-  const card = (it, i) => {
-    const dup = impDup(it), ul = impUnitLabel(it);
-    const title = it.kind === 'term' ? rb(it.term) + (lifeText(it) ? `<span class="ick" style="margin-left:8px">${esc(lifeText(it))}</span>` : '') : `<span class="yr">${it.year}${it.era ? `（${esc(it.era)}）` : ''}</span> ${rb(it.title)}`;
-    const sub = it.kind === 'term' ? (qList(it.q)[0] ? `<p class="ic-q">${rb(qList(it.q)[0])}</p>` : '') + `<p class="ic-s">${rb(it.summary || '')}</p>` : (it.explanation ? `<p class="ic-s">${rb(it.explanation)}</p>` : '');
-    return `<li class="icard ${it.sel ? '' : 'off'}">
-      <label class="ichk"><input type="checkbox" data-imp="${i}" ${it.sel ? 'checked' : ''} aria-label="取り込む"><span class="box">${I('check')}</span></label>
-      <button class="ibody" data-act="impEdit" data-v="${i}">
-        <span class="ihead"><span class="badge">${it.kind === 'term' ? (qList(it.q).length ? '4択問題' : '用語') : '年号'}</span>${ul ? `<span class="badge">${esc(ul)}</span>` : ''}${it.cat || it.group ? `<span class="ick">${esc(it.cat || it.group)}</span>` : ''}</span>
-        <span class="it">${title}</span>${sub}
-        ${dup ? `<span class="idup">${I('alert')}同じものがすでにあります</span>` : ''}
-      </button></li>`;
-  };
-  app.innerHTML = `
-  <h1 class="ptitle">取り込む内容の確認 ${help('import')}</h1>
-  ${needUnit ? `<section class="fgroup"><h2 class="stitle">追加先の単元</h2><select class="sel" id="impUnit">${unitOptions(I0.unit)}</select>
-    ${I0.unit === '__new' ? `<input class="inp" style="margin-top:8px" id="impNew" value="${esc(I0.newName)}" placeholder="新しい単元の名前">` : ''}</section>` : ''}
-  ${I0.errors.length ? `<details class="warn" style="margin-top:16px"><summary>読み取れなかったもの ${I0.errors.length}件</summary><ul>${I0.errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></details>` : ''}
-  <div class="impbar"><span class="cnt">${n}件中 <b>${sel}</b>件を選択</span><span class="btnrow" style="margin:0"><button class="textbtn" data-act="impAll">すべて選ぶ</button><button class="textbtn" data-act="impNone">すべて外す</button></span></div>
-  <ul class="ilist">${I0.items.map(card).join('')}</ul>
-  <div class="actionbar"><button class="btn primary block" data-act="impCommit" ${sel ? '' : 'disabled'}>${sel ? `${sel}件を取り込む` : '取り込むものを選んでください'}</button></div>`;
-}
-function openImpSheet(i){
-  const it = state.imp.items[i];
-  if (!it) return;
-  openModal(`
-    <h2 class="sheet-t">取り込む内容を直す</h2>
-    <form id="impForm" data-guard data-i="${i}">
-      ${it.kind === 'term' ? `
-        ${fld('問題文', 'q', qList(it.q).join('\n\n'), 'ta', false, null, '空行で区切ると複数の問題になります')}
-        ${fld('答え（用語・人物）', 'term', it.term || '', 'inp', true)}
-        ${fld('読み', 'kana', it.kana || '')}
-        ${fld('国・地域', 'country', it.country || '')}
-        ${fld('生没年・時期', 'life', it.life || '')}
-        ${fld('要約', 'summary', it.summary || '', 'ta', true)}
-        ${fld('解説', 'detail', it.detail || '', 'ta')}
-        ${fld('覚え方', 'point', it.point || '', 'ta')}
-        ${fld('分野', 'cat', it.cat || '', 'inp')}` : `
-        ${fld('出来事', 'title', it.title || '', 'ta', true)}
-        ${fld('年（西暦）', 'year', String(it.year || ''), 'num', true)}
-        ${fld('和暦', 'era', it.era || '')}
-        ${fld('解説', 'explanation', it.explanation || '', 'ta')}
-        ${fld('時代', 'group', it.group || '')}`}
-      <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="closeModal">キャンセル</button><button type="submit" class="btn primary">保存する</button></div>
-        <div class="sheet-sub"><button type="button" class="textbtn danger" data-act="impRemove" data-v="${i}">この項目を一覧から外す</button></div></div>
-    </form>`, { noFocus: true });
-}
-function saveImpForm(form){
-  const it = state.imp.items[+form.dataset.i], f = formVals(form);
-  if (it.kind === 'term') {
-    if (!f.term.trim() || !f.summary.trim()) { toast('答えと要約は必須です'); return; }
-    const qs = f.q.split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
-    for (const k of ['q', 'term', 'kana', 'country', 'life', 'summary', 'detail', 'point', 'cat']) delete it[k];
-    Object.assign(it, clean({ q: qs.length > 1 ? qs : qs[0], term: f.term.trim(), kana: f.kana.trim(), country: f.country.trim(), life: f.life.trim(), summary: f.summary.trim(), detail: f.detail.trim(), point: f.point.trim(), cat: f.cat.trim() || 'その他' }));
-  } else {
-    const y = parseInt(toHalf(f.year), 10);
-    if (!f.title.trim() || !y) { toast('出来事と年は必須です'); return; }
-    for (const k of ['title', 'era', 'explanation', 'group']) delete it[k];
-    Object.assign(it, clean({ title: f.title.trim(), year: y, era: f.era.trim(), explanation: f.explanation.trim(), group: f.group.trim() }));
-  }
-  it.sel = true;
-  closeModal(); render(cur(), true); toast('直しました');
-}
-function bundleCandidates(){
-  const b = bundleData(), uById = new Map(b.units.map(u => [u.id, u])), out = [];
-  for (const t of b.terms) { const { unit, ...rest } = t; out.push({ kind: 'term', ...rest, unitPreset: uById.get(unit) }); }
-  for (const e of b.events) { const { unit, ...rest } = e; out.push({ kind: 'event', ...rest, unitPreset: uById.get(unit) }); }
-  return out.filter(it => !(it.kind === 'term' ? U.terms.some(t => t.unit === it.unitPreset.id && t.term === it.term) || U.terms.some(t => t.key === it.key) : U.events.some(e => e.id === it.id || (e.unit === it.unitPreset.id && e.year === it.year && e.title === it.title))));
-}
-
 /* ---------- バックアップ ---------- 
 /* バックアップの書き出し
  *   ホーム画面から開いたiPhoneでは <a download> が動かないため、
@@ -3946,6 +3638,7 @@ function hitBox(hits, words, skip = []){
 function filterLabel(k, v){ return k === 'unit' ? unitName(v) : k === 'bucket' ? BL[v] : k === 'cat' ? (v.startsWith('g:') ? v.slice(2) : (subOf(v) || v)) : v; }
 /* 今の画面で選べる単元・分野（図鑑の種類／振り分けの種類によって変わる） */
 function scopeOf(ctx){
+  if (ctx === 'tbl') return { list: tableItems(), catOf: x => x.genre };
   if (state.dict.tab === 'years') return { list: EVENTS, catOf: e => e.group || 'その他' };
   return { list: TERMS, catOf: t => t.cat };
 }
@@ -3957,16 +3650,6 @@ function catOptions(cats, cur){
   return groups.map(gr => gr.subs.length
     ? `<optgroup label="${esc(gr.g)}">${opt('g:' + gr.g, `${gr.g}（すべて）`)}${uniq(gr.subs).map(c => opt(c, subOf(c))).join('')}</optgroup>`
     : opt('g:' + gr.g, gr.g)).join('');
-}
-/* 検索欄の下の帯：単元→分野をタップで選ぶ */
-function genreBar(ctx){
-  const S = state.search[ctx], { list, catOf } = scopeOf(ctx);
-  const units = uniq(list.map(x => x.unit)).filter(u => unitById.has(u)), unit = S.unit || (units.length === 1 ? units[0] : '');
-  if (!unit) return units.length > 1 ? `<div class="gbar" role="group" aria-label="単元で絞る">${units.map(u => `<button type="button" data-act="gpick" data-c="${ctx}" data-k="unit" data-v="${esc(u)}">${I(unitIcon(u))}${esc(unitName(u))}</button>`).join('')}</div>` : '';
-  const gs = uniq(list.filter(x => x.unit === unit).map(x => genreOf(catOf(x))));
-  if (gs.length < 2) return '';
-  const curG = S.cat ? (S.cat.startsWith('g:') ? S.cat.slice(2) : genreOf(S.cat)) : '';
-  return `<div class="gbar on" role="group" aria-label="分野で絞る"><button type="button" data-act="gpick" data-c="${ctx}" data-k="cat" data-v="" aria-pressed="${!curG}">すべて</button>${gs.map(g => `<button type="button" data-act="gpick" data-c="${ctx}" data-k="cat" data-v="g:${esc(g)}" aria-pressed="${curG === g}">${esc(g)}</button>`).join('')}</div>`;
 }
 function searchField(ctx){
   const S = state.search[ctx], n = filterCount(S);
@@ -3981,7 +3664,7 @@ function openFilterSheet(ctx){
   const opt = (v, l, sel) => `<option value="${esc(v)}" ${sel === v ? 'selected' : ''}>${esc(l)}</option>`;
   const units = uniq(list.map(x => x.unit)).filter(u => unitById.has(u));
   const cats = uniq(list.filter(x => !S.unit || x.unit === S.unit).map(catOf)).filter(Boolean);
-  const catName = state.dict.tab === 'years' ? '時代' : '分野';
+  const catName = ctx !== 'tbl' && state.dict.tab === 'years' ? '時代' : '分野';
   let rows = `<label class="frow"><span>単元</span><select class="sel" id="fUnit">${opt('', 'すべての単元', S.unit)}${units.map(u => opt(u, unitName(u), S.unit)).join('')}</select></label>`;
   if (cats.length > 1) rows += `<label class="frow"><span>${catName}</span><select class="sel" id="fCat">${opt('', `すべての${catName}`, S.cat)}${catOptions(cats, S.cat)}</select></label>`;
   openModal(`<h2 class="sheet-t">絞り込み</h2>
@@ -4032,9 +3715,11 @@ function dictItems(){
 }
 function renderDict(){
   if (state.dict.tab === 'tables') state.dict.tab = 'terms';
+  const tab = state.dict.tab === 'years' ? 'years' : 'terms';
   app.innerHTML = `
-  <div class="headact"><h1 class="ptitle">図鑑 ${help('dict')}</h1><button class="iconbtn round" data-act="goOne" aria-label="用語・出来事を追加">${I('plus')}</button></div>
-  <div style="margin-top:16px">${searchField('dict')}</div>
+  <h1 class="ptitle">図鑑 ${help('dict')}</h1>
+  <div class="seg dtabs" role="tablist" aria-label="図鑑の種類" style="margin-top:16px"><button role="tab" data-act="dtab" data-v="terms" aria-pressed="${tab === 'terms'}">用語・人物</button><button role="tab" data-act="dtab" data-v="years" aria-pressed="${tab === 'years'}">年表</button></div>
+  <div style="margin-top:12px">${searchField('dict')}</div>
   <div id="res-dict"></div>`;
   drawDict();
 }
@@ -4049,10 +3734,7 @@ function drawDict(){
   /* 大分類が変わるところに見出しを入れる（単元を選んでいて、検索していないとき） */
   const withHeads = (arr, rowFn, gOf) => { let last = null; return arr.map(it => { const g = gOf(it.x, it); const h = !showUnit && !words.length && g !== last ? `<li class="ghead">${esc(g)}</li>` : ''; last = g; return h + rowFn(it); }).join(''); };
   box.innerHTML = `
-  ${genreBar('dict')}
-  <div class="reshead"><select class="isel" id="dtab" aria-label="表示するもの">
-      <option value="terms" ${tab !== 'years' ? 'selected' : ''}>用語・人物</option><option value="years" ${yr ? 'selected' : ''}>年表</option></select>
-    <span class="cnt">${items.length}件</span></div>
+  <p class="cntline">${items.length}件</p>
   ${items.length ? (yr ? `<ol class="tl">${items.map(yearRow).join('')}</ol>`
       : `<ul class="rows">${withHeads(items, termRow, (M, it) => genreOf(it.t.cat))}</ul>`)
     : `<p class="empty">${on ? '見つかりません' : 'まだありません'}</p>`}`;
@@ -4100,12 +3782,9 @@ function renderData(){
   app.innerHTML = `
   <h1 class="ptitle">データ ${help('data')}</h1>
   <section class="sect">
-    <h2 class="stitle">問題</h2>
     <div class="menu">
-      ${row('goBulk', 'paste', 'まとめて追加', 'AIで作った問題やテキストファイルから')}
-      ${row('goOne', 'plus', '1件ずつ追加')}
-      ${row('goUnits', 'layers', '単元', `${UNITS.length}単元・用語 ${TERMS.length}件・出来事 ${EVENTS.length}件`)}
       ${row('goMine', 'note', 'メモ', `${memos}件`)}
+      ${row('goRuby', 'book', 'ふりがなの辞書', `${Object.keys(RUBY_MAP).length}語`)}
     </div>
   </section>
   <section class="sect">
@@ -4113,29 +3792,21 @@ function renderData(){
     <div class="menu">
       <button class="swrow" role="switch" aria-checked="${SET.sound}" data-act="toggleSound"><span class="mi">${I(SET.sound ? 'vol' : 'mute')}</span><span class="mtx"><span class="mt">効果音</span></span><span class="sw2"></span></button>
       <button class="swrow" role="switch" aria-checked="${SET.ruby}" data-act="toggleRuby"><span class="mi">${I('ruby')}</span><span class="mtx"><span class="mt">ふりがな</span></span><span class="sw2"></span></button>
-      ${row('goRuby', 'book', 'ふりがなの辞書', `${Object.keys(RUBY_MAP).length}語`)}
     </div>
   </section>
   <section class="sect">
     <h2 class="stitle">バックアップ</h2>
     <div class="menu">
-      ${row('exportBackup', 'download', 'バックアップを書き出す', '問題・メモ・ふりがな・学習記録・語呂合わせ')}
+      ${row('exportBackup', 'download', 'バックアップを書き出す', 'メモ・ふりがな・学習記録・語呂合わせ')}
       <label class="mrow filebtn"><span class="mi">${I('upload')}</span><span class="mtx"><span class="mt">バックアップから復元</span></span>${I('chev', 'mchev')}<input type="file" id="importFile" accept=".json,application/json"></label>
-      ${row('importBundle', 'file', '付属の問題ファイルから取り込む', 'アプリに入っている問題のうち、まだ無いもの')}
     </div>
   </section>
   ${WARNINGS.length ? `<details class="warn"><summary>データの確認事項 ${WARNINGS.length}件</summary><ul>${WARNINGS.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>` : ''}
   <section class="sect">
-    <h2 class="stitle">リセット・削除</h2>
-    <div class="menu">
-      ${row('resetAll', 'retry', '学習記録をすべてリセット', '振り分けを「未回答」に戻す')}
-      ${row('wipeAll', 'trash', '問題をすべて削除', '単元・用語・出来事・メモ')}
-    </div>
-  </section>
-  <section class="sect">
     <h2 class="stitle">アプリ</h2>
     <div class="menu">
       ${row('checkUpdate', 'refresh', '最新バージョンに更新', `今のバージョン ${APP_VERSION}${'serviceWorker' in navigator && navigator.serviceWorker.controller ? '・オフラインでも使えます' : ''}`)}
+      ${row('resetAll', 'retry', '学習記録をすべてリセット', '振り分けを「未回答」に戻す')}
     </div>
   </section>
   <p class="ver">暗記ノート　バージョン ${APP_VERSION}（${APP_BUILD}）<br>データ：用語 ${TERMS.length}件・出来事 ${EVENTS.length}件・ふりがな ${Object.keys(RUBY_MAP).length}語</p>`;
@@ -4228,57 +3899,6 @@ function saveRubyForm(form){
   U.ruby[word] = reading;
   if (!orig) state.ruby.q = '';
   saveU(); buildRuby(); closeModal(); render(cur(), true); toast('保存しました');
-}
-
-/* =========================================================
- * 単元
- * ========================================================= */
-const UNIT_ICONS = ['book', 'cap', 'blocks', 'sprout', 'heart', 'calendar', 'building', 'layers', 'note'];
-function renderUnits(){
-  const row = u => {
-    const nq = TERMS.filter(t => t.unit === u.id).length, ne = EVENTS.filter(e => e.unit === u.id).length;
-    const sub = [nq ? `用語 ${nq}件` : '', ne ? `出来事 ${ne}件` : ''].filter(Boolean).join('　') || 'まだ問題がありません';
-    return `<li class="dcard"><span class="dico">${I(u.icon || 'book')}</span>
-      <span class="mtx"><span class="mt">${esc(u.name)}</span><span class="ms">${sub}</span></span>
-      <button class="iconbtn" data-act="unitEdit" data-v="${esc(u.id)}" aria-label="${esc(u.name)}の設定">${I('sliders')}</button>
-      ${UNITS.length > 1 ? `<button class="grip" aria-label="つまんで並べ替え">${I('grip')}</button>` : ''}</li>`;
-  };
-  app.innerHTML = `
-  <h1 class="ptitle">単元 ${help('units')}</h1>
-  <div class="addrow"><input class="inp" id="newUnit" placeholder="新しい単元" enterkeyhint="done"><button class="btn primary" data-act="unitCreate" id="unitCreateBtn" disabled>${I('plus')}作る</button></div>
-  ${UNITS.length ? `<ul class="dlist" data-reorder="units">${UNITS.map(row).join('')}</ul>` : '<p class="empty">まだ単元がありません</p>'}`;
-}
-function openUnitSheet(id){
-  const u = U.units.find(x => x.id === id);
-  if (!u) return;
-  const icon = u.icon || 'book', i = U.units.indexOf(u);
-  openModal(`
-    <h2 class="sheet-t">単元の設定</h2>
-    <form id="unitForm" data-guard data-id="${esc(id)}">
-      ${fld('名前', 'name', u.name || '', 'inp', true)}
-      ${fld('説明', 'desc', u.desc || '', 'inp')}
-      <div class="fld"><label>アイコン</label><div class="chips">${UNIT_ICONS.map(ic => `<label class="iconpick"><input type="radio" name="icon" data-f="icon" value="${ic}" ${ic === icon ? 'checked' : ''}><span>${I(ic)}</span></label>`).join('')}</div></div>
-      <div class="sheet-actions"><div class="two"><button type="button" class="btn" data-act="closeModal">キャンセル</button><button type="submit" class="btn primary">保存する</button></div>
-        <div class="sheet-sub">
-          ${i > 0 ? `<button type="button" class="textbtn" data-act="unitTop" data-v="${esc(id)}">${I('up')}いちばん上へ</button>` : ''}
-          <button type="button" class="textbtn danger" data-act="unitDel" data-v="${esc(u.id)}">この単元を削除</button>
-        </div></div>
-    </form>`, { noFocus: true });
-}
-function saveUnitForm(form){
-  const name = form.querySelector('#f_name').value.trim(), desc = form.querySelector('#f_desc').value.trim();
-  const icon = form.querySelector('input[name=icon]:checked')?.value || 'book';
-  if (!name) { toast('名前を入力してください'); return; }
-  if (U.units.some(u => u.name === name && u.id !== form.dataset.id)) { toast('同じ名前の単元があります'); return; }
-  Object.assign(U.units.find(x => x.id === form.dataset.id), { name, desc, icon });
-  saveU(); buildData(); closeModal(); render(cur(), true); toast('保存しました');
-}
-function createUnit(){
-  const inp = document.getElementById('newUnit'), name = (inp?.value || '').trim();
-  if (!name) return;
-  if (U.units.some(u => u.name === name)) { toast('同じ名前の単元があります'); return; }
-  U.units.push({ id: 'u' + uid(), name, desc: '', icon: 'book' });
-  saveU(); buildData(); render(cur(), true); toast(`「${name}」を作りました`);
 }
 
 /* =========================================================
@@ -4396,7 +4016,7 @@ function openDictSearch(opts = {}){
     <p class="kana">名前・読み・説明のことばで探せます（例：おんぶつ、消極教育）</p>
     ${qt.length ? `<div class="dsm-q"><p>この問題の選択肢</p><div class="tchips">${qt.map(t => `<button class="tchip" data-act="dmOpen" data-v="${esc(t.key)}">${rb(t.term)}</button>`).join('')}</div></div>` : ''}
     <label class="lsearch">${I('search')}<input id="sq-dm" type="search" enterkeyhint="search" placeholder="キーワードで探す" value="${esc(D.q)}" aria-label="図鑑をキーワードで探す（読みでも可）"><button type="button" class="lsx" data-act="lsClear" data-v="sq-dm" aria-label="キーワードを消す">${I('x')}</button></label>
-    ${units.length > 1 ? `<div class="gbar on" role="group" aria-label="単元で絞る"><button type="button" data-act="dmUnit" data-v="" aria-pressed="${!D.unit}">すべて</button>${units.map(u => `<button type="button" data-act="dmUnit" data-v="${esc(u.id)}" aria-pressed="${D.unit === u.id}">${esc(u.name)}</button>`).join('')}</div>` : ''}
+    ${D.unit && units.some(u => u.id === D.unit) ? `<p class="cntline" style="margin:0 0 6px">${esc(unitName(D.unit))}の語句だけを表示中　<button type="button" class="textbtn" data-act="dmUnit" data-v="">すべての単元を見る</button></p>` : (units.length > 1 ? `<div class="gbar on" role="group" aria-label="単元で絞る"><button type="button" data-act="dmUnit" data-v="" aria-pressed="${!D.unit}">すべて</button>${units.map(u => `<button type="button" data-act="dmUnit" data-v="${esc(u.id)}" aria-pressed="${D.unit === u.id}">${esc(u.name)}</button>`).join('')}</div>` : '')}
     <div id="dm-res"></div>
   </div>`, { noFocus: true });
   drawDm();
@@ -4463,49 +4083,30 @@ function learnGenres(unit, cards){
 }
 function cardCount(cards){ const c = { new: 0, ok: 0, unsure: 0, total: cards.length }; for (const x of cards) c[cardB(x.key)]++; return c; }
 const cardBar = c => `<span class="pbar sm">${c.ok ? `<i class="p-ok" style="flex:${c.ok}"></i>` : ''}${c.unsure ? `<i class="p-uns" style="flex:${c.unsure}"></i>` : ''}${c.new ? `<i class="p-new" style="flex:${c.new}"></i>` : ''}</span>`;
-function learnFilter(cards){
-  const f = state.learn.filter;
-  return f === 'unsure' ? cards.filter(c => cardB(c.key) === 'unsure') : f === 'new' ? cards.filter(c => cardB(c.key) === 'new') : cards;
-}
-/* 単元ページの「覚える」 */
+/* 単元ページの「覚える」：分野の行だけ。押すと、まだ覚えていないカードから順に出る */
 function learnSection(id){
-  const all = cardsOf(id), c = cardCount(all), L = state.learn;
+  const all = cardsOf(id), c = cardCount(all);
   if (!all.length) return `<section class="sect"><p class="empty">まだカードがありません</p></section>`;
   const rows = id === 'all'
     ? UNITS.map(u => ({ v: 'u:' + u.id, title: u.name, icon: unitIcon(u.id), cards: all.filter(x => x.unit === u.id) })).filter(r => r.cards.length)
     : learnGenres(id, all).map(g => ({ v: 'g:' + g, title: g, icon: g === '年号' ? 'hourglass' : 'cards', cards: all.filter(x => x.genre === g) }));
-  const row = r => { const x = cardCount(r.cards), n = learnFilter(r.cards).length;
-    const kinds = uniq(r.cards.map(k => k.kind)).map(k => `${{ term: '語句', ev: '年号の流れ', dev: '要点', staff: '職員配置' }[k]} ${r.cards.filter(z => z.kind === k).length}`).join('・');
-    return `<button class="mrow urow" data-act="learnGo" data-v="${esc(r.v)}" ${n ? '' : 'aria-disabled="true"'}><span class="mi">${I(r.icon)}</span><span class="mtx"><span class="mt">${esc(r.title)}<span class="upct">${x.total ? Math.floor(x.ok / x.total * 100) : 0}%</span></span><span class="ms">${kinds}　覚えた ${x.ok}／${x.total}${x.unsure ? `　自信がない ${x.unsure}` : ''}</span><span class="mbar">${cardBar(x)}</span></span>${I('chev', 'mchev')}</button>`; };
-  const fb = (v, l, n) => `<button data-act="lfilter" data-v="${v}" aria-pressed="${L.filter === v}">${l}${n != null ? `<span class="segn">${n}</span>` : ''}</button>`;
-  return `<section class="sect">
-    <div class="shead"><h2 class="stitle">覚える ${help('learn')}</h2></div>
-    <div class="panel">
-      <div class="lsum"><div><span>覚えた</span><b>${c.ok}<small> / ${c.total}</small></b></div><div class="uns"><span>自信がない</span><b>${c.unsure}</b></div><div><span>まだ</span><b>${c.new}</b></div></div>
-      <span class="pbar">${c.ok ? `<i class="p-ok" style="flex:${c.ok}"></i>` : ''}${c.unsure ? `<i class="p-uns" style="flex:${c.unsure}"></i>` : ''}${c.new ? `<i class="p-new" style="flex:${c.new}"></i>` : ''}</span>
-      <p class="plegend"><span><i class="p-ok"></i>覚えた</span><span><i class="p-uns"></i>自信がない</span><span><i class="p-new"></i>まだ</span></p>
-    </div>
-    ${c.unsure ? `<div class="menu" style="margin-top:12px"><button class="mrow accent" data-act="learnUnsure" data-v="${esc(id)}"><span class="mi">${I('retry')}</span><span class="mtx"><span class="mt">「自信がない」だけ見返す</span><span class="ms">${c.unsure}枚</span></span>${I('chev', 'mchev')}</button></div>` : ''}
-  </section>
-  <section class="sect">
-    <h2 class="stitle">${id === 'all' ? '単元' : '分野'}を選んでカードを出す</h2>
-    <div class="lopts">
-      <div class="seg" role="radiogroup" aria-label="出すカード">${fb('all', 'すべて', c.total)}${fb('unsure', '自信がない', c.unsure)}${fb('new', 'まだ', c.new)}</div>
-      <button class="lsw" role="checkbox" aria-checked="${!!L.shuffle}" data-act="lshuffle"><span class="bx">${I('check')}</span>順番をまぜる</button>
-    </div>
-    <div class="menu">${rows.map(row).join('')}</div>
-  </section>`;
+  const row = r => { const x = cardCount(r.cards), left = x.total - x.ok;
+    return `<button class="mrow urow" data-act="learnGo" data-v="${esc(r.v)}"><span class="mi">${I(r.icon)}</span><span class="mtx"><span class="mt">${esc(r.title)}<span class="upct">${x.total ? Math.floor(x.ok / x.total * 100) : 0}%</span></span><span class="ms">${left ? `覚えた ${x.ok}／${x.total}` : 'すべて覚えた'}${x.unsure ? `　自信がない ${x.unsure}` : ''}</span><span class="mbar">${cardBar(x)}</span></span>${I('chev', 'mchev')}</button>`; };
+  return `<section class="sect"><div class="menu">
+    ${c.unsure ? `<button class="mrow accent" data-act="learnUnsure" data-v="${esc(id)}"><span class="mi">${I('retry')}</span><span class="mtx"><span class="mt">「自信がない」を見返す</span><span class="ms">${c.unsure}枚</span></span>${I('chev', 'mchev')}</button>` : ''}
+    ${rows.map(row).join('')}
+  </div></section>`;
 }
 function startDeck(cards, origin, how = 'push'){
   if (!cards.length) { toast('該当するカードがありません'); return; }
-  const keys = cards.map(c => c.key);
-  state.deck = { keys: state.learn.shuffle ? shuffle(keys) : keys, i: 0, rev: false, origin };
+  state.deck = { keys: cards.map(c => c.key), i: 0, rev: false, origin };
   go({ v: 'cards' }, how);
 }
 function learnGo(v, unit){
   const all = cardsOf(unit);
   const pick = v.startsWith('u:') ? all.filter(c => c.unit === v.slice(2)) : all.filter(c => c.genre === v.slice(2));
-  startDeck(learnFilter(pick), { unit, label: v.slice(2) });
+  const rest = pick.filter(c => cardB(c.key) !== 'ok');
+  startDeck(rest.length ? rest : pick, { unit, label: v.slice(2) });
 }
 
 /* ---------- カードの中身 ---------- */
@@ -4788,7 +4389,7 @@ function afterGoro(){
 }
 
 /* =========================================================
- * 1.21.0：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
+ * 1.22.0：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
  * ========================================================= */
 
 /* ---------- 大事なことばに色をつける ----------
@@ -4931,18 +4532,13 @@ function tableListHTML(f, act){
   return html + '</div>';
 }
 /* タブ「表」 */
+const tblFilterOf = S => ({ q: S.q, unit: S.unit, genre: (S.cat || '').replace(/^g:/, '') });
 function renderTables(){
-  const f = state.tbl;
-  const units = UNITS.filter(u => tableItems().some(x => x.unit === u.id));
-  const gs = f.unit ? uniq(tableItems().filter(x => x.unit === f.unit).map(x => x.genre)) : [];
-  if (f.genre && !gs.includes(f.genre)) f.genre = '';
   app.innerHTML = `
   <h1 class="ptitle">表</h1>
-  <p class="psub">比較の表・早見表を、単元と分野ごとに</p>
-  <div style="margin-top:16px"><label class="lsearch">${I('search')}<input id="sq-tbl" type="search" enterkeyhint="search" placeholder="表の名前・中身で探す（例：潜伏期間、里親）" value="${esc(f.q)}"><button type="button" class="lsx" data-act="lsClear" data-v="sq-tbl" aria-label="消す">${I('x')}</button></label></div>
-  <div class="gbar on" role="group" aria-label="単元" style="margin-top:12px"><button type="button" data-act="tblUnit" data-v="" aria-pressed="${!f.unit}">すべて</button>${units.map(u => `<button type="button" data-act="tblUnit" data-v="${esc(u.id)}" aria-pressed="${f.unit === u.id}">${esc(u.name)}</button>`).join('')}</div>
-  ${gs.length > 1 ? `<div class="gbar on sub" role="group" aria-label="分野"><button type="button" data-act="tblGenre" data-v="" aria-pressed="${!f.genre}">すべての分野</button>${gs.map(g => `<button type="button" data-act="tblGenre" data-v="${esc(g)}" aria-pressed="${f.genre === g}">${esc(g)}</button>`).join('')}</div>` : ''}
-  <div id="tbl-res" class="tl">${tableListHTML(f, 'tblOpen')}</div>`;
+  <p class="psub">比較の表・早見表</p>
+  <div style="margin-top:16px">${searchField('tbl')}</div>
+  <div id="tbl-res" class="tl">${tableListHTML(tblFilterOf(state.search.tbl), 'tblOpen')}</div>`;
 }
 function tableNav(id, list){
   const i = list.findIndex(x => x.id === id), p = list[i - 1], n = list[i + 1];
@@ -4986,9 +4582,7 @@ function openTableSheetList(unit, genre){
 function showTablesFor(unit, genre){
   const its = tableItems().filter(x => x.unit === unit);
   const g = its.some(x => x.genre === genre) ? genre : '';
-  if (['round', 'cards'].includes(cur().v)) { openTableSheetList(unit, g); return; }
-  state.tbl = { unit, genre: g, q: '' };
-  go({ v: 'tables' }, 'tab');
+  openTableSheetList(unit, g);
 }
 
 /* ---------- 問題の一覧（「問題を解く」で、これから解く問題をまとめて見る） ----------
@@ -5008,7 +4602,7 @@ function qItemRow(it){
   let q = '', a = '';
   if (it.k === 'q') { q = x.question; a = x.type === 'rev' ? termByKey.get(x.termKey)?.term + 'の説明' : x.answer; }
   else if (it.k === 'e') { q = x.title; a = yearLabel(x); }
-  else if (it.k === 'd') { q = x.title; a = Array.isArray(x.items && x.items[0]) ? `並べ替え ${x.items.length}つ` : x.rows ? `${x.rows.length}行` : `○×　${x.items.map((s, i) => ABC[i] + (s.ok ? '○' : '×')).join(' ')}`; }
+  else if (it.k === 'd') { q = x.title; a = Array.isArray(x.items && x.items[0]) ? `並べ替え ${x.items.length}つ` : x.rows ? `${x.rows.length}行` : x.list ? `一覧○× ${x.lrows.length}項目` : `○×　${x.items.map((s, i) => ABC[i] + (s.ok ? '○' : '×')).join(' ')}`; }
   else if (it.t === 'staff') { q = sFacName(x) + 'の職員配置'; a = '全職種'; }
   else { q = x.q; a = x.yes.map(id => sFac(id)).map(f => f.name + (f.scale ? `（${f.scale.replace('乳幼児', '')}）` : '')).join('・'); }
   return `<li><button class="qi" data-act="qiOpen" data-k="${it.t || it.k}" data-v="${esc(it.id)}"><span class="dot b-${b}" title="${BL[b]}"></span><span class="qi-t"><span class="qi-q">${rb(q)}</span><span class="qi-a">${rb(a || '')}</span></span>${I('chev', 'qi-chev')}</button></li>`;
@@ -5060,6 +4654,7 @@ function openQItem(k, id){
     const isOrd = Array.isArray(x.items && x.items[0]);
     html = `<p class="kana">${esc(unitName(dUnitOf(id)))}／${esc(dKind(x))}</p><h2 class="qsh">${rb(x.title)}</h2>
       ${isOrd ? `<ol class="oans">${x.items.map(([t, w], i) => `<li><span class="onum">${i + 1}</span><span class="otx"><span>${rb(t)}</span><small>${esc(w)}</small></span></li>`).join('')}</ol>`
+        : x.list ? `<ul class="lc-facts">${x.lrows.map(r => `<li><span class="fm">・</span><span>${rbL(r.n)}：<b>${rb(r.v)}</b></span></li>`).join('')}</ul>`
         : x.rows ? `<ul class="lc-facts">${x.rows.map(r => `<li><span class="fm">・</span><span>${rbL(r[0])}：<b>${rb(r[1])}</b></span></li>`).join('')}</ul>`
         : `<ol class="dlist">${x.items.map((it, j) => `<li><span class="dlm ${it.ok ? 'ok' : 'ng'}">${ABC[j]} ${it.ok ? '○' : '×'}</span><div><p>${rb(it.s)}</p>${it.ok ? '' : `<p class="dfix"><b>正しくは</b>${rbL(it.fix || '')}</p>`}${it.why ? `<p class="dwhy">${rbL(it.why)}</p>` : ''}</div></li>`).join('')}</ol>`}
       ${x.point ? `<div class="expl"><div class="ex-r ex-pt"><span class="ex-l">まとめ</span><div class="ex-b"><p>${rbL(x.point)}</p></div></div></div>` : ''}
@@ -5207,7 +4802,7 @@ async function onAction(el, ev){
     case 'staffAll': staffStart(ST.facilities.map(f => f.id)); break;
     case 'staffWeak': staffStart(ST.facilities.filter(f => isWeak(bucket('s', f.id))).map(f => f.id)); break;
     case 'staffOne': staffStart([v]); break;
-    case 'staffTable': if (['round', 'cards'].includes(cur().v)) openTableSheet('@staff'); else go({ v: 'table', a: '@staff' }); break;
+    case 'staffTable': openTableSheet('@staff'); break;
     case 'goDev': go({ v: 'dev', u: state.unit }); break;
     case 'devOne': devStart([v]); break;
     case 'devMatRandom': devStart(shuffle(DV.matches || []).slice(0, 5).map(x => x.id)); break;
@@ -5234,32 +4829,21 @@ async function onAction(el, ev){
     case 'staffDontKnow': staffDontKnow(); break;
     case 'sJump': staffJump(v); break;
     case 'unitList': { const cs = catsFor('quiz', state.unit); state.setup.cats[`${state.unit}|quiz`] = new Set(cs); state.qf = ''; go({ v: 'qlist', a: 'quiz', u: state.unit }); break; }
-    case 'unitDict': {
-      const hasT = TERMS.some(t => state.unit === 'all' || t.unit === state.unit);
-      state.dict.tab = hasT ? 'terms' : 'years';
-      state.search.dict = { ...blankSearchState(), unit: state.unit !== 'all' && hasT ? state.unit : '' };
-      go({ v: 'dict' }, 'tab'); break;
-    }
-    case 'unitAdd': state.bulk.unit = state.unit; state.bulk.done = null; go({ v: 'bulk' }); break;
+    case 'unitDict': { const D = dmState(); D.q = ''; D.y = 0; D.unit = state.unit === 'all' ? '' : state.unit; openDictSearch({}); break; }
+    case 'tablesFor': showTablesFor(el.dataset.u || state.unit, el.dataset.g || ''); break;
     case 'setupQuiz': go({ v: 'setup', a: 'quiz', u: state.unit }); break;
     case 'sheetQuiz': { const t = dTbl(v), ks = new Set(TERMS.filter(x => tblOfTerm(x) === v).map(x => x.key));
       startRound(QUESTIONS.filter(q => ks.has(q.termKey) && q.type !== 'rev').map(q => ({ type: 'quiz', id: q.id })), { unit: (t && t.unit) || state.unit, kind: 'quiz' }); break; }
     case 'setupSort': go({ v: 'setup', a: 'sort', u: state.unit }); break;
     case 'quickReview': quickReview(); break;
-    case 'sbucket': { const k = cur().a, B = S.buckets[k]; B.has(v) ? B.delete(v) : B.add(v); render(cur(), true); break; }
-    case 'sall': S.buckets[cur().a] = new Set(ORDER); render(cur(), true); break;
-    case 'sreview': S.buckets[cur().a] = new Set(WEAK); render(cur(), true); break;
+    case 'sscope': { const sc = SCOPES.find(x => x[0] === v); if (sc) S.buckets[cur().a] = new Set(sc[2]); render(cur(), true); break; }
     case 'scat': { const s = selectedCats(cur().a, cur().u); s.has(v) ? s.delete(v) : s.add(v); render(cur(), true); break; }
     case 'scount': S.count = v === 'all' ? 'all' : +v; render(cur(), true); break;
     case 'sdir': S.dir = v; render(cur(), true); break;
     case 'ssets': S.sets = +v; render(cur(), true); break;
-    case 'ssize': S.size = +v; render(cur(), true); break;
     case 'startSetup': startFromSetup(); break;
     case 'setupG': state.setup.cats[`${state.unit}|quiz`] = new Set([v]); go({ v: 'setup', a: 'quiz', u: state.unit }); break;
-    case 'sgenre': { const cs = catsFor(cur().a, cur().u); state.setup.cats[`${cur().u}|${cur().a}`] = new Set(v ? [v] : cs); render(cur(), true); break; }
-    case 'gpick': { const S2 = state.search[el.dataset.c]; S2[el.dataset.k] = v; if (el.dataset.k === 'unit') S2.cat = ''; state.opened.clear(); render(cur(), true); break; }
-    case 'sheet': if (['round', 'cards'].includes(cur().v) || modalOpen()) openTableSheet(v); else go({ v: 'table', a: v }); break;
-    case 'goSheets': state.tbl = { unit: v, genre: el.dataset.g || '', q: '' }; go({ v: 'tables' }, 'tab'); break;
+    case 'sheet': openTableSheet(v); break;
     case 'choose': choose(+v); break;
     case 'dontknow': choose(-1); break;
     case 'submitSort': submitSort(); break;
@@ -5306,17 +4890,15 @@ async function onAction(el, ev){
     case 'dmBack': openDictSearch({ restore: true }); break;
     /* 覚える */
     case 'umode': SET.umode = v; saveSet(); render(cur(), true); break;
-    case 'lfilter': state.learn.filter = v; render(cur(), true); break;
-    case 'lshuffle': state.learn.shuffle = !state.learn.shuffle; render(cur(), true); break;
+    case 'dtab': state.dict.tab = v; state.search.dict.cat = ''; render(cur(), true); break;
     case 'learnGo': learnGo(v, state.unit); break;
     case 'learnUnsure': { const u = v || state.unit; startDeck(cardsOf(u).filter(c => cardB(c.key) === 'unsure'), { unit: u, label: '自信がない' }); break; }
     case 'cardMark': cardMark(v); break;
     case 'cardPrev': deckStep(-1); break;
     case 'cardSkip': deckStep(1); break;
     /* 表 */
-    case 'tblUnit': state.tbl.unit = v; state.tbl.genre = ''; render(cur(), true); break;
-    case 'tblGenre': state.tbl.genre = v; render(cur(), true); break;
     case 'tblOpen': go({ v: 'table', a: v }); break;
+    case 'tcol': case 'trow': case 'tcmp': case 'tclr': tviewAction(act, el); break;
     case 'tblStep': if (v) go({ v: 'table', a: v }, 'replace'); break;
     case 'tblSheet': openTableSheet(v); break;
     case 'tblSheetStep': if (v) openTableSheet(v); break;
@@ -5374,55 +4956,8 @@ async function onAction(el, ev){
     }
 
     /* データ */
-    case 'goBulk': state.bulk.done = null; go({ v: 'bulk' }); break;
-    case 'goOne': go({ v: 'one' }); break;
     case 'goMine': go({ v: 'mine' }); break;
     case 'goRuby': go({ v: 'ruby' }); break;
-    case 'goUnits': go({ v: 'units' }); break;
-    case 'copyTpl': copyTemplate(); break;
-    case 'bulkClear':
-      if (!state.bulk.text.trim()) break;
-      if (await confirmDialog({ title: '入力した内容を消しますか？', ok: '消す' })) { state.bulk.text = ''; state.bulk.done = null; render(cur(), true); }
-      break;
-    case 'bulkCheck': {
-      const { items, errors } = parseText(state.bulk.text);
-      if (items.length) startImport(items, 'text', errors);
-      break;
-    }
-    case 'importBundle': {
-      const items = bundleCandidates();
-      /* 社会的養護（職員配置）の単元を消していたら、ここで戻す */
-      if (ST && !U.units.some(u => u.id === ST.unit.id)) { U.staffUnit = 0; ensureStaffUnit(U); saveU(); buildData(); if (!items.length) { render(cur(), true); toast(`「${ST.unit.name}」の単元を戻しました`); break; } }
-      if (!items.length) { toast('付属の問題はすべて取り込まれています'); break; }
-      startImport(items, 'bundle');
-      break;
-    }
-    case 'impEdit': openImpSheet(+v); break;
-    case 'impAll': state.imp.items.forEach(x => { x.sel = true; }); render(cur(), true); break;
-    case 'impNone': state.imp.items.forEach(x => { x.sel = false; }); render(cur(), true); break;
-    case 'impRemove':
-      if (await confirmDialog({ title: 'この項目を外しますか？', body: '取り込む一覧から外します。元のテキストは消えません。', ok: '外す' })) { state.imp.items.splice(+v, 1); closeModal(); if (!state.imp.items.length) uiBack(); else render(cur(), true); }
-      break;
-    case 'impCommit': {
-      const I0 = state.imp, chosen = I0.items.filter(x => x.sel);
-      if (!chosen.length) break;
-      if (I0.unit === '__new' && chosen.some(x => !x.unitPreset && !x.unitName) && !I0.newName.trim()) { toast('新しい単元の名前を入力してください'); document.getElementById('impNew')?.focus(); break; }
-      if (!await confirmDialog({ title: `${chosen.length}件を取り込みますか？`, body: I0.items.length > chosen.length ? `チェックを外した${I0.items.length - chosen.length}件は取り込みません。` : '', ok: '取り込む', danger: false })) break;
-      if (I0.source === 'bundle') for (const [k, r] of Object.entries(window.RUBY || {})) if (!(k in U.ruby)) U.ruby[k] = r;
-      const r = addItems(chosen.map(({ sel, ...x }) => x), I0.unit, I0.newName);
-      if (I0.source === 'text') state.bulk = { unit: r.unit, newName: '', text: '', done: null };
-      state.imp = null;
-      toast(`${r.added}件を取り込みました${r.skipped ? `（同じもの${r.skipped}件は除きました）` : ''}`);
-      if (I0.source === 'text' && r.unit && r.unit !== '__new') go({ v: 'unit', a: r.unit }, 'tab'); else go({ v: 'home' }, 'tab');
-      break;
-    }
-    case 'unitCreate': createUnit(); break;
-    case 'unitTop': { const i = U.units.findIndex(u => u.id === v); if (i > 0) { const [m] = U.units.splice(i, 1); U.units.unshift(m); saveU(); buildData(); } closeModal(); render(cur(), true); toast('いちばん上へ移しました'); break; }
-    case 'wipeAll': {
-      if (!await confirmDialog({ title: '問題をすべて削除しますか？', body: `単元${UNITS.length}・用語${TERMS.length}件・出来事${EVENTS.length}件・メモをすべて削除し、空の状態にします。ふりがなの辞書と学習記録は残ります。元に戻せません。\n付属の問題は「付属の問題ファイルから取り込む」でもう一度入れられます。`, ok: 'すべて削除' })) break;
-      U.units = []; U.terms = []; U.events = []; U.memos = {}; saveU(); buildData(); clearSession(); render(cur(), true); toast('すべて削除しました'); break;
-    }
-    case 'oneKind': state.one.kind = v; render(cur(), true); break;
     case 'exportBackup': exportBackup(); break;
     case 'checkUpdate': checkUpdate(el); break;
     case 'toggleSound': SET.sound = !SET.sound; saveSet(); if (SET.sound) { SFX.unlock(); SFX.correct(); } if (cur().v === 'round') renderTop(); else render(cur(), true); toast(`効果音を${SET.sound ? 'オン' : 'オフ'}にしました`); break;
@@ -5437,18 +4972,6 @@ async function onAction(el, ev){
     case 'rubyDel':
       if (await confirmDialog({ title: 'ふりがなを削除しますか？', body: `「${v}」のふりがなを削除します。` })) { delete U.ruby[v]; saveU(); buildRuby(); closeModal(); render(cur(), true); toast('削除しました'); }
       break;
-    case 'unitEdit': openUnitSheet(v); break;
-    case 'unitDel': {
-      const u = U.units.find(x => x.id === v); if (!u) break;
-      const nt = U.terms.filter(t => t.unit === v).length, ne = U.events.filter(e => e.unit === v).length;
-      if (!await confirmDialog({ title: `「${u.name}」を削除しますか？`, body: `この単元と、中の用語・問題${nt}件、出来事${ne}件を削除します。元に戻せません。` })) break;
-      U.terms.filter(t => t.unit === v).forEach(t => delete U.memos['k:' + t.key]);
-      U.events.filter(e => e.unit === v).forEach(e => delete U.memos['e:' + e.id]);
-      U.units = U.units.filter(x => x.id !== v); U.terms = U.terms.filter(t => t.unit !== v); U.events = U.events.filter(e => e.unit !== v);
-      saveU(); buildData(); closeModal();
-      if (stack.some(r => r.v === 'unit' && r.a === v)) go({ v: 'data' }, 'tab'); else render(cur(), true);
-      toast('削除しました'); break;
-    }
   }
 }
 document.addEventListener('click', ev => {
@@ -5462,11 +4985,8 @@ document.addEventListener('submit', ev => {
   ev.preventDefault();
   const f = ev.target;
   if (f.id === 'editForm') { if (saveEdit(f)) { afterDataChange(); toast('保存しました'); } }
-  else if (f.id === 'oneForm') submitOne();
   else if (f.id === 'rubyForm') saveRubyForm(f);
   else if (f.id === 'goroForm') saveGoro();
-  else if (f.id === 'unitForm') saveUnitForm(f);
-  else if (f.id === 'impForm') saveImpForm(f);
   else if (f.id === 'filterForm') {
     const S = state.search[f.dataset.ctx];
     S.unit = f.querySelector('#fUnit')?.value || '';
@@ -5479,7 +4999,7 @@ let sqTimer = null;
 document.addEventListener('input', ev => {
   const t = ev.target;
   if (t.matches && t.matches('textarea.ta:not(.big)') && !ev.isComposing) autoGrow(t);   // 変換中は高さを変えない（予測変換を妨げないように）
-  if (t.id === 'sq-tbl') { state.tbl.q = t.value; clearTimeout(sqTimer); sqTimer = setTimeout(() => { const b = document.getElementById('tbl-res'); if (b) b.innerHTML = tableListHTML(state.tbl, 'tblOpen'); persistNav(); }, 200); return; }
+  if (t.id === 'sq-tbl') { state.search.tbl.q = t.value; clearTimeout(sqTimer); sqTimer = setTimeout(() => { const b = document.getElementById('tbl-res'); if (b) b.innerHTML = tableListHTML(tblFilterOf(state.search.tbl), 'tblOpen'); persistNav(); }, 200); return; }
   if (t.id === 'sq-dm') { dmState().q = t.value; clearTimeout(sqTimer); sqTimer = setTimeout(drawDm, 200); return; }
   if (t.id === 'sq-dict') {   // 打つそばから絞る（少し待ってから）
     const ctx = t.id.slice(3); state.search[ctx].q = t.value;
@@ -5491,12 +5011,6 @@ document.addEventListener('input', ev => {
     const w = document.getElementById('rbWord').value.trim(), r = document.getElementById('rbRead').value.trim();
     document.getElementById('rbPv').innerHTML = w ? (r ? furi(esc(w), esc(r)) : esc(w)) : '<span class="muted">ここに見え方が出ます</span>';
   }
-  else if (t.id === 'bulkText') { state.bulk.text = t.value; onBulkInput(); }
-  else if (t.id === 'bulkNew') state.bulk.newName = t.value;
-  else if (t.id === 'impNew') state.imp.newName = t.value;
-  else if (t.id === 'newUnit') { const b = document.getElementById('unitCreateBtn'); if (b) b.disabled = !t.value.trim(); }
-  else if (t.id === 'oneNew') state.one.newName = t.value;
-  else if (t.closest('#oneForm') && t.dataset.f && t.dataset.f !== 'unit') state.one.f[t.dataset.f] = t.value;
 });
 document.addEventListener('compositionend', ev => {   // 変換が確定してから高さを合わせる
   const t = ev.target;
@@ -5514,28 +5028,18 @@ document.addEventListener('change', ev => {
     if (t.id === 'sSize') S.size = +v;
     render(cur(), true); return;
   }
-  if (t.id === 'dtab') { state.dict.tab = t.value; state.search.dict.cat = ''; render(cur(), true); return; }
   if (t.id === 'fUnit' && document.getElementById('fCat')) {
     const ctx = t.closest('form')?.dataset.ctx || 'dict', { list, catOf } = scopeOf(ctx), sel = document.getElementById('fCat');
     const cats = uniq(list.filter(x => !t.value || x.unit === t.value).map(catOf)).filter(Boolean);
     sel.innerHTML = `<option value="">${sel.options[0] ? esc(sel.options[0].textContent) : 'すべて'}</option>` + catOptions(cats, '');
     return;
   }
-  if (t.id === 'impUnit') { state.imp.unit = t.value; state.imp.items.forEach(x => { if (!x.unitPreset && !x.unitName) x.sel = !impDup(x); }); render(cur(), true); }
-  else if (t.dataset && t.dataset.imp != null) { const it = state.imp.items[+t.dataset.imp]; it.sel = t.checked; render(cur(), true); }
-  else if (t.id === 'oneUnit') { state.one.unit = t.value; render(cur(), true); }
-  else if (t.id === 'importFile' && t.files[0]) { importBackup(t.files[0]); t.value = ''; }
-  else if (t.id === 'bulkFile' && t.files[0]) {
-    const rd = new FileReader();
-    rd.onload = () => { state.bulk.text = (state.bulk.text ? state.bulk.text.trim() + '\n---\n' : '') + String(rd.result); state.bulk.done = null; render(cur(), true); toast('読み込みました'); };
-    rd.readAsText(t.files[0]); t.value = '';
-  }
+  if (t.id === 'importFile' && t.files[0]) { importBackup(t.files[0]); t.value = ''; }
 });
 document.addEventListener('keydown', ev => {
   if (document.querySelector('.dlg')) return;
   if (ev.key === 'Escape') { if (tipEl) { hideTip(); return; } if (modalOpen()) { requestCloseModal(); return; } }
   if (ev.key === 'Enter' && (ev.target.id === 'sq-dict' || ev.target.id === 'sq-dm' || ev.target.id === 'sq-tbl') && !ev.isComposing) { ev.preventDefault(); ev.target.blur(); return; }
-  if (ev.key === 'Enter' && ev.target.id === 'newUnit' && !ev.isComposing) { ev.preventDefault(); createUnit(); return; }
   if (cur().v === 'cards' && state.deck && !modalOpen() && !/INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) {
     if (ev.key === 'ArrowRight' || ev.key === '2') { if (state.deck.i < state.deck.keys.length) { ev.preventDefault(); cardMark('ok'); } }
     else if (ev.key === '1') { if (state.deck.i < state.deck.keys.length) { ev.preventDefault(); cardMark('unsure'); } }

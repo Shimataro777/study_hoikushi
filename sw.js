@@ -7,10 +7,10 @@
  *   ※ 版を上げるときは、下の VERSION を index.html の APP_VERSION と同じにし、
  *     .js を足したら FILES にも書き足してください（?v= も index.html とそろえる）。
  * ============================================================= */
-const VERSION = '1.21.0';
+const VERSION = '1.22.0';
 const CACHE = 'hoikushi-anki-' + VERSION;
 const FONT_CACHE = 'hoikushi-anki-fonts';
-const JS = ['kyoiku-genri.js', 'hoiku-genri.js', 'hoiku-shinri.js', 'shokuin-haichi.js', 'kodomo-hoken.js',
+const JS = ['kyoiku-genri.js', 'kyoiku-hoki.js', 'kyoiku-seido.js', 'hoiku-genri.js', 'hoiku-shinri.js', 'shokuin-haichi.js', 'kodomo-hoken.js',
   'kodomo-hattatsu.js', 'kodomo-yougo.js', 'shakai-yogo.js', 'ruby.js',
   'kaisetsu-kyoiku.js', 'kaisetsu-hoiku.js', 'kaisetsu-shinri.js', 'kaisetsu-hoken.js', 'kaisetsu-shakai.js'];
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'favicon-32.png', 'apple-touch-icon.png',
