@@ -1096,7 +1096,7 @@ ruby{ruby-align:center}
 .dsm .cntline{font-size:var(--fs-caption);color:var(--muted);margin:10px 2px 0}
 
 /* =========================================================
- * 1.22.5：整理（色・解説・表・一覧・下のボタン）
+ * 1.22.6：整理（色・解説・表・一覧・下のボタン）
  *   色は「振り分けの色」と、大事なことばの2色（語句＝あお、年号＝こはく）だけ
  * ========================================================= */
 :root{ --hk:#2E6A8C; --hy:#9A6A2E; --hk-line:#BFD9E8; --law:#F7F8FA; --law-line:#DCE1E7 }
@@ -1229,7 +1229,7 @@ ruby{ruby-align:center}
 .sa-law{display:flex;align-items:center;gap:5px;margin:4px 0 0 26px;font-size:var(--fs-micro);color:var(--muted);font-weight:600}
 .sa-law .i{width:12px;height:12px}
 
-/* 覚えるカード（1.22.5） */
+/* 覚えるカード（1.22.6） */
 .lc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .lc-top .lc-kind{margin:0}
 .lcard .expl{margin-top:14px}
@@ -1252,7 +1252,7 @@ ruby{ruby-align:center}
 .lnav .lpos small{color:var(--muted);font-weight:500}
 body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 
-/* 語呂合わせ（1.22.5：落ち着いた色に。登録は小さなボタン） */
+/* 語呂合わせ（1.22.6：落ち着いた色に。登録は小さなボタン） */
 .goro{background:#FAF8F4;border:1px solid #ECE6DB;border-radius:12px;padding:10px 12px 12px;margin-top:14px}
 .goro.mini{padding:8px 10px 10px;margin-top:8px}
 .goro-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1350,28 +1350,28 @@ body:has(.lbar) main{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)
 <script>/* 万一アプリの本体が動かなかったときに、真っ白のままにせず知らせる */
 window.addEventListener('error', function (e) { setTimeout(function () { var a = document.getElementById('app'); if (a && !a.children.length) a.innerHTML = '<div style="padding:32px 20px;line-height:1.8"><h1 style="font-size:20px">アプリを読み込めませんでした</h1><p>通信の状態を確かめて、ページを読み込み直してください。直らないときは、表示されているエラーを作成者に伝えてください。</p><p style="font-size:12px;color:#888;word-break:break-all">' + String(e.message || '').replace(/</g, '&lt;') + '（' + String(e.filename || '').split('/').pop() + ':' + e.lineno + '）</p></div>'; }, 0); });
 </script>
-<script src="kyoiku-genri.js?v=1.22.5"></script>
-<script src="kyoiku-hoki.js?v=1.22.5"></script>
-<script src="kyoiku-seido.js?v=1.22.5"></script>
-<script src="hoiku-genri.js?v=1.22.5"></script>
-<script src="hoiku-shinri.js?v=1.22.5"></script>
-<script src="shokuin-haichi.js?v=1.22.5"></script>
-<script src="kodomo-hoken.js?v=1.22.5"></script>
-<script src="kodomo-hattatsu.js?v=1.22.5"></script>
-<script src="kodomo-yougo.js?v=1.22.5"></script>
-<script src="shakai-yogo.js?v=1.22.5"></script>
-<script src="ruby.js?v=1.22.5"></script>
+<script src="kyoiku-genri.js?v=1.22.6"></script>
+<script src="kyoiku-hoki.js?v=1.22.6"></script>
+<script src="kyoiku-seido.js?v=1.22.6"></script>
+<script src="hoiku-genri.js?v=1.22.6"></script>
+<script src="hoiku-shinri.js?v=1.22.6"></script>
+<script src="shokuin-haichi.js?v=1.22.6"></script>
+<script src="kodomo-hoken.js?v=1.22.6"></script>
+<script src="kodomo-hattatsu.js?v=1.22.6"></script>
+<script src="kodomo-yougo.js?v=1.22.6"></script>
+<script src="shakai-yogo.js?v=1.22.6"></script>
+<script src="ruby.js?v=1.22.6"></script>
 <!-- くわしい解説（解説・条文）。単元のファイルのあとに読み込む -->
-<script src="kaisetsu-kyoiku.js?v=1.22.5"></script>
-<script src="kaisetsu-hoiku.js?v=1.22.5"></script>
-<script src="kaisetsu-shinri.js?v=1.22.5"></script>
-<script src="kaisetsu-hoken.js?v=1.22.5"></script>
-<script src="kaisetsu-shakai.js?v=1.22.5"></script>
+<script src="kaisetsu-kyoiku.js?v=1.22.6"></script>
+<script src="kaisetsu-hoiku.js?v=1.22.6"></script>
+<script src="kaisetsu-shinri.js?v=1.22.6"></script>
+<script src="kaisetsu-hoken.js?v=1.22.6"></script>
+<script src="kaisetsu-shakai.js?v=1.22.6"></script>
 <script>
 (function(){
 'use strict';
 /* アプリのバージョン（更新したらここを書きかえる。「データ」画面のいちばん下に表示される） */
-const APP_VERSION = '1.22.5';
+const APP_VERSION = '1.22.6';
 const APP_BUILD = '2026-10-24';
 
 /* =========================================================
@@ -1777,7 +1777,8 @@ function buildData(){
     exclude: t.exclude || [], explanation: [t.summary, t.detail].filter(Boolean).join('\n'), point: t.point
   }));
   /* 逆向き（答え→説明）：用語・人物を見て、正しい説明を選ぶ */
-  for (const t of TERMS) if (t.summary) QUESTIONS.push({
+  /* 教育法規は「条文・規定 → 法令名」だけ出す（法令名 → 説明の向きは出さない） */
+  for (const t of TERMS) if (t.summary && !/^教育法規/.test(t.cat || '')) QUESTIONS.push({
     id: t.key.replace('::', ':') + ':r', unit: t.unit, cat: t.cat, type: 'rev', question: `「${t.term}」の説明として正しいものは？`, answer: t.summary, termKey: t.key,
     exclude: t.exclude || [], explanation: [t.summary, t.detail].filter(Boolean).join('\n'), point: t.point
   });
@@ -2978,7 +2979,7 @@ const unitTables = () => _uTbl || (_uTbl = Object.fromEntries((window.UNITS || [
 const unitTblKeys = id => Object.keys(unitTables()).filter(k => unitTables()[k].unit === id && unitById.has(id));
 const bundleUnit = id => (window.UNITS || []).find(u => u.id === id) || {};
 const dTbl = key => { for (const d of DVS) if (d.tables[key]) return d.tables[key]; return unitTables()[key]; };
-/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.22.5〜 hl に統一） */
+/* 表や解説の文：大事なことばに色をつけ、図鑑にある語句は押すと図鑑が開く（1.22.6〜 hl に統一） */
 function rbL(text){ return hl(text); }
 /* 表のHTML。spec = [key, 始めの行, 終わりの行]（行は省略で全部）
  *   スマホで見比べやすいように：
@@ -4388,7 +4389,7 @@ function afterGoro(){
 }
 
 /* =========================================================
- * 1.22.5：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
+ * 1.22.6：大事なことばの色・くわしい解説・表のページ・問題の一覧・施設を選ぶ問題
  * ========================================================= */
 
 /* ---------- 大事なことばに色をつける ----------
